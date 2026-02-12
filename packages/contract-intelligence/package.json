@@ -1,0 +1,15 @@
+{
+  "name": "@repo/contract-intelligence",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@repo/contract-prompts": "workspace:*",
+    "ai": "6.0.77",
+    "zod": "3.25.76"
+  }
+}

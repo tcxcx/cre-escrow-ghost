@@ -1,0 +1,25 @@
+{
+  "name": "@repo/cre-bufi-lifecycle",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "cre:workflow:simulate": "~/.cre/bin/cre workflow simulate -R ..",
+    "cre:workflow:deploy": "~/.cre/bin/cre workflow deploy -R ..",
+    "cre:workflow:activate": "~/.cre/bin/cre workflow activate -R ..",
+    "cre:workflow:pause": "~/.cre/bin/cre workflow pause -R ..",
+    "cre:workflow:delete": "~/.cre/bin/cre workflow delete -R ..",
+    "cre:secrets:create": "~/.cre/bin/cre secrets create -R ..",
+    "cre:secrets:update": "~/.cre/bin/cre secrets update -R ..",
+    "cre:secrets:list": "~/.cre/bin/cre secrets list -R ..",
+    "cre:secrets:delete": "~/.cre/bin/cre secrets delete -R ..",
+    "cre:bindings": "~/.cre/bin/cre bindings -R .."
+  },
+  "dependencies": {
+    "@chainlink/cre-sdk": "^1.0.9",
+    "viem": "^2.23.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
+}

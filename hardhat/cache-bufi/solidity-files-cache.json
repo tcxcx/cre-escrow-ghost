@@ -1,0 +1,457 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/EscrowFactoryV3.sol": {
+      "lastModificationDate": 1770898762520,
+      "contentHash": "5977020a9cd566b042fc38277dee6482",
+      "sourceName": "contracts/bufi/EscrowFactoryV3.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/proxy/Clones.sol",
+        "./EscrowWithAgentV3.sol",
+        "./IEscrowWithAgentV3.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "EscrowFactoryV3"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/EscrowWithAgentV3.sol": {
+      "lastModificationDate": 1770898762501,
+      "contentHash": "353cc14d86627c2a08e8cb3f111c1e21",
+      "sourceName": "contracts/bufi/EscrowWithAgentV3.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "./IEscrowWithAgentV3.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "EscrowWithAgentV3"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/IEscrowWithAgentV3.sol": {
+      "lastModificationDate": 1770898762480,
+      "contentHash": "dad2352915c20c1782fa5332f1ebdcd8",
+      "sourceName": "contracts/bufi/IEscrowWithAgentV3.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "IEscrowWithAgentV3"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/node_modules/@openzeppelin/contracts/proxy/Clones.sol": {
+      "lastModificationDate": 1770862090013,
+      "contentHash": "89c075565795af5e3e88fc75642a4af8",
+      "sourceName": "@openzeppelin/contracts/proxy/Clones.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Clones"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1770862090013,
+      "contentHash": "df36f7051335cd1e748b1b6463b7fdd3",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+      "lastModificationDate": 1770862090013,
+      "contentHash": "1b5d667d3740d866eca0352758e59827",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC20.sol",
+        "../extensions/IERC20Permit.sol",
+        "../../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeERC20"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/node_modules/@openzeppelin/contracts/utils/Address.sol": {
+      "lastModificationDate": 1770862090012,
+      "contentHash": "211ffd288c1588ba8c10eae668ca3c66",
+      "sourceName": "@openzeppelin/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.1"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol": {
+      "lastModificationDate": 1770862090013,
+      "contentHash": "525fcdad8d171312933f47baf01d1ed8",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Permit"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/policies/DisputeWindowPolicy.sol": {
+      "lastModificationDate": 1770898762585,
+      "contentHash": "15fcab5b76eccb4ccd1ae84ed525f08a",
+      "sourceName": "contracts/bufi/policies/DisputeWindowPolicy.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IEscrowWithAgentV3.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "DisputeWindowPolicy",
+        "IPolicyEngineForPolicy"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/extractors/EscrowExtractor.sol": {
+      "lastModificationDate": 1770898762542,
+      "contentHash": "ae2b1640faaad9ec1836fb33f491fdcc",
+      "sourceName": "contracts/bufi/extractors/EscrowExtractor.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "EscrowExtractor",
+        "IExtractor",
+        "IPolicyEngine"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/policies/AgentIdentityPolicy.sol": {
+      "lastModificationDate": 1770899174954,
+      "contentHash": "6cb48403889cc679f1732f72402e5305",
+      "sourceName": "contracts/bufi/policies/AgentIdentityPolicy.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "AgentIdentityPolicy",
+        "IERC8004IdentityMinimal",
+        "IPolicyEngineForPolicy"
+      ]
+    },
+    "/Users/criptopoeta/coding-dojo/i-hate-lawyers-and-bankers/hardhat/contracts/bufi/policies/PayoutLimitPolicy.sol": {
+      "lastModificationDate": 1770898762603,
+      "contentHash": "b80371b94c979cbc4566d59b7d35e74f",
+      "sourceName": "contracts/bufi/policies/PayoutLimitPolicy.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.24 <0.9.0"
+      ],
+      "artifacts": [
+        "IPolicyEngineForPolicy",
+        "PayoutLimitPolicy"
+      ]
+    }
+  }
+}

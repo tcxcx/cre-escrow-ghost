@@ -14,44 +14,260 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "LotusRouter",
+      name: "IERC20Permit",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.LotusRouter__factory>;
+    ): Promise<Contracts.IERC20Permit__factory>;
     getContractFactory(
-      name: "Error",
+      name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Error__factory>;
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
+      name: "EscrowFactoryV3",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.EscrowFactoryV3__factory>;
+    getContractFactory(
+      name: "EscrowWithAgentV3",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.EscrowWithAgentV3__factory>;
+    getContractFactory(
+      name: "EscrowExtractor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.EscrowExtractor__factory>;
+    getContractFactory(
+      name: "IExtractor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IExtractor__factory>;
+    getContractFactory(
+      name: "IEscrowWithAgentV3",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IEscrowWithAgentV3__factory>;
+    getContractFactory(
+      name: "AgentIdentityPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AgentIdentityPolicy__factory>;
+    getContractFactory(
+      name: "IERC8004IdentityMinimal",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC8004IdentityMinimal__factory>;
+    getContractFactory(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy__factory>;
+    getContractFactory(
+      name: "DisputeWindowPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DisputeWindowPolicy__factory>;
+    getContractFactory(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy__factory>;
+    getContractFactory(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy__factory>;
+    getContractFactory(
+      name: "PayoutLimitPolicy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PayoutLimitPolicy__factory>;
 
     getContractAt(
-      name: "LotusRouter",
+      name: "IERC20Permit",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.LotusRouter>;
+    ): Promise<Contracts.IERC20Permit>;
     getContractAt(
-      name: "Error",
+      name: "IERC20",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.Error>;
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "EscrowFactoryV3",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.EscrowFactoryV3>;
+    getContractAt(
+      name: "EscrowWithAgentV3",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.EscrowWithAgentV3>;
+    getContractAt(
+      name: "EscrowExtractor",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.EscrowExtractor>;
+    getContractAt(
+      name: "IExtractor",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IExtractor>;
+    getContractAt(
+      name: "IEscrowWithAgentV3",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IEscrowWithAgentV3>;
+    getContractAt(
+      name: "AgentIdentityPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AgentIdentityPolicy>;
+    getContractAt(
+      name: "IERC8004IdentityMinimal",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC8004IdentityMinimal>;
+    getContractAt(
+      name: "IPolicyEngineForPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    getContractAt(
+      name: "DisputeWindowPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DisputeWindowPolicy>;
+    getContractAt(
+      name: "IPolicyEngineForPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    getContractAt(
+      name: "IPolicyEngineForPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    getContractAt(
+      name: "PayoutLimitPolicy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PayoutLimitPolicy>;
 
     deployContract(
-      name: "LotusRouter",
+      name: "IERC20Permit",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.LotusRouter>;
+    ): Promise<Contracts.IERC20Permit>;
     deployContract(
-      name: "Error",
+      name: "IERC20",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Error>;
+    ): Promise<Contracts.IERC20>;
+    deployContract(
+      name: "EscrowFactoryV3",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowFactoryV3>;
+    deployContract(
+      name: "EscrowWithAgentV3",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowWithAgentV3>;
+    deployContract(
+      name: "EscrowExtractor",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowExtractor>;
+    deployContract(
+      name: "IExtractor",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IExtractor>;
+    deployContract(
+      name: "IEscrowWithAgentV3",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IEscrowWithAgentV3>;
+    deployContract(
+      name: "AgentIdentityPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AgentIdentityPolicy>;
+    deployContract(
+      name: "IERC8004IdentityMinimal",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IERC8004IdentityMinimal>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "DisputeWindowPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.DisputeWindowPolicy>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "PayoutLimitPolicy",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PayoutLimitPolicy>;
 
     deployContract(
-      name: "LotusRouter",
+      name: "IERC20Permit",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.LotusRouter>;
+    ): Promise<Contracts.IERC20Permit>;
     deployContract(
-      name: "Error",
+      name: "IERC20",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Error>;
+    ): Promise<Contracts.IERC20>;
+    deployContract(
+      name: "EscrowFactoryV3",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowFactoryV3>;
+    deployContract(
+      name: "EscrowWithAgentV3",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowWithAgentV3>;
+    deployContract(
+      name: "EscrowExtractor",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.EscrowExtractor>;
+    deployContract(
+      name: "IExtractor",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IExtractor>;
+    deployContract(
+      name: "IEscrowWithAgentV3",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IEscrowWithAgentV3>;
+    deployContract(
+      name: "AgentIdentityPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AgentIdentityPolicy>;
+    deployContract(
+      name: "IERC8004IdentityMinimal",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IERC8004IdentityMinimal>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "DisputeWindowPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.DisputeWindowPolicy>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "IPolicyEngineForPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IPolicyEngineForPolicy>;
+    deployContract(
+      name: "PayoutLimitPolicy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PayoutLimitPolicy>;
 
     // default types
     getContractFactory(

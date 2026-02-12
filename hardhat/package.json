@@ -3,14 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "hardhat compile",
-    "compile": "hardhat compile",
+    "build": "hardhat compile && hardhat compile --config hardhat.bufi.config.ts",
+    "compile": "hardhat compile && hardhat compile --config hardhat.bufi.config.ts",
+    "compile:router": "hardhat compile",
+    "compile:bufi": "hardhat compile --config hardhat.bufi.config.ts",
     "dev": "hardhat node",
     "test": "hardhat test",
+    "test:bufi": "hardhat test --config hardhat.bufi.config.ts",
     "test:fork": "hardhat test --grep 'Fork'",
     "test:no-fork": "hardhat test --grep '^(?!.*Fork).*$'",
     "lint": "echo 'no lint configured'",
-    "check-types": "hardhat compile"
+    "check-types": "hardhat compile && hardhat compile --config hardhat.bufi.config.ts"
   },
   "devDependencies": {
     "@chainlink/contracts": "1.5.0",

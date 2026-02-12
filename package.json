@@ -4,8 +4,9 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "packages/cre/ai-escrow/my-workflow",
-    "packages/cre/stable-fx/my-workflow",
+    "packages/cre/ai-escrow/workflow",
+    "packages/cre/stable-fx/workflow",
+    "packages/cre/bufi-lifecycle/workflow",
     "hardhat"
   ],
   "scripts": {
@@ -62,7 +63,14 @@
     "stable-fx:secrets:update": "turbo run cre:secrets:update --filter=@repo/cre-stable-fx",
     "stable-fx:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-stable-fx",
     "stable-fx:secrets:delete": "turbo run cre:secrets:delete --filter=@repo/cre-stable-fx",
-    "stable-fx:bindings": "turbo run cre:bindings --filter=@repo/cre-stable-fx"
+    "stable-fx:bindings": "turbo run cre:bindings --filter=@repo/cre-stable-fx",
+
+    "bufi:simulate": "turbo run cre:workflow:simulate --filter=@repo/cre-bufi-lifecycle",
+    "bufi:deploy": "turbo run cre:workflow:deploy --filter=@repo/cre-bufi-lifecycle",
+    "bufi:activate": "turbo run cre:workflow:activate --filter=@repo/cre-bufi-lifecycle",
+    "bufi:pause": "turbo run cre:workflow:pause --filter=@repo/cre-bufi-lifecycle",
+    "bufi:secrets:create": "turbo run cre:secrets:create --filter=@repo/cre-bufi-lifecycle",
+    "bufi:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-bufi-lifecycle"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

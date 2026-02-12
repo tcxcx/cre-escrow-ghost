@@ -1,0 +1,22 @@
+{
+  "name": "@repo/core",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./agreement": "./agreement/schema.ts",
+    "./agreement/compiler": "./agreement/compiler.ts",
+    "./artifacts": "./artifacts/index.ts",
+    "./artifacts/canonical": "./artifacts/canonical.ts",
+    "./artifacts/storage": "./artifacts/storage.ts",
+    "./artifacts/types": "./artifacts/types.ts",
+    ".": "./index.ts"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@repo/types": "workspace:*",
+    "@repo/erc-8004": "workspace:*",
+    "@supabase/supabase-js": "^2.49.3",
+    "zod": "^3.24.2"
+  }
+}
