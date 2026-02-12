@@ -4,8 +4,6 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "packages/cre/ai-escrow/workflow",
-    "packages/cre/stable-fx/workflow",
     "packages/cre/bufi-lifecycle/workflow",
     "hardhat"
   ],
@@ -70,7 +68,8 @@
     "bufi:activate": "turbo run cre:workflow:activate --filter=@repo/cre-bufi-lifecycle",
     "bufi:pause": "turbo run cre:workflow:pause --filter=@repo/cre-bufi-lifecycle",
     "bufi:secrets:create": "turbo run cre:secrets:create --filter=@repo/cre-bufi-lifecycle",
-    "bufi:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-bufi-lifecycle"
+    "bufi:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-bufi-lifecycle",
+    "bufi:smoke": "bun scripts/bufi-smoke.ts"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

@@ -7,6 +7,7 @@
     "compile": "hardhat compile && hardhat compile --config hardhat.bufi.config.ts",
     "compile:router": "hardhat compile",
     "compile:bufi": "hardhat compile --config hardhat.bufi.config.ts",
+    "deploy:bufi:fuji": "hardhat run scripts/deploy-bufi-fuji.ts --config hardhat.bufi.config.ts --network avalancheFuji",
     "dev": "hardhat node",
     "test": "hardhat test",
     "test:bufi": "hardhat test --config hardhat.bufi.config.ts",

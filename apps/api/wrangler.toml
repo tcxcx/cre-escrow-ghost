@@ -12,3 +12,7 @@ compatibility_flags = ["nodejs_compat"]
 # AGENT_WALLET_ID = ""
 # AGENT_WALLET_ADDRESS = ""
 # USDC_CONTRACT_ADDRESS = ""
+# CRE_WORKFLOW_URL = ""
+# CRE_WORKFLOW_API_KEY = ""
+# ERC8004_PRIVATE_KEY = ""
+# AVALANCHE_FUJI_RPC_URL = ""

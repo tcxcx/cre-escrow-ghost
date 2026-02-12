@@ -109,6 +109,8 @@ export async function registerAgent(
   agentURI: string
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: IDENTITY_REGISTRY_ABI,
     functionName: 'register',
@@ -125,6 +127,8 @@ export async function setAgentURI(
   newURI: string
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: IDENTITY_REGISTRY_ABI,
     functionName: 'setAgentURI',
@@ -147,6 +151,8 @@ export async function setAgentWalletAddress(
   signature: `0x${string}`
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: IDENTITY_REGISTRY_ABI,
     functionName: 'setAgentWallet',
@@ -164,6 +170,8 @@ export async function setAgentMetadata(
   metadataValue: `0x${string}`
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: IDENTITY_REGISTRY_ABI,
     functionName: 'setMetadata',

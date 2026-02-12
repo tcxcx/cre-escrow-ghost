@@ -72,6 +72,7 @@
     "vaul": "^1.1.2",
     "zod": "3.25.76",
     "zustand": "^5.0.3",
+    "@repo/core": "workspace:*",
     "@repo/contract-flow": "workspace:*",
     "@repo/contract-intelligence": "workspace:*",
     "@repo/contract-prompts": "workspace:*",

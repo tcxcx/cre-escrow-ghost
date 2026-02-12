@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Search, ArrowRight, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 import type { ContractStatus } from '@/types/contracts'
 import { getContractDestination } from '@repo/contract-shared'
+import { listAgreements } from '@/lib/api/client'
 
 interface ContractListItem {
   id: string
@@ -25,27 +26,55 @@ interface ContractListItem {
   updatedAt: Date
 }
 
-const mockContracts: ContractListItem[] = [
-  { id: 'contract-1', name: 'Website Redesign Project', status: 'active', totalValue: 15000, currency: 'USDC', payerName: 'Acme Corp', payeeName: 'Design Studio LLC', milestonesCompleted: 2, milestonesTotal: 4, updatedAt: new Date('2024-01-28') },
-  { id: 'contract-2', name: 'Mobile App Development', status: 'pending-signatures', totalValue: 50000, currency: 'USDC', payerName: 'TechStart Inc', payeeName: 'App Builders Co', milestonesCompleted: 0, milestonesTotal: 6, updatedAt: new Date('2024-01-25') },
-  { id: 'contract-3', name: 'Content Marketing Package', status: 'pending-funding', totalValue: 5000, currency: 'USDC', payerName: 'Growth Labs', payeeName: 'Content Creators Agency', milestonesCompleted: 0, milestonesTotal: 3, updatedAt: new Date('2024-01-22') },
-  { id: 'contract-4', name: 'SEO Optimization', status: 'completed', totalValue: 8000, currency: 'USDC', payerName: 'E-commerce Plus', payeeName: 'SEO Masters', milestonesCompleted: 3, milestonesTotal: 3, updatedAt: new Date('2024-01-15') },
-  { id: 'contract-5', name: 'Brand Identity Design', status: 'disputed', totalValue: 12000, currency: 'USDC', payerName: 'New Ventures LLC', payeeName: 'Creative Agency', milestonesCompleted: 1, milestonesTotal: 2, updatedAt: new Date('2024-01-27') },
-]
+const statusMap: Record<string, ContractStatus> = {
+  DRAFT: 'draft',
+  PENDING_SIGN: 'pending_sign',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  DISPUTED: 'disputed',
+  CANCELLED: 'cancelled',
+}
 
 export function ContractsList() {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const [tab, setTab] = useState('all')
+  const [contracts, setContracts] = useState<ContractListItem[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filtered = mockContracts.filter((c) => {
+  useEffect(() => {
+    void (async () => {
+      try {
+        const response = await listAgreements({ limit: 200 })
+        const rows = response.agreements ?? []
+        setContracts(
+          rows.map((row) => ({
+            id: String(row.agreement_id ?? ''),
+            name: String(row.title ?? 'Untitled Agreement'),
+            status: statusMap[String(row.status ?? 'DRAFT')] ?? 'draft',
+            totalValue: Number(row.total_amount ?? 0),
+            currency: 'USDC',
+            payerName: 'Payer',
+            payeeName: 'Payee',
+            milestonesCompleted: 0,
+            milestonesTotal: 0,
+            updatedAt: new Date(String(row.updated_at ?? row.created_at ?? Date.now())),
+          }))
+        )
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  const filtered = useMemo(() => contracts.filter((c) => {
     const matchesSearch = !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.payerName.toLowerCase().includes(search.toLowerCase())
     const matchesTab = tab === 'all' ||
       (tab === 'active' && c.status === 'active') ||
-      (tab === 'pending' && c.status.startsWith('pending')) ||
+      (tab === 'pending' && (c.status === 'pending_sign' || c.status === 'draft')) ||
       (tab === 'completed' && c.status === 'completed')
     return matchesSearch && matchesTab
-  })
+  }), [contracts, search, tab])
 
   return (
     <div className="flex flex-col h-full p-6 lg:p-8 max-w-4xl mx-auto w-full">
@@ -82,7 +111,9 @@ export function ContractsList() {
 
           <TabsContent value={tab} className="flex-1 m-0">
             <div className="px-5 py-3">
-              {filtered.length === 0 ? (
+              {loading ? (
+                <p className="text-sm text-muted-foreground text-center py-12">Loading contracts...</p>
+              ) : filtered.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-12">No contracts found</p>
               ) : (
                 <div className="divide-y divide-border">
@@ -97,7 +128,7 @@ export function ContractsList() {
                         <div className="flex items-center gap-2.5">
                           <p className="text-sm font-medium text-foreground truncate">{contract.name}</p>
                           <Badge variant="outline" className="text-xs capitalize shrink-0">
-                            {contract.status.replace(/-/g, ' ')}
+                            {contract.status.replace(/_/g, ' ')}
                           </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mt-0.5">

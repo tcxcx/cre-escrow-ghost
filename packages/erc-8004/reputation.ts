@@ -110,6 +110,8 @@ export async function giveFeedback(
   params: FeedbackParams
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: REPUTATION_REGISTRY_ABI,
     functionName: 'giveFeedback',
@@ -135,6 +137,8 @@ export async function revokeFeedback(
   feedbackIndex: bigint
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: REPUTATION_REGISTRY_ABI,
     functionName: 'revokeFeedback',
@@ -154,6 +158,8 @@ export async function appendResponse(
   responseHash: `0x${string}`
 ): Promise<`0x${string}`> {
   const txHash = await walletClient.writeContract({
+    account: walletClient.account ?? null,
+    chain: walletClient.chain ?? undefined,
     address: registryAddress,
     abi: REPUTATION_REGISTRY_ABI,
     functionName: 'appendResponse',

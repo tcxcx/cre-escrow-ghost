@@ -1,7 +1,6 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { Plus } from 'lucide-react' // Import Plus component
+import { useEffect, useMemo, useState } from "react"
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { CreateContractButton } from '@/components/shared/create-contract-button'
@@ -10,28 +9,58 @@ import { cn } from '@/lib/utils'
 import { ContractsWidget } from '@/components/widgets'
 import { WelcomeOnboarding } from './welcome-onboarding'
 import { getContractDestination } from '@repo/contract-shared'
+import { listAgreements } from '@/lib/api/client'
 
-const stats = [
-  { label: 'Active', value: '12' },
-  { label: 'Pending', value: '3' },
-  { label: 'Escrow', value: '$45,230' },
-  { label: 'Yield', value: '$1,847' },
-]
+const statusMap: Record<string, string> = {
+  DRAFT: 'draft',
+  PENDING_SIGN: 'pending_sign',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  DISPUTED: 'disputed',
+  CANCELLED: 'cancelled',
+}
 
-const recentContracts = [
-  { id: 'contract-1', name: 'Website Redesign Project', counterparty: 'Acme Corp', status: 'active', amount: '$15,000', progress: 65 },
-  { id: 'contract-2', name: 'Mobile App Development', counterparty: 'TechStart Inc', status: 'pending_signatures', amount: '$32,500', progress: 0 },
-  { id: 'contract-3', name: 'Brand Identity Package', counterparty: 'NewBrand Co', status: 'funded', amount: '$8,000', progress: 30 },
-  { id: 'contract-4', name: 'Marketing Campaign', counterparty: 'GrowthLabs', status: 'completed', amount: '$5,500', progress: 100 },
-]
-
-const pendingActions = [
-  { id: '1', title: 'Sign contract with TechStart Inc', href: '/contracts/contract-2/sign', urgent: true },
-  { id: '2', title: 'Review design mockup submission', href: '/contracts/contract-1/milestones/1', urgent: false },
-  { id: '3', title: 'Fund escrow for Brand Identity', href: '/contracts/contract-3/fund', urgent: false },
-]
+const pendingActions = []
 
 export function HomeDashboard() {
+  const [recentContracts, setRecentContracts] = useState<
+    Array<{ id: string; name: string; counterparty: string; status: string; amount: string; progress: number }>
+  >([])
+
+  useEffect(() => {
+    void (async () => {
+      const response = await listAgreements({ limit: 10 })
+      const rows = response.agreements ?? []
+      setRecentContracts(
+        rows.slice(0, 4).map((row) => ({
+          id: String(row.agreement_id ?? ''),
+          name: String(row.title ?? 'Untitled Agreement'),
+          counterparty: 'Counterparty',
+          status: statusMap[String(row.status ?? 'DRAFT')] ?? 'draft',
+          amount: `$${Number(row.total_amount ?? 0).toLocaleString()}`,
+          progress: 0,
+        }))
+      )
+    })()
+  }, [])
+
+  const stats = useMemo(() => {
+    const active = recentContracts.filter((contract) => contract.status === 'active').length
+    const pending = recentContracts.filter(
+      (contract) => contract.status === 'pending_sign' || contract.status === 'draft'
+    ).length
+    const escrow = recentContracts.reduce((sum, contract) => {
+      const normalized = Number(contract.amount.replace(/[$,]/g, ''))
+      return sum + (Number.isFinite(normalized) ? normalized : 0)
+    }, 0)
+    return [
+      { label: 'Active', value: String(active) },
+      { label: 'Pending', value: String(pending) },
+      { label: 'Escrow', value: `$${escrow.toLocaleString()}` },
+      { label: 'Yield', value: '$0' },
+    ]
+  }, [recentContracts])
+
   return (
     <div className="flex-1 p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
       {/* Header */}
@@ -95,7 +124,7 @@ export function HomeDashboard() {
             {recentContracts.map((contract) => (
               <Link
                 key={contract.id}
-                href={getContractDestination(contract.id, contract.status)}
+                href={getContractDestination(contract.id, contract.status as any)}
                 className="flex items-center justify-between py-3 group"
               >
                 <div className="min-w-0">

@@ -64,6 +64,14 @@ export async function getAgreement(agreementId: string) {
   return apiRequest<Record<string, unknown>>(`/agreements/${agreementId}`)
 }
 
+export async function listAgreements(params?: { limit?: number; offset?: number }) {
+  const query = new URLSearchParams()
+  if (params?.limit !== undefined) query.set('limit', String(params.limit))
+  if (params?.offset !== undefined) query.set('offset', String(params.offset))
+  const suffix = query.toString().length > 0 ? `?${query.toString()}` : ''
+  return apiRequest<{ agreements: Array<Record<string, unknown>> }>(`/agreements${suffix}`)
+}
+
 export async function getAgreementArtifacts(agreementId: string) {
   return apiRequest<{ artifacts: unknown[] }>(`/agreements/${agreementId}/artifacts`)
 }
@@ -72,6 +80,36 @@ export async function getMilestoneReceipt(agreementId: string, milestoneId: stri
   return apiRequest<Record<string, unknown>>(
     `/agreements/${agreementId}/milestones/${milestoneId}/receipt`
   )
+}
+
+export async function getMilestoneVerification(agreementId: string, milestoneId: string) {
+  return apiRequest<Record<string, unknown>>(
+    `/agreements/${agreementId}/milestones/${milestoneId}/verification`
+  )
+}
+
+export async function signAgreement(
+  agreementId: string,
+  role: 'payer' | 'payee',
+  signerAddress: string
+) {
+  return apiRequest<{ success: boolean; status: string }>(`/agreements/${agreementId}/sign`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ role, signerAddress }),
+  })
+}
+
+export async function fundAgreement(
+  agreementId: string,
+  amount: number,
+  txHash: string
+) {
+  return apiRequest<{ success: boolean; fundedAmount: number }>(`/agreements/${agreementId}/fund`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount, txHash }),
+  })
 }
 
 // ── Milestone APIs ─────────────────────────────────────────────────────────

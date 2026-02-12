@@ -11,6 +11,7 @@ import validateWork from "./routes/validate-work";
 import webhook from "./routes/webhook";
 import agreements from "./routes/agreements";
 import agents from "./routes/agents";
+import creCallback from "./routes/cre-callback";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -31,6 +32,7 @@ app.route("/contracts/validate-work", validateWork);
 // ── BUFI Contracts v3 routes ──────────────────────────────────────────────
 app.route("/agreements", agreements);
 app.route("/agents/erc8004", agents);
+app.route("/cre/callback", creCallback);
 
 // ── Webhook ───────────────────────────────────────────────────────────────
 app.route("/webhook", webhook);

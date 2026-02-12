@@ -1,310 +1,143 @@
-# The Ark of the New Covenant 🕊️  
-**Programmable settlement for a world without lawyers, politicians, and bankers.**
+# BUFI CRE Hackathon Project
 
-> **“Cursed is the man who trusts in man…”**  
-> — *Jeremiah 17:5*
+Monorepo for a CRE-first escrow + adversarial arbitration system:
 
-That verse is basically our thesis statement.
+- API gateway receives events and forwards to CRE workflows
+- CRE workflows orchestrate AI verification, dispute tribunal, and finalization
+- Escrow contracts execute deterministic payout decisions on Fuji
+- Supabase stores agreement state, milestones, disputes, and artifact metadata
+- Frontend shows contract state + artifacts + receipts
 
-Not because humans are evil — but because humans are human:
-biased, emotional, inconsistent, incentivized, corruptible, tired, and sometimes just having a bad day.
+## Demo Flow (Hackathon Path)
 
-So we’re building a system where:
-- **AI can be neutral when we can’t**
-- **contracts can verify reality**
-- and **money moves at the speed of the internet**  
-  *without asking politicians for permission.*
+1. Upload agreement or create from template
+2. Create agreement + milestones in DB
+3. Sign and fund agreement
+4. Submit milestone deliverable
+5. CRE verifier returns PASS/FAIL + confidence
+6. Client opens dispute
+7. CRE runs advocate briefs + tribunal (2/3 majority)
+8. CRE finalizes and executes payout split
+9. Receipt + artifacts are queryable from API/UI
 
----
+## Architecture
 
-## What is this?
+- `apps/api` - Hono API thin gateway
+- `packages/cre/bufi-lifecycle/workflow` - CRE workflow handlers
+- `hardhat/contracts/bufi` - Escrow contracts + factory
+- `packages/core` - shared schemas, ABI exports, agent helpers
+- `apps/contract-builder` - UI connected to API
+- `supabase/manual/001_apply_bufi_contracts_tables.sql` - manual SQL setup
 
-**The Ark of the New Covenant** is a monorepo for two systems that belong together:
+## Required Environment Setup
 
-### 1) Stablecoin FX Router (DeFi Bytecode FX Engine)
-A **Solidity bytecode VM** that executes FX settlement workflows onchain:
-- deterministic execution
-- composable settlement
-- verifiable receipts
-- permissionless layers later (DeFi venues, hooks, intents)
+### 1) API env (`apps/api/.dev.vars`)
 
-### 2) AI Escrow + Adversarial Arbitration  
-An AI-native escrow system where smart contracts become **actually smart**:
+Copy the template first:
 
-Instead of “release funds when someone clicks a button”, the contract asks:
+```bash
+cp apps/api/.dev.vars.example apps/api/.dev.vars
+```
 
-> “Was the work delivered correctly?”
+Fill at minimum:
 
-Then it verifies deliverables against acceptance criteria using:
-- AI verification
-- adversarial arguments (pro-provider vs pro-client) on disputes
-- decentralized tribunal consensus across multiple model providers on the next dispute instance
-- hashed outputs stored onchain for auditability and replay
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `USDC_CONTRACT_ADDRESS`
+- `CRE_WORKFLOW_URL`
 
-No subjective approvals.  
-No disputes as a business model.  
-No “please review the updated PDF v17-final-final”. Where there is no Internation Chamber of Commerce available to the individual - there is the Chamber of the New Covenant.
+Optional for ERC-8004 bootstrap endpoint:
 
----
+- `ERC8004_PRIVATE_KEY`
+- `AVALANCHE_FUJI_RPC_URL`
 
-## Why so dramatic papi? “Ark of the New Covenant”? Really?
+### 2) Hardhat env (`hardhat/.env`)
 
-Because we’re building contracts the way they were always supposed to work:
+Copy:
 
-- the agreement is explicit  
-- the rules are immutable  
-- the judgment is auditable  
-- the outcome is deterministic  
+```bash
+cp hardhat/.env.example hardhat/.env
+```
 
-Not enforced by institutions.
-Corruptible lawyers.
-Enforced by a system.
+Fill:
 
-This is a covenant between two parties — enforced by code, verified by AI, settled onchain. Where two parties agree that this is the way.
+- `PRIVATE_KEY`
+- `AVALANCHE_FUJI_RPC_URL`
 
----
+### 3) CRE workflow config + secrets
 
-## The biblical thesis: Jeremiah 17:5
+- Use `packages/cre/bufi-lifecycle/workflow/config.staging.example.json` as reference
+- Ensure `config.staging.json` has:
+  - `escrowFactory`
+  - `protocolFeeRecipient`
+  - `supabaseUrl`
+- Ensure CRE secrets are created (`packages/cre/bufi-lifecycle/secrets.yaml` lists required keys)
 
-> **“Cursed is the man who trusts in man,**  
-> **and makes flesh his strength,**  
-> **whose heart departs from the Lord.”**  
-> — *Jeremiah 17:5*
+If `supabaseUrl is required` appears during smoke tests, it means API or CRE config/secrets are missing Supabase values.
 
-We use this verse as a metaphor for modern finance and modern institutions.
+## Local Run (Correct Order)
 
-The world is built on:
-- trusting middlemen
-- trusting authorities
-- trusting counterparties
-- trusting bureaucracy
+### Install and verify
 
-But trust doesn’t scale.
-
-So this project is about building systems where trust is replaced by:
-- cryptography
-- decentralized execution
-- deterministic settlement
-- neutral arbitration
-- receipts you can replay
-- connecting systems where there is some trust to where there is none for global trust
-
----
-
-## The Thesis
-
-### Part 1 — FX should behave like software
-FX is the largest market on Earth.
-
-And yet it still runs on:
-- cut-off times
-- settlement windows
-- correspondent chains
-- bilateral risk
-- gated venues
-- institutional privilege
-
-Stablecoins changed the settlement layer.  
-StableFX is changing the execution layer.  
-
-This project pushes it further:
-**a programmable settlement VM that makes FX composable, auditable, and eventually permissionless.**
-
----
-
-### Part 2 — Actually putting the “smart” in smart contracts
-Traditional smart contracts aren’t smart — they’re just automated.
-
-They can move money when someone clicks a button.  
-But they cannot answer the most important question:
-
-> “Was the work actually delivered correctly?”
-
-This project changes that.
-
-We use **AI-powered verification** to evaluate deliverables against acceptance criteria, reaching decentralized consensus on quality before releasing payment.
-
-No human is ever in the decision loop.
-
-Locked escrow funds don’t just sit idle — they can generate yield through DeFi protocols, distributed between both parties based on performance.
-
-Think:
-- PandaDocs meets escrow  
-- minus the 3% intermediary fees  
-- minus the 1% “insurance”  
-- minus the lawyer layer  
-- minus the political permission layer  
-- minus getting ripped off by a random freelancer aka a Nigerian prince 🇳🇬 
-
-Freelancers finally get payment guarantees.  
-Clients finally get delivery guarantees.  
-No middlemen.  
-Just two parties, one contract, and AI that verifies the work.
-
-Smart contracts that can finally think — and earn while they wait.
-
----
-
-## Trust model
-
-This repo is built to avoid:
-
-> “Our server did it, trust us.”
-
-Sources of truth are:
-1) **Onchain bytecode execution logs**
-2) **Hashed AI-generated documents recorded onchain**
-3) **Decentralized workflows for orchestration**
-4) **Deterministic receipts and replay**
-
-The system is designed to survive thanks to Chainlink:
-- outages  
-- geographic distribution  
-- multi-rail settlement  
-- and the inevitable chaos of the real world  
-
----
-
-## What’s inside?
-
-This is a Turborepo monorepo:
-
-- `apps/docs` — docs site
-- `apps/api` - hono api for usage
-- `packages/contracts` — Solidity VM + escrow + arbitration contracts
-- `packages/workflows` — decentralized workflows (RFQ + AI arbitration)
-- `packages/sdk` — TypeScript compiler/encoder (bytecode programs, receipts)
-- `packages/gateway` — Hono API for intents, profiles, evidence upload, webhooks
-
----
-
-## Running locally
-
-Install dependencies:
-
-```sh
+```bash
 bun install
-
-
-
-# Turborepo starter
-
-This Turborepo starter is maintained by the Turborepo core team.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
+bun run api:check-types
+bunx turbo run build --filter=api --filter=@repo/contract-builder
 ```
 
-### Utilities
+### Apply database schema manually
 
-This Turborepo has some additional tools already setup for you:
+Run:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- `supabase/manual/001_apply_bufi_contracts_tables.sql`
 
-### Build
+in Supabase SQL editor.
 
-To build all apps and packages, run the following command:
+### Start API
 
-```
-cd i-hate-lawyers-and-bankers
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+bun run api:dev
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+### Run smoke test
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+bun run bufi:smoke
 ```
 
-### Develop
+Optional finalize coverage:
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+BUFI_SMOKE_ESCROW_ADDRESS=0xYourEscrowAddress bun run bufi:smoke
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## Deploy Runbook
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### Deploy contracts (Fuji)
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```bash
+cd hardhat
+bun run deploy:bufi:fuji
+cd ..
 ```
 
-### Remote Caching
+### Deploy CRE workflow
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+bun run bufi:deploy
+bun run bufi:activate
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Deploy API
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+bun run api:deploy
 ```
 
-## Useful Links
+### Bootstrap ERC-8004 agents (optional)
 
-Learn more about the power of Turborepo:
+Call:
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+`POST /agents/erc8004/bootstrap`
+
+after API and envs are configured.

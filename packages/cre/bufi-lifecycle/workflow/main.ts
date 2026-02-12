@@ -19,9 +19,12 @@ import {
   type HTTPPayload,
 } from '@chainlink/cre-sdk'
 import { z } from 'zod'
+import { handleAnalyze, type AnalyzeInput } from './handlers/analyze'
+import { handleDeploy, type DeployInput } from './handlers/deploy'
 import { handleVerify, type VerifyInput } from './handlers/verify'
 import { handleDispute, type DisputeInput } from './handlers/dispute'
 import { handleFinalize, type FinalizeInput } from './handlers/finalize'
+import { handleReputation, type ReputationInput } from './handlers/reputation'
 
 // ── Config Schema ──────────────────────────────────────────────────────────
 
@@ -65,6 +68,20 @@ const verifyPayloadSchema = z.object({
   submissionNotes: z.string().optional(),
 })
 
+const analyzePayloadSchema = z.object({
+  action: z.literal('analyze'),
+  agreementId: z.string(),
+  fileName: z.string(),
+  contentType: z.string(),
+  documentBase64: z.string(),
+})
+
+const deployPayloadSchema = z.object({
+  action: z.literal('deploy'),
+  agreementId: z.string(),
+  agreementJson: z.record(z.string(), z.unknown()),
+})
+
 const disputePayloadSchema = z.object({
   action: z.literal('dispute'),
   milestoneId: z.string(),
@@ -93,10 +110,21 @@ const finalizePayloadSchema = z.object({
   }),
 })
 
+const reputationPayloadSchema = z.object({
+  action: z.literal('reputation'),
+  disputeId: z.string(),
+  jurorAgentIds: z.array(z.string()),
+  majorityAgentIds: z.array(z.string()),
+  overturned: z.boolean().default(false),
+})
+
 const payloadSchema = z.discriminatedUnion('action', [
+  analyzePayloadSchema,
+  deployPayloadSchema,
   verifyPayloadSchema,
   disputePayloadSchema,
   finalizePayloadSchema,
+  reputationPayloadSchema,
 ])
 
 // ── Safe JSON Stringify ────────────────────────────────────────────────────
@@ -106,7 +134,7 @@ const safeJsonStringify = (obj: unknown): string =>
 
 // ── HTTP Trigger Handler ───────────────────────────────────────────────────
 
-const onHTTPTrigger = (runtime: Runtime<Config>, payload: HTTPPayload): string => {
+const onHTTPTrigger = async (runtime: Runtime<Config>, payload: HTTPPayload): Promise<string> => {
   runtime.log('=== BUFI Lifecycle Workflow ===')
 
   if (!payload.input || payload.input.length === 0) {
@@ -119,9 +147,27 @@ const onHTTPTrigger = (runtime: Runtime<Config>, payload: HTTPPayload): string =
   runtime.log(`Action: ${parsed.action}`)
 
   switch (parsed.action) {
+    case 'analyze': {
+      const input: AnalyzeInput = {
+        agreementId: parsed.agreementId,
+        fileName: parsed.fileName,
+        contentType: parsed.contentType,
+        documentBase64: parsed.documentBase64,
+      }
+      const report = await handleAnalyze(runtime, input)
+      return safeJsonStringify(report)
+    }
+
+    case 'deploy': {
+      const input: DeployInput = {
+        agreementId: parsed.agreementId,
+        agreementJson: parsed.agreementJson,
+      }
+      const report = await handleDeploy(runtime, input)
+      return safeJsonStringify(report)
+    }
+
     case 'verify': {
-      // Synchronous wrapper — CRE handlers must be sync
-      // The handleVerify function uses runtime.* APIs which are sync in CRE context
       const input: VerifyInput = {
         milestoneId: parsed.milestoneId,
         milestoneTitle: parsed.milestoneTitle,
@@ -129,10 +175,7 @@ const onHTTPTrigger = (runtime: Runtime<Config>, payload: HTTPPayload): string =
         submissionFiles: parsed.submissionFiles,
         submissionNotes: parsed.submissionNotes,
       }
-
-      // Note: In CRE context, async/await is handled by the runtime
-      // The HTTPClient calls are synchronous within the WASM sandbox
-      const report = handleVerifySync(runtime, input)
+      const report = await handleVerify(runtime, input)
       return safeJsonStringify(report)
     }
 
@@ -148,7 +191,7 @@ const onHTTPTrigger = (runtime: Runtime<Config>, payload: HTTPPayload): string =
         verificationConfidence: parsed.verificationConfidence,
       }
 
-      const result = handleDisputeSync(runtime, input)
+      const result = await handleDispute(runtime, input)
       return safeJsonStringify(result)
     }
 
@@ -163,28 +206,21 @@ const onHTTPTrigger = (runtime: Runtime<Config>, payload: HTTPPayload): string =
         agentIdentities: parsed.agentIdentities,
       }
 
-      const result = handleFinalizeSync(runtime, input)
+      const result = await handleFinalize(runtime, input)
+      return safeJsonStringify(result)
+    }
+
+    case 'reputation': {
+      const input: ReputationInput = {
+        disputeId: parsed.disputeId,
+        jurorAgentIds: parsed.jurorAgentIds,
+        majorityAgentIds: parsed.majorityAgentIds,
+        overturned: parsed.overturned,
+      }
+      const result = await handleReputation(runtime, input)
       return safeJsonStringify(result)
     }
   }
-}
-
-// ── Sync wrappers (CRE handlers are synchronous) ──────────────────────────
-// These wrap the async handlers. In CRE WASM context, crypto.subtle.digest
-// and other Web APIs are available synchronously within the sandbox.
-
-function handleVerifySync(runtime: Runtime<Config>, input: VerifyInput): unknown {
-  // In CRE, the runtime handles async internally
-  // We call the handler directly — it uses runtime.* sync APIs
-  return handleVerify(runtime, input)
-}
-
-function handleDisputeSync(runtime: Runtime<Config>, input: DisputeInput): unknown {
-  return handleDispute(runtime, input)
-}
-
-function handleFinalizeSync(runtime: Runtime<Config>, input: FinalizeInput): unknown {
-  return handleFinalize(runtime, input)
 }
 
 // ── Workflow Init ──────────────────────────────────────────────────────────

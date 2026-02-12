@@ -9,6 +9,13 @@ import type {
   EscrowStatus,
   Signature,
 } from '@/types/contracts'
+import {
+  getAgreement,
+  submitDeliverable as submitDeliverableApi,
+  getMilestoneVerification,
+  signAgreement,
+  fundAgreement,
+} from '@/lib/api/client'
 
 // Signing states
 export type SigningState = 'idle' | 'confirming' | 'signing' | 'success' | 'error'
@@ -244,6 +251,76 @@ const mockContract: Contract = {
   updatedAt: new Date(),
 }
 
+const statusMap: Record<string, ContractStatus> = {
+  DRAFT: 'draft',
+  PENDING_SIGN: 'pending_sign',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  DISPUTED: 'disputed',
+  CANCELLED: 'cancelled',
+}
+
+const milestoneStateMap: Record<string, MilestoneStatus> = {
+  PENDING: 'pending',
+  FUNDED: 'active',
+  SUBMITTED: 'submitted',
+  VERIFYING: 'verifying',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  RELEASED: 'released',
+  DISPUTED: 'disputed',
+  CANCELLED: 'rejected',
+}
+
+function mapAgreementToContract(data: Record<string, unknown>): Contract {
+  const rawMilestones = Array.isArray(data.milestones)
+    ? (data.milestones as Array<Record<string, unknown>>)
+    : []
+  const totalAmount = typeof data.total_amount === 'number' ? data.total_amount : 0
+
+  return {
+    ...mockContract,
+    id: String(data.agreement_id ?? mockContract.id),
+    name: String(data.title ?? mockContract.name),
+    contractNumber: String(data.agreement_id ?? mockContract.contractNumber),
+    status: statusMap[String(data.status ?? 'DRAFT')] ?? mockContract.status,
+    totalAmount,
+    smartContractAddress:
+      typeof data.escrow_address === 'string' && data.escrow_address.length > 0
+        ? data.escrow_address
+        : mockContract.smartContractAddress,
+    milestones:
+      rawMilestones.length > 0
+        ? rawMilestones.map((ms, index) => ({
+            id: String(ms.id ?? `ms-${index + 1}`),
+            contractId: String(data.agreement_id ?? ''),
+            name: String(ms.title ?? `Milestone ${index + 1}`),
+            description: '',
+            orderIndex: Number(ms.index ?? index),
+            amount: Number(ms.amount ?? 0),
+            percentage:
+              totalAmount > 0 ? Math.round((Number(ms.amount ?? 0) / totalAmount) * 100) : 0,
+            verificationCriteria: JSON.stringify(ms.criteria ?? []),
+            requiredDeliverables: [],
+            status: milestoneStateMap[String(ms.state ?? 'PENDING')] ?? 'pending',
+            maxRetries: Number(ms.max_retries ?? 3),
+            currentAttempt: Number(ms.current_attempt ?? 0),
+            submissions: [],
+            dueDate:
+              typeof ms.due_date === 'string' && ms.due_date.length > 0
+                ? new Date(ms.due_date)
+                : undefined,
+            createdAt:
+              typeof ms.created_at === 'string' ? new Date(ms.created_at) : new Date(),
+          }))
+        : mockContract.milestones,
+    createdAt:
+      typeof data.created_at === 'string' ? new Date(data.created_at) : new Date(),
+    updatedAt:
+      typeof data.updated_at === 'string' ? new Date(data.updated_at) : new Date(),
+  }
+}
+
 export const useActiveContractStore = create<ActiveContractStore>((set, get) => ({
   // Initial state
   contract: null,
@@ -281,10 +358,10 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   fetchContract: async (id: string) => {
     set({ loading: true, error: null })
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const agreement = await getAgreement(id)
+      const contract = mapAgreementToContract(agreement)
       set({ 
-        contract: mockContract,
+        contract,
         currentUserRole: 'payer', // Mock: assume current user is payer
         currentUserWallet: '0x7f3a4b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a',
         loading: false,
@@ -307,16 +384,15 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   signContract: async () => {
     set({ signingState: 'confirming' })
     try {
-      // Show wallet confirmation
-      await new Promise(resolve => setTimeout(resolve, 1000))
       set({ signingState: 'signing' })
-      
-      // Simulate wallet signing
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
+
       // Update contract with signature
       const { contract, currentUserRole } = get()
       if (contract && currentUserRole) {
+        const signerAddress =
+          currentUserRole === 'payer' ? contract.payer.walletAddress : contract.payee.walletAddress
+        await signAgreement(contract.id, currentUserRole, signerAddress)
+
         const signature: Signature = {
           partyId: currentUserRole === 'payer' ? contract.payer.id : contract.payee.id,
           role: currentUserRole,
@@ -385,8 +461,7 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   },
   
   sendSigningReminder: async () => {
-    // TODO: API call to send reminder email
-    await new Promise(resolve => setTimeout(resolve, 500))
+    // TODO: Connect this to notifications service endpoint.
     set({ lastReminderSent: new Date() })
   },
   
@@ -394,15 +469,13 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   fundEscrow: async (amount: number) => {
     set({ fundingState: 'approving' })
     try {
-      // Simulate USDC approval
-      await new Promise(resolve => setTimeout(resolve, 1500))
       set({ fundingState: 'depositing' })
-      
-      // Simulate deposit
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
+
       const { contract } = get()
       if (contract) {
+        const txHash = '0x' + Math.random().toString(16).substring(2, 42)
+        await fundAgreement(contract.id, amount, txHash)
+
         set({
           contract: {
             ...contract,
@@ -426,8 +499,7 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   },
   
   fetchUsdcBalance: async () => {
-    // TODO: Fetch actual balance
-    await new Promise(resolve => setTimeout(resolve, 300))
+    // TODO: Wire to wallet balance endpoint.
     set({ userUsdcBalance: 28432.50 })
   },
   
@@ -462,54 +534,25 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   submitDeliverable: async (milestoneId, files, links, notes) => {
     set({ submissionState: 'uploading', submissionProgress: 0 })
     try {
-      // Simulate upload progress
-      for (let i = 0; i <= 100; i += 20) {
-        await new Promise(resolve => setTimeout(resolve, 300))
-        set({ submissionProgress: i })
-      }
-      
-      set({ submissionState: 'submitting' })
-      
-      // Simulate submission
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Update milestone
       const { contract } = get()
       if (contract) {
-        const milestones = contract.milestones.map(m => {
-          if (m.id === milestoneId) {
-            const newSubmission: Submission = {
-              id: 'sub-' + Date.now(),
-              milestoneId,
-              attemptNumber: m.currentAttempt + 1,
-              files: files.map(f => ({
-                id: 'file-' + Date.now(),
-                name: f.name,
-                size: f.size,
-                type: f.type,
-                url: URL.createObjectURL(f),
-                deliverableType: 'other',
-              })),
-              links: links.map(url => ({
-                id: 'link-' + Date.now(),
-                url,
-                type: url.includes('figma') ? 'figma' : url.includes('github') ? 'github' : 'other',
-                validated: true,
-              })),
-              notes,
-              status: 'verifying',
-              submittedAt: new Date(),
-            }
-            return {
-              ...m,
-              status: 'verifying' as MilestoneStatus,
-              currentAttempt: m.currentAttempt + 1,
-              submissions: [...m.submissions, newSubmission],
-            }
-          }
-          return m
-        })
-        set({ contract: { ...contract, milestones }, submissionState: 'success' })
+        set({ submissionProgress: 50, submissionState: 'submitting' })
+        const result = await submitDeliverableApi(contract.id, milestoneId, files, notes)
+        const verification = result as unknown as { verification?: { verdict?: 'PASS' | 'FAIL' } }
+
+        const milestones = contract.milestones.map((m) =>
+          m.id === milestoneId
+            ? {
+                ...m,
+                status:
+                  verification?.verification?.verdict === 'PASS'
+                    ? ('approved' as MilestoneStatus)
+                    : ('rejected' as MilestoneStatus),
+                currentAttempt: m.currentAttempt + 1,
+              }
+            : m
+        )
+        set({ contract: { ...contract, milestones }, submissionProgress: 100, submissionState: 'success' })
       }
     } catch (error) {
       set({ submissionState: 'error', submissionError: 'Submission failed. Please try again.' })
@@ -521,7 +564,22 @@ export const useActiveContractStore = create<ActiveContractStore>((set, get) => 
   // Verification polling
   startVerificationPolling: (submissionId) => {
     set({ verificationState: 'polling' })
-    // TODO: Implement actual polling
+    const poll = async () => {
+      const { contract, activeMilestone } = get()
+      if (!contract || !activeMilestone) {
+        set({ verificationState: 'idle' })
+        return
+      }
+      try {
+        await getMilestoneVerification(contract.id, activeMilestone.id)
+        set({ verificationState: 'complete' })
+      } catch {
+        setTimeout(() => {
+          void poll()
+        }, 2500)
+      }
+    }
+    void poll()
   },
   
   stopVerificationPolling: () => {
