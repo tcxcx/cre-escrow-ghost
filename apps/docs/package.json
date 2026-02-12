@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@repo/services": "workspace:*",
+    "@supabase/supabase-js": "^2.49.3",
     "next": "16.1.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

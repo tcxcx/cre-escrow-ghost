@@ -1,0 +1,22 @@
+{
+  "name": "@repo/services",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./agreement": "./src/agreement.service.ts",
+    "./escrow": "./src/escrow.service.ts",
+    "./file": "./src/file.service.ts",
+    ".": "./src/index.ts"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@repo/types": "workspace:*",
+    "@supabase/supabase-js": "^2.49.3",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.6.2"
+  }
+}

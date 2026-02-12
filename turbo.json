@@ -5,8 +5,13 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "artifacts/**", "typechain-types/**"]
     },
+    "compile": {
+      "inputs": ["contracts/**/*.sol", "hardhat.config.ts", "remappings.txt"],
+      "outputs": ["artifacts/**", "cache/**", "typechain-types/**"]
+    },
+    "test": {},
     "lint": {
       "dependsOn": ["^lint"]
     },
@@ -16,6 +21,49 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "cre:workflow:simulate": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:workflow:deploy": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:workflow:activate": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:workflow:pause": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:workflow:delete": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:secrets:create": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:secrets:update": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:secrets:list": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:secrets:delete": {
+      "cache": false,
+      "interactive": true
+    },
+    "cre:bindings": {
+      "cache": false
     }
   }
 }

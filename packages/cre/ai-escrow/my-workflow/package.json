@@ -1,0 +1,26 @@
+{
+  "name": "@repo/cre-ai-escrow",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "private": true,
+  "scripts": {
+    "postinstall": "bun x cre-setup",
+    "cre:workflow:simulate": "~/.cre/bin/cre workflow simulate -R ..",
+    "cre:workflow:deploy": "~/.cre/bin/cre workflow deploy -R ..",
+    "cre:workflow:activate": "~/.cre/bin/cre workflow activate -R ..",
+    "cre:workflow:pause": "~/.cre/bin/cre workflow pause -R ..",
+    "cre:workflow:delete": "~/.cre/bin/cre workflow delete -R ..",
+    "cre:secrets:create": "~/.cre/bin/cre secrets create -R ..",
+    "cre:secrets:update": "~/.cre/bin/cre secrets update -R ..",
+    "cre:secrets:list": "~/.cre/bin/cre secrets list -R ..",
+    "cre:secrets:delete": "~/.cre/bin/cre secrets delete -R ..",
+    "cre:bindings": "~/.cre/bin/cre generate-bindings -R .."
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@chainlink/cre-sdk": "^1.0.9"
+  },
+  "devDependencies": {
+    "@types/bun": "1.2.21"
+  }
+}

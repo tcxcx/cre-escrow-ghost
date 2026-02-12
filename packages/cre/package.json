@@ -1,0 +1,34 @@
+{
+  "name": "@repo/cre",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./template": "./template/template.ts"
+  },
+  "scripts": {
+    "cre:login": "~/.cre/bin/cre login",
+    "cre:whoami": "~/.cre/bin/cre whoami",
+    "cre:init": "~/.cre/bin/cre init",
+    "cre:workflow:simulate": "~/.cre/bin/cre workflow simulate",
+    "cre:workflow:deploy": "~/.cre/bin/cre workflow deploy",
+    "cre:workflow:activate": "~/.cre/bin/cre workflow activate",
+    "cre:workflow:pause": "~/.cre/bin/cre workflow pause",
+    "cre:workflow:delete": "~/.cre/bin/cre workflow delete",
+    "cre:secrets:create": "~/.cre/bin/cre secrets create",
+    "cre:secrets:update": "~/.cre/bin/cre secrets update",
+    "cre:secrets:list": "~/.cre/bin/cre secrets list",
+    "cre:secrets:delete": "~/.cre/bin/cre secrets delete",
+    "cre:account:link-key": "~/.cre/bin/cre account link-key",
+    "cre:account:list-key": "~/.cre/bin/cre account list-key",
+    "cre:account:unlink-key": "~/.cre/bin/cre account unlink-key",
+    "cre:bindings": "~/.cre/bin/cre generate-bindings"
+  },
+  "devDependencies": {
+    "@chainlink/cre-sdk": "^1.0.9",
+    "zod": "^3.24.2"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
+}
