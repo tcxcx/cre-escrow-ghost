@@ -1,0 +1,315 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* BUFI Brand Colors */
+:root {
+  /* Core BUFI colors */
+  --violeta: #C4A1FF;
+  --lila: #E2D0FC;
+  --agnus-dei: #FFECB4;
+  --belanova: #FEADEC;
+  --purpura: #6854CF;
+  --vverde: #82e664;
+  --rojo: #FF507A;
+  --amarillo: #FFE48C;
+  --morado: #AB8DFF;
+
+  /* Light mode (default) */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 45 18% 96%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 252 58% 57%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 270 50% 98%;
+  --secondary-foreground: 252 58% 40%;
+  --muted: 270 30% 96%;
+  --muted-foreground: 252 10% 45%;
+  --accent: 270 50% 96%;
+  --accent-foreground: 252 58% 40%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 270 30% 90%;
+  --input: 270 30% 92%;
+  --ring: 252 58% 57%;
+  --radius: 0.625rem;
+
+  /* Chart colors using BUFI palette */
+  --chart-1: #CBB0FF;
+  --chart-2: #FFADEC;
+  --chart-3: #FFEBB4;
+  --chart-4: #E2D0FD;
+  --chart-5: #6954CF;
+
+  /* Sidebar light */
+  --sidebar: 270 30% 97%;
+  --sidebar-foreground: 222.2 84% 4.9%;
+  --sidebar-primary: 252 58% 57%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 270 50% 96%;
+  --sidebar-accent-foreground: 252 58% 40%;
+  --sidebar-border: 270 30% 90%;
+  --sidebar-ring: 252 58% 57%;
+
+  /* Node colors - BUFI themed */
+  --node-payer: #6854CF;
+  --node-payee: #82e664;
+  --node-milestone: #C4A1FF;
+  --node-condition: #FFE48C;
+  --node-payment: #82e664;
+  --node-signature: #6854CF;
+  --node-clause: #E2D0FC;
+  --node-commission: #FEADEC;
+
+  /* Additional BUFI tokens */
+  --bg-violet: #F8F6FD;
+  --border-fine: #dadada;
+  --border-purple: #6954CF;
+  --border-bufi: #E2D0FD;
+  --shadow: 4px 4px 0px 0px #1a1a1a;
+}
+
+.dark {
+  --background: 240 10% 8%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 12%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 10%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 252 58% 67%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 252 30% 18%;
+  --secondary-foreground: 270 50% 90%;
+  --muted: 252 20% 16%;
+  --muted-foreground: 252 10% 60%;
+  --accent: 252 30% 18%;
+  --accent-foreground: 270 50% 90%;
+  --destructive: 0 62.8% 50%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 252 20% 20%;
+  --input: 252 20% 18%;
+  --ring: 252 58% 67%;
+
+  /* Chart colors dark */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  /* Sidebar dark */
+  --sidebar: 240 10% 12%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 252 58% 67%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 252 30% 18%;
+  --sidebar-accent-foreground: 270 50% 90%;
+  --sidebar-border: 252 20% 20%;
+  --sidebar-ring: 252 58% 67%;
+
+  /* Node colors dark */
+  --node-payer: #AB8DFF;
+  --node-payee: #82e664;
+  --node-milestone: #C4A1FF;
+  --node-condition: #FFE48C;
+  --node-payment: #82e664;
+  --node-signature: #AB8DFF;
+  --node-clause: #E2D0FC;
+  --node-commission: #FEADEC;
+
+  --bg-violet: #272933;
+  --border-fine: #4b5563;
+  --shadow: 4px 4px 0px 0px #4b5563;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* BUFI color tokens */
+  --color-violeta: var(--violeta);
+  --color-lila: var(--lila);
+  --color-agnus-dei: var(--agnus-dei);
+  --color-belanova: var(--belanova);
+  --color-purpura: var(--purpura);
+  --color-vverde: var(--vverde);
+  --color-rojo: var(--rojo);
+  --color-amarillo: var(--amarillo);
+  --color-morado: var(--morado);
+
+  /* Node colors */
+  --color-node-payer: var(--node-payer);
+  --color-node-payee: var(--node-payee);
+  --color-node-milestone: var(--node-milestone);
+  --color-node-condition: var(--node-condition);
+  --color-node-payment: var(--node-payment);
+  --color-node-signature: var(--node-signature);
+  --color-node-clause: var(--node-clause);
+  --color-node-commission: var(--node-commission);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* BUFI Effects */
+.text-clip {
+  background-image: linear-gradient(to right, #6954CF, #C4A1FF, #0C92FF, #46FFE3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.fx-glossy {
+  --fx-from: #C9BBFF;
+  --fx-via: #A88FFF;
+  --fx-to: #7C5CFF;
+  position: relative;
+  border-radius: 1rem;
+  color: #fff;
+  background: linear-gradient(180deg, var(--fx-from) 0%, var(--fx-via) 45%, var(--fx-to) 100%);
+  box-shadow:
+    0 8px 20px rgba(109, 76, 255, 0.35),
+    inset 0 2px 6px rgba(255, 255, 255, 0.55),
+    inset 0 -10px 22px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.fx-glossy:hover {
+  filter: saturate(1.05);
+}
+
+.dark .fx-glossy {
+  --fx-from: #AD96FF;
+  --fx-via: #7D5BFF;
+  --fx-to: #5E3DEB;
+  box-shadow:
+    0 10px 22px rgba(76, 54, 173, 0.45),
+    inset 0 2px 6px rgba(255, 255, 255, 0.25),
+    inset 0 -10px 22px rgba(0, 0, 0, 0.35);
+}
+
+/* Scrollbar styling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--purpura) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--purpura);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* React Flow Styles */
+.react-flow__node {
+  cursor: pointer;
+}
+
+.react-flow__handle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border-width: 2px;
+  transition: all 0.15s ease;
+}
+
+.react-flow__handle:hover {
+  transform: scale(1.2);
+}
+
+.react-flow__edge-path {
+  stroke: var(--purpura);
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: var(--violeta);
+}
+
+.react-flow__connection-line {
+  stroke: var(--purpura);
+  stroke-width: 2;
+}
+
+.react-flow__background {
+  background-color: hsl(var(--background));
+}
+
+.dark .react-flow__background {
+  background-color: hsl(var(--background));
+}
+
+/* React Flow minimap */
+.react-flow__minimap {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+/* Hide default sheet close button when we have custom close */
+[data-slot="sheet-content"] > button[class*="absolute top-4 right-4"] {
+  display: none;
+}

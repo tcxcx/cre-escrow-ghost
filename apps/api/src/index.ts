@@ -9,6 +9,8 @@ import deposit from "./routes/deposit";
 import depositApprove from "./routes/deposit-approve";
 import validateWork from "./routes/validate-work";
 import webhook from "./routes/webhook";
+import agreements from "./routes/agreements";
+import agents from "./routes/agents";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -25,6 +27,10 @@ app.route("/contracts/escrow", escrow);
 app.route("/contracts/escrow/deposit", deposit);
 app.route("/contracts/escrow/deposit/approve", depositApprove);
 app.route("/contracts/validate-work", validateWork);
+
+// ── BUFI Contracts v3 routes ──────────────────────────────────────────────
+app.route("/agreements", agreements);
+app.route("/agents/erc8004", agents);
 
 // ── Webhook ───────────────────────────────────────────────────────────────
 app.route("/webhook", webhook);
