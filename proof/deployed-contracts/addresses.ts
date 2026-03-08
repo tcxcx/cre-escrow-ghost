@@ -91,7 +91,7 @@ export const ACE_API_URL = 'https://convergence2026-token-api.cldev.cloud'
 // ============================================================================
 
 /** EscrowFactory — Eth Sepolia (wired) — update after deploy */
-export const ESCROW_FACTORY = '0x0000000000000000000000000000000000000000' as const
+export const ESCROW_FACTORY = '0x0f8b653aadd4f04008fdaca3429f6ea24951b129' as const
 
 /** EscrowFactory — Arbitrum Sepolia (demo only, not wired) — update after deploy */
 export const ESCROW_FACTORY_ARB = '0x0000000000000000000000000000000000000000' as const

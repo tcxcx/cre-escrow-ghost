@@ -144,31 +144,35 @@ An agentic interface where AI agents help employees discover, research, and purc
 
 ## Deployed Contracts
 
+> All contracts verified on testnet explorers. Click addresses to view on Etherscan/Arbiscan.
+
 ### Ethereum Sepolia (Chain ID: 11155111)
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
-| **BUAttestation** | `0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C` | On-chain attestation (19 op types, rate limits, TTL, severity) |
-| **USDg** | `0x2F28A8378798c5B42FC28f209E903508DD8F878b` | Ghost stablecoin (6 decimals, auto-allocate, Ownable2Step+Pausable) |
-| **PolicyEngine** | `0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926` | ERC1967Proxy → Chainlink impl, ACE-managed allowlists |
-| **TreasuryManager** | `0x33A4a73FD81bB6314AB7dc77301894728E6825A4` | ReceiverTemplate+Pausable, USDC→USYC yield allocation |
-| **ACE Vault** | `0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13` | Chainlink-managed custody vault |
-| **GhostUSDC v2** | `0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5` | FHERC20 wrapper (USDC-backed, FHE-encrypted balances) |
+| **BUAttestation** | [`0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C`](https://sepolia.etherscan.io/address/0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C) | On-chain attestation — 19 operation types, rate limits, TTL, severity levels |
+| **USDCg (USDg)** | [`0x2F28A8378798c5B42FC28f209E903508DD8F878b`](https://sepolia.etherscan.io/address/0x2F28A8378798c5B42FC28f209E903508DD8F878b) | Ghost stablecoin — 6 decimals, auto-allocate deposit→USYC, Ownable2Step+Pausable |
+| **PolicyEngine** | [`0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926`](https://sepolia.etherscan.io/address/0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926) | ERC1967Proxy → Chainlink compliance impl, ACE-managed allowlists |
+| **TreasuryManager** | [`0x33A4a73FD81bB6314AB7dc77301894728E6825A4`](https://sepolia.etherscan.io/address/0x33A4a73FD81bB6314AB7dc77301894728E6825A4) | ReceiverTemplate+Pausable, CRE ALLOCATE/REDEEM, USDC→USYC yield |
+| **ACE Vault** | [`0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13`](https://sepolia.etherscan.io/address/0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13) | Chainlink-managed custody vault, USDCg registered |
+| **GhostUSDC v2 (eUSDCg)** | [`0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5`](https://sepolia.etherscan.io/address/0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5) | FHERC20 wrapper — USDC-backed, FHE-encrypted balances via CoFHE |
+| **EscrowFactory** | [`0x0f8b653aadd4f04008fdaca3429f6ea24951b129`](https://sepolia.etherscan.io/address/0x0f8b653aadd4f04008fdaca3429f6ea24951b129) | Escrow agreement factory — deploys EscrowWithAgentV3 instances |
 
-### Arbitrum Sepolia
+### Arbitrum Sepolia (Chain ID: 421614)
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
-| **GhostUSDC** | `0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765` | Cross-chain Ghost USDC deployment |
+| **GhostUSDC (eUSDCg)** | [`0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765`](https://sepolia.arbiscan.io/address/0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765) | Cross-chain Ghost USDC — FHERC20 wrapper on Arbitrum |
 
 ### External Dependencies (Sepolia)
 
 | Contract | Address | Provider |
 |----------|---------|----------|
-| USDC | `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` | Circle |
-| USYC | `0x38D3A3f8717F4DB1CcB4Ad7D8C755919440848A3` | Hashnote |
-| USYC Teller | `0x96424C885951ceb4B79fecb934eD857999e6f82B` | Hashnote |
-| Deployer | `0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474` | Bu (testnet burner) |
+| **USDC** | [`0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238`](https://sepolia.etherscan.io/address/0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238) | Circle |
+| **USYC** | [`0x38D3A3f8717F4DB1CcB4Ad7D8C755919440848A3`](https://sepolia.etherscan.io/address/0x38D3A3f8717F4DB1CcB4Ad7D8C755919440848A3) | Hashnote |
+| **USYC Teller** | [`0x96424C885951ceb4B79fecb934eD857999e6f82B`](https://sepolia.etherscan.io/address/0x96424C885951ceb4B79fecb934eD857999e6f82B) | Hashnote |
+| **USYC Oracle** | [`0x35b96d80C72f873bACc44A1fACfb1f5fac064f1a`](https://sepolia.etherscan.io/address/0x35b96d80C72f873bACc44A1fACfb1f5fac064f1a) | Hashnote |
+| **Deployer** | [`0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474`](https://sepolia.etherscan.io/address/0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474) | Bu (testnet burner) |
 
 ### Contract Hardening
 
@@ -286,34 +290,43 @@ All source code, contracts, workflows, and UI components are included in the `pr
 
 ```
 proof/
-├── cre-workflows/          # 14 CRE workflow handlers + shared utilities
-│   ├── workflow-ghost-*    # 3 Ghost Mode workflows
-│   ├── workflow-escrow-*   # 5 Escrow workflows
+├── cre-workflows/          # 12 CRE workflow handlers + shared utilities
+│   ├── workflow-ghost-*    # 3 Ghost Mode workflows (deposit, withdraw, transfer)
+│   ├── workflow-escrow-*   # 5 Escrow workflows (verify, dispute, finalize, monitor, yield)
 │   ├── workflow-private-*  # Confidential transfer workflow
 │   ├── workflow-treasury-* # Treasury rebalance cron
 │   ├── workflow-payroll-*  # Payroll attestation
-│   └── shared/             # Reusable services (attestation, EVM, FHE, triggers)
-├── contracts/              # Solidity: GhostUSDC, USDg, PolicyEngine, TreasuryManager, BUAttestation
-│   ├── src/                # Contract source
+│   └── shared/             # Reusable services (attestation, EVM, FHE, triggers, ABIs)
+├── cre-contracts/          # Foundry contracts (deployed on Sepolia)
+│   ├── src/                # BUAttestation, USDg, USDCg, GhostUSDC, TreasuryManager, FHERC20
+│   ├── test/               # Foundry tests (hardened security, attestation, yield)
+│   └── script/             # Deploy scripts (DeployAll, DeployGhostUSDC, DeployTimelock)
+├── cre-scripts/            # CRE deploy & simulation scripts
+│   ├── deploy-escrow-factory.ts    # EscrowFactory deployment (ETH Sepolia)
+│   ├── deploy-escrow-factory-arb.ts # EscrowFactory deployment (ARB Sepolia)
+│   ├── deploy-arb-sepolia-all.ts   # Full ARB Sepolia deployment
+│   └── simulate.sh                 # CRE workflow simulation runner
+├── contracts/              # Additional contract source + FHE reference
+│   ├── src/                # Arbitration contracts (EscrowWithAgentV3, Factory, Policies)
 │   ├── test/               # Foundry tests
 │   ├── script/             # Deploy scripts
-│   └── fhe-reference/      # CoFHE/Fhenix FHE integration reference
+│   └── fhe-reference/      # CoFHE/Fhenix FHE integration reference (FHERC20, Wrapper)
 ├── intelligence/           # AI arbitration system
 │   ├── arbitration/        # 4-layer tribunal (verifier, advocates, judges, supreme court)
-│   └── a2ui/               # Agent-to-Agent + AG-UI streaming
+│   └── a2ui/               # Agent-to-Agent + AG-UI streaming adapter
 ├── ghost-mode/             # Ghost Mode UI + services
-│   ├── components/         # Deposit, withdraw, transfer UIs
+│   ├── components/         # Deposit, withdraw, transfer UIs + onboarding
 │   └── services/           # FHE state readers, privacy helpers
 ├── stocks/                 # Stock purchasing + payroll
-│   ├── src/                # @bu/stocks package (providers, types, constants)
-│   ├── earn-ui/            # Purchase flow, charts, stock cards
-│   └── hooks/              # React hooks for stock data
+│   ├── src/                # @bu/stocks package (Polygon.io, Dune, Alchemy, Massive providers)
+│   ├── earn-ui/            # Purchase flow, interactive charts, stock cards
+│   └── hooks/              # React hooks for stock data + price history
 ├── agentic-ui/             # A2A protocol + CopilotKit adapter
-│   ├── src/                # Agent cards, registry, A2A client, stream bridge
-│   └── a2a-routes/         # Shiva A2A HTTP routes
+│   ├── src/                # Agent cards, registry, A2A client, stream bridge, renderer
+│   └── a2a-routes/         # Shiva A2A HTTP routes + task store
 ├── email-templates/        # 8 contract lifecycle email templates
-├── deployed-contracts/     # Contract address registry
-└── plans/                  # Architecture documents and design specs
+├── deployed-contracts/     # Contract address registry (addresses.ts)
+└── plans/                  # 8 architecture documents and design specs
 ```
 
 ---
