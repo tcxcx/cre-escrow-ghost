@@ -1,31 +1,34 @@
-# The Ark of the New Covenant
+# cre-escrow-ghost
 
-**Programmable settlement for a world without lawyers, politicians, and bankers.**
+**Milestone-based escrow with AI arbitration + FHE-encrypted private transfers, orchestrated by Chainlink CRE.**
 
-> **"Cursed is the man who trusts in man…"**
-> — *Jeremiah 17:5*
+> Submitted for [Convergence | A Chainlink Hackathon](https://chainlink-hackathon.devpost.com/)
 
-Not because humans are evil — but because humans are human: biased, emotional, inconsistent, incentivized, corruptible, tired, and sometimes just having a bad day.
+## Overview
 
-So we built a system where:
-- **AI is neutral when we can't be**
-- **contracts verify reality before releasing funds**
-- **money moves at the speed of the internet** — without asking politicians for permission
+Two CRE-orchestrated financial primitives sharing the same compliance, attestation, and fallback infrastructure:
 
----
+| Primitive | What It Does | Key Contracts |
+|-----------|-------------|---------------|
+| **Escrow** | Milestone-based escrow where AI verifies deliverables, runs 4-layer adversarial arbitration on disputes (Advocates → Tribunal → Supreme Court), and releases funds only when work is provably delivered. On-chain appeal bonds + immutable verdict records. | `EscrowFactoryV3`, `EscrowWithAgentV3` |
+| **Ghost Mode** | Compliant private transfers with FHE-encrypted balances (`eUSDCg` via CoFHE), 3-layer compliance (Circle + Chainlink ACE PolicyEngine + Persona KYC/KYB), and treasury yield on deposits via Hashnote USYC. | `GhostUSDC (FHERC20Wrapper)`, `PolicyEngine`, `TreasuryManager` |
 
-## What We Built
+Both produce **on-chain attestations** via `BUAttestation` for every operation — DON-signed, consensus-verified, immutable.
 
-Bu is an **Agentic Financial Operating System** on stablecoin rails — not a dashboard, not a neobank. An AI COO and CFO that remembers everything, researches autonomously, communicates proactively, and guides workspace teams through any financial operation.
+**16 CRE workflows** across escrow, privacy, compliance, treasury, payroll, invoicing, and reporting. Full architectural parity between Ghost and Escrow pipelines (fallback resilience, callback pattern, confidential DON state, dual-trigger event monitoring).
 
-It runs on **two pillars**:
+### Stack
 
-1. **Ghost Mode Privacy** — compliant private transfers with FHE-encrypted balances, 3-layer compliance (Circle + Chainlink ACE + Persona KYC/KYB), and treasury yield on deposits
-2. **AI Escrow Contracts** — milestone-based escrow where AI verifies deliverables, runs adversarial arbitration on disputes, and releases funds only when work is provably delivered
-
-Both orchestrated through **Chainlink CRE** — 16 workflows producing on-chain attestations for every financial operation, with full architectural parity between Ghost Mode and Escrow pipelines.
-
-**Architecture:** Next.js app → Cloudflare Worker (Shiva) → Circle Programmable Wallets → Solidity contracts on Sepolia + Arbitrum Sepolia → 15 CRE workflows for compliance, privacy, escrow, payroll, invoicing, and treasury management.
+| Layer | Technology |
+|-------|-----------|
+| **Orchestration** | Chainlink CRE — 16 workflows on DON with consensus-verified API calls |
+| **Contracts** | Solidity 0.8.24 (Foundry) — Sepolia + Arbitrum Sepolia |
+| **FHE** | Fhenix CoFHE — server-side `FHE.asEuint64()` encryption, no browser SDK |
+| **Wallets** | Circle Programmable Wallets (DCW) — server-side custodial |
+| **Compliance** | Circle Compliance Engine + Chainlink ACE PolicyEngine + Persona KYC/KYB |
+| **Backend** | Hono on Cloudflare Workers (Shiva) + Supabase PostgreSQL |
+| **Frontend** | Next.js 16 + React 19 — 98 contract UI components |
+| **Yield** | Hashnote USYC (~6.5% APY) via TreasuryManager |
 
 ---
 
@@ -61,25 +64,15 @@ Both orchestrated through **Chainlink CRE** — 16 workflows producing on-chain 
 
 ---
 
-## Chainlink CRE — The Orchestration Layer
+## How CRE Fits In
 
-### The Problem: A Messy Middle
+CRE sits between our backend services and the blockchain. Every financial operation passes through a Decentralized Oracle Network (DON) — multiple independent Chainlink nodes execute the same task, reach consensus, and produce a cryptographically signed result.
 
-Our financial system — Shiva, Motora, Circle, Bridge, Alfred, Rain, Stripe — talks to blockchains through a tangle of individual integrations. Every service has its own connection to every chain. KYC/AML checks happen in one place, transfer execution in another, fee reconciliation in a third. Each path is a separate piece of infrastructure we built, maintain, and trust independently.
+- **API calls are consensus-verified** — multiple DON nodes call the same endpoint and must agree on the response
+- **Blockchain reads are independently confirmed** — no single-node trust for balance checks or state reads
+- **Attestations are DON-signed** — BFT consensus signature verified on-chain by `BUAttestation`
 
-There is no unified verification layer. When Shiva executes a Circle transfer, we trust Circle's response. When Motora processes an Alfred ramp, we trust Alfred's webhook. If something goes wrong between any of these systems and the blockchain, we find out from a support ticket, not from a cryptographic proof.
-
-### The Solution: CRE as the Single Source of Truth
-
-CRE replaces the messy middle with a single orchestration layer. Our existing financial systems connect to CRE, and CRE connects to blockchains. Every operation passes through a Decentralized Oracle Network (DON) where multiple independent nodes execute the same task, reach consensus, and produce a cryptographically signed result.
-
-This means:
-
-- **Every API call is consensus-verified.** When a CRE workflow calls Shiva to check a transfer, multiple independent Chainlink nodes call Shiva and must agree on the response. No single point of trust.
-- **Every blockchain read is independently confirmed.** When CRE reads a USDC balance, multiple nodes read the chain independently. You get one verified answer.
-- **Every write is cryptographically signed.** When CRE publishes an attestation on-chain, it carries a BFT consensus signature. The smart contract verifies it came from the DON, not from a single server.
-
-We did not rewrite Shiva, Motora, or any existing service. CRE wraps around them — calls their APIs, verifies the results through consensus, and produces provable, on-chain records of what happened.
+Existing services (Shiva, Circle, Motora) didn't change. CRE wraps around them — calls their APIs through consensus, then writes immutable proofs on-chain.
 
 ---
 
@@ -248,26 +241,21 @@ The CRE workflow runs on a Chainlink DON, calls back into the API through consen
 
 ---
 
-## Wallet-Level Compliance Stack (3 Layers)
+## Compliance Stack (3 Layers)
 
-| Layer | System | What It Does |
-|-------|--------|-------------|
-| **1** | Circle Compliance Engine | Every Programmable Wallet transaction passes sanctions/PEP/adverse media screening before on-chain execution. Silent. Automatic. First gate. |
-| **2** | ACE Policy Guards | PolicyEngine contract (ERC1967Proxy) enforces Chainlink ACE policy on every `transfer()`, `deposit()`, `wrap()`. On-chain `_requireCompliant(sender, recipient)` check. |
-| **3** | Persona KYC/KYB | Context-aware: personal wallets → KYC, team wallets → KYB. Status attested on-chain via BUAttestation with 365-day TTL. Ghost Mode and escrow gate behind verification. |
-
-The user sees one verification step. Three compliance systems run underneath.
+| Layer | System | Mechanism |
+|-------|--------|-----------|
+| **1** | Circle Compliance Engine | Sanctions/PEP/adverse media screening on every DCW transaction (silent, automatic) |
+| **2** | Chainlink ACE PolicyEngine | On-chain `_requireCompliant(sender, recipient)` check on every `transfer()`, `deposit()`, `wrap()` |
+| **3** | Persona KYC/KYB | Personal wallets → KYC, team wallets → KYB. Attested on-chain via BUAttestation (365-day TTL). `workflow-allowlist-sync` bridges webhooks to PolicyEngine AllowList |
 
 ---
 
-## Two Privacy Methods (Both CRE-Compliant)
+## Privacy: eUSDCg (FHE) + USDCg (Private Ledger)
 
-### eUSDCg (FHE — Fully Homomorphic Encryption)
-
-USDC wraps into an FHERC20Wrapper contract. Balances encrypted as `euint64` via CoFHE TaskManager. **Server-side FHE** — no browser SDK needed, encryption happens on-chain via `FHE.asEuint64()`. Deployed on both ETH-Sepolia and ARB-Sepolia.
+**eUSDCg** — USDC wraps into FHERC20Wrapper. Balances encrypted as `euint64` via CoFHE. Server-side FHE — Shiva sends plaintext via Circle DCW, the contract encrypts internally:
 
 ```solidity
-// GhostUSDC.sol — server sends plaintext, contract encrypts
 function transferAmount(address to, uint64 amount) external whenNotPaused {
     _requireCompliant(msg.sender, to);
     euint64 encAmount = FHE.asEuint64(amount);  // contract encrypts via CoFHE
@@ -275,148 +263,76 @@ function transferAmount(address to, uint64 amount) external whenNotPaused {
 }
 ```
 
-The Cloudflare Worker sends `transferAmount(0xRecipient, 100000000)` via Circle DCW. The contract calls `FHE.asEuint64()` to encrypt. No SDK, no iframe, no browser. FHE works with ANY wallet infrastructure.
+No browser SDK, no iframe. Works with any wallet infrastructure. Deployed on ETH-Sepolia + ARB-Sepolia.
 
-### USDCg (Private Transfers)
-
-USDC deposits into ACE Vault. Transfers happen off-chain via CRE's private ledger with zero on-chain trace. EIP-712 signatures authenticate each transfer.
+**USDCg** — USDC deposits into ACE Vault. Transfers happen off-chain via CRE's private ledger (zero on-chain trace). EIP-712 signatures authenticate each transfer.
 
 ---
 
-## The Escrow System: Actually Smart Contracts
-
-Traditional smart contracts aren't smart — they're automated. They can move money when someone clicks a button. But they cannot answer:
-
-> "Was the work actually delivered correctly?"
-
-Our escrow contracts answer that question. Here's the pipeline:
+## Escrow Pipeline
 
 ```
-Agreement Created (UI)
-  → EscrowFactoryV3.createEscrow() deploys milestone-based escrow on-chain
-    → Payer funds escrow with USDC
-      → Payee submits deliverables
-        → CRE workflow-escrow-verify: AI evaluates deliverables vs acceptance criteria
-          → PASS → workflow-escrow-finalize releases funds to payee
-          → FAIL → payee resubmits or files dispute
-            → workflow-escrow-dispute: 4-layer AI arbitration
-              Layer 2: Two advocate briefs (pro-provider + pro-client)
-              Layer 3: 3-judge tribunal (majority vote)
-              Layer 4: 5-judge supreme court (supermajority 4/5, appeal only)
-            → workflow-escrow-finalize executes verdict on-chain
+EscrowFactoryV3.createEscrow()  →  Payer funds with USDC
+  → Payee submits deliverables
+    → CRE workflow-escrow-verify: AI evaluates vs acceptance criteria
+      → PASS → workflow-escrow-finalize releases funds
+      → FAIL → resubmit or dispute
+        → workflow-escrow-dispute: 4-layer AI arbitration
+          L2: Two advocate briefs (pro-provider + pro-client)
+          L3: 3-judge tribunal (majority vote)
+          L4: 5-judge supreme court (supermajority 4/5, appeal only)
+        → Verdict recorded on-chain (VerdictRecord) → funds released
 ```
 
-While funds sit in escrow, `workflow-escrow-yield` deposits idle USDC into yield strategies. `workflow-escrow-monitor` watches for events and publishes proof-of-reserves every 6 hours.
-
-Every step produces an on-chain attestation. Every verdict is encrypted before storage. Document hashes go on-chain; evidence stays in encrypted Supabase storage.
-
-**No subjective approvals. No disputes as a business model. No "please review the updated PDF v17-final-final".**
+Idle escrow USDC earns yield via `workflow-escrow-yield` (Deframe strategies through Motora). `workflow-escrow-monitor` watches factory events + publishes proof-of-reserves every 6 hours. Every step produces an on-chain attestation. Verdicts encrypted before storage; only document hashes go on-chain.
 
 ---
 
 ## Ghost ↔ Escrow Architectural Parity
 
-Ghost Mode privacy and Escrow arbitration now share the same production-grade patterns. This wasn't always the case — Ghost Mode started as HTTP-only triggers with no fallback resilience. We brought it to escrow-grade reliability:
+Both primitives share the same production-grade patterns:
 
-| Pattern | Escrow | Ghost Mode (Before) | Ghost Mode (After) |
-|---------|--------|--------------------|--------------------|
-| **CRE Trigger** | `triggerCreWorkflowWithFallback` | `triggerCreWorkflow` (no fallback) | `triggerCreWorkflowWithFallback` |
-| **Callback Pattern** | POST to `cre_callbacks` table | None | POST to `cre-callback/*` endpoints |
-| **Confidential Client** | `confidentialShivaClient` for AI/IP | `aceClient` only | `confidentialShivaClient` for DON state |
-| **Multi-Handler** | HTTP + EVM Log + Cron | HTTP only | HTTP + EVM Log (dual-trigger) |
-| **Appeal Bonds** | N/A | N/A | On-chain `disputeWithBond()` / `appealWithBond()` |
-| **Verdict Storage** | Supabase only | N/A | Immutable on-chain `VerdictRecord` + events |
-| **AllowList Sync** | Via direct server call | Direct server call | CRE workflow + attestation bridge |
+| Pattern | Implementation |
+|---------|---------------|
+| **Fallback Resilience** | `triggerCreWorkflowWithFallback` — CRE downtime doesn't block transactions; attestations deferred to next cron |
+| **Callback Bridge** | CRE workflows POST to Shiva `cre-callback/*` endpoints → stored in audit tables |
+| **Confidential Client** | `confidentialShivaClient` for sensitive data (DON state, AI verdicts, balance queries) |
+| **Dual Triggers** | HTTP + EVM Log monitoring (Ghost watches `ConfidentialTransfer` + `Transfer`; Escrow watches factory events) |
+| **Bond Economics** | `disputeWithBond()` / `appealWithBond()` — forfeitable deposits prevent frivolous disputes |
+| **On-Chain Verdicts** | `VerdictRecord` per arbitration layer — `verdictHash`, `payeeBps`, `appealed` flag, immutable |
+| **AllowList Sync** | [`workflow-allowlist-sync`](apps/cre/workflow-allowlist-sync/) bridges Persona webhooks → PolicyEngine via attestation |
 
-### What This Means
-
-1. **Fallback resilience** — CRE gateway downtime doesn't block transactions. Ghost operations succeed; attestations are deferred to the next cron cycle.
-2. **Confidential DON state** — Sensitive balance data (encrypted amounts, private ledger updates) flows through a separate `confidentialShivaClient` channel, not the public ACE endpoint.
-3. **Callback bridge** — CRE workflows publish attestations, then POST callbacks to Shiva for storage in `ghost_transactions` audit table. Same pattern escrow uses for `cre_callbacks`.
-4. **Dual triggers** — `workflow-ghost-transfer` now watches both `ConfidentialTransfer` (FHE chain) and standard `Transfer` (GhostUSDC) events via EVM Log, plus HTTP. Escrow-grade redundancy.
-5. **Bond economics** — Escrow disputes now require `disputeWithBond()` deposits. Failed disputes forfeit bonds to treasury. Appeals require higher bonds. Economic incentive against frivolous claims.
-6. **On-chain verdicts** — Every arbitration layer (Verifier → Advocates → Tribunal → Supreme Court) records an immutable `VerdictRecord` on-chain with `verdictHash`, `payeeBps`, and `appealed` flag. Full audit trail without revealing confidential evidence.
-
-### New: AllowList Sync Workflow
-
-The new [`workflow-allowlist-sync`](apps/cre/workflow-allowlist-sync/) bridges Persona KYC/KYB webhooks to the PolicyEngine AllowList:
-
-```
-Persona Webhook → Shiva (validate) → CRE workflow-allowlist-sync
-  1. Parse Persona webhook → extract wallet + approval status
-  2. Read PolicyEngine.isAllowed() on-chain (zero-gas eth_call)
-  3. Determine sync action: "add", "remove", or "none"
-  4. Publish allowlist_sync attestation (op type 19)
-  → Shiva handles AllowList mutations via Circle SDK
-  → CRE publishes immutable attestation for audit trail
-```
-
-Decouples compliance state mutations from verification proofs. Shiva does the write; CRE proves what happened.
-
-### New: Appeal Bond Economics (On-Chain)
-
-[`EscrowWithAgentV3.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/EscrowWithAgentV3.sol) now includes:
+### Appeal Bonds ([`EscrowWithAgentV3.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/EscrowWithAgentV3.sol))
 
 ```solidity
 struct BondConfig {
     uint256 disputeBondAmount;   // Required to file a dispute
-    uint256 appealBondAmount;    // Required to appeal (higher than dispute)
+    uint256 appealBondAmount;    // Higher bond required for appeal
     address bondRecipient;       // Treasury receives forfeited bonds
 }
 
 function disputeWithBond(uint256 milestoneIndex) external payable;
 function appealWithBond(uint256 milestoneIndex) external payable;
-
-// On executeDecision(): winner refunded, loser's bonds forfeited
-event BondDeposited(uint256 milestoneIndex, address depositor, uint256 amount);
-event BondForfeited(uint256 milestoneIndex, address depositor, uint256 amount);
-event BondRefunded(uint256 milestoneIndex, address recipient, uint256 amount);
-event VerdictRecorded(uint256 milestoneIndex, uint8 layer, bytes32 verdictHash);
+// executeDecision(): winner refunded, loser forfeited
 ```
 
----
+### Yield Model
 
-## Business Model
-
-TreasuryManager allocates USDC into Hashnote USYC (~6.5% APY) from two sources: Ghost Mode deposits AND idle escrow balances. Yield accrues to the **platform**, not users. Users get privacy + compliance + programmable contracts.
-
-Same model as traditional banking, but on-chain and auditable via CRE attestations.
+TreasuryManager allocates USDC into Hashnote USYC (~6.5% APY) from Ghost deposits + idle escrow balances. `workflow-treasury-rebalance` monitors buffer ratios and redeems when reserves drop.
 
 ---
 
-## Architecture
+## Technical Challenges
 
-| Layer | Stack |
-|-------|-------|
-| **Frontend** | Next.js 16 + React 19 + Expo 54 (mobile) + TypeScript 5.9 |
-| **Backend** | Hono (Cloudflare Workers) + Supabase (PostgreSQL, 180+ tables) |
-| **AI** | Vercel AI SDK v6 + CopilotKit + Langfuse Observability |
-| **Chain** | viem + ethers + Foundry + Chainlink CRE (16 workflows) + Fhenix CoFHE |
-| **Payments** | Circle SDK + Bridge API + Stripe + AlfredPay + Rain.xyz |
-| **Banking** | Plaid + Teller + GoCardless + Pluggy (Motora edge API) |
-| **Infra** | Turborepo (76 packages, 10 apps), 218 API routes, 19 locales, 54 email templates, Bun |
-
----
-
-## Challenges We Hit
-
-**1. Server-side FHE without browser wallets.** Most FHE projects assume MetaMask + client-side encryption SDK. Our wallets are Circle Programmable Wallets (server-side custodial). Solution: the smart contract encrypts internally — `FHE.asEuint64(amount)` is called inside the contract. Shiva sends plaintext via Circle DCW, the contract handles encryption via CoFHE TaskManager. Zero SDK dependencies for FHE.
-
-**2. Three-layer compliance without friction.** Circle screens silently at the wallet level. PolicyEngine enforces on-chain per-transfer. Persona verification happens once during onboarding with a 365-day TTL attestation. The user sees one step; three systems run underneath.
-
-**3. Async FHE decryption.** CoFHE decryption takes 30-300 seconds. We built a 3-phase pipeline: unwrap (burns encrypted tokens, creates claim), decrypt (CoFHE processes off-chain), auto-claim (frontend polls every 5s). The user sees a loading animation, not FHE complexity.
-
-**4. CRE WASM compilation.** CRE workflows compile to WASM via Javy. Required `bun >= 1.2.21` (lower versions produce broken WASM that compiles but crashes at runtime). Block number queries needed `LATEST_BLOCK_NUMBER` — free Sepolia RPCs lag behind on the `"finalized"` block tag.
-
-**5. Escrow arbitration confidentiality.** Advocate briefs, tribunal verdicts, and supreme court rulings contain IP-sensitive information. CRE workflows mark these as CONFIDENTIAL, encrypt verdicts before storage, and only expose document hashes in on-chain attestations.
-
-**6. Escrow yield timing.** Escrowed USDC needs to earn yield while locked but must be instantly available on milestone release. TreasuryManager handles this via async USYC allocation with a USDC buffer — `workflow-treasury-rebalance` monitors and redeems when reserves drop.
-
-**7. Dual privacy routing.** Wiring both eUSDCg (FHE) and USDCg (private transfers) through the same UI required a clean asset-selection abstraction in the state machine while sharing the same KYC gate and CRE compliance layer.
-
-**8. Multi-chain deployment.** GhostUSDC on both ETH-Sepolia and ARB-Sepolia required careful address management across 16 CRE workflow configs, Shiva env vars, and frontend routing.
-
-**9. Ghost-Escrow architectural parity.** Ghost Mode started with plain CRE triggers, no callbacks, and no fallback resilience. Bringing it to escrow-grade reliability meant adding `triggerCreWorkflowWithFallback` to all 3 routes, `confidentialShivaClient` for DON state, callback POST endpoints, and EVM Log dual-triggers for `workflow-ghost-transfer`. Plus adding bond economics and on-chain verdict storage to the escrow contract itself.
+| # | Challenge | Solution |
+|---|-----------|----------|
+| 1 | **Server-side FHE** — Circle DCW wallets are custodial, no MetaMask/client SDK | Contract encrypts internally via `FHE.asEuint64()`. Shiva sends plaintext, CoFHE handles encryption on-chain. Zero browser dependencies. |
+| 2 | **Async FHE decryption** — CoFHE takes 30-300s | 3-phase pipeline: unwrap (burn + create claim) → decrypt (CoFHE off-chain) → auto-claim (frontend polls every 5s) |
+| 3 | **CRE WASM compilation** — Javy requires `bun >= 1.2.21` | Lower versions produce WASM that compiles but crashes at runtime (`unreachable` trap). Block reads need `LATEST_BLOCK_NUMBER` — free Sepolia RPCs lag on `"finalized"` tag. |
+| 4 | **Arbitration confidentiality** — briefs/verdicts contain IP-sensitive data | CRE workflows mark as CONFIDENTIAL, encrypt before storage, only document hashes go on-chain |
+| 5 | **Escrow yield timing** — locked USDC must earn yield but be instantly available | TreasuryManager async USYC allocation with USDC buffer; `workflow-treasury-rebalance` monitors and redeems |
+| 6 | **Multi-chain addresses** — same contracts on ETH-Sepolia + ARB-Sepolia | Centralized address registry in [`shared/addresses.ts`](apps/cre/shared/addresses.ts), per-workflow `config.json` |
+| 7 | **Ghost-Escrow parity** — Ghost started as HTTP-only, no fallback/callbacks | Added `triggerCreWorkflowWithFallback`, `confidentialShivaClient`, callback POSTs, EVM Log dual-triggers to all Ghost workflows |
 
 ---
 
@@ -444,31 +360,21 @@ forge test
 
 ---
 
-## The Trust Model
+## Trust Model
 
-Every financial operation produces a cryptographic proof:
-
-| Source of Truth | What It Proves |
-|----------------|---------------|
-| BUAttestation on-chain | Every deposit, withdrawal, transfer, invoice, payroll batch, rebalance has an immutable attestation signed by the Chainlink DON |
-| EscrowWithAgentV3 on-chain | Every milestone status change, every decision, every fund release, every **appeal bond deposit/forfeit**, and every **VerdictRecord** is recorded in contract state with events |
+| Source | What It Proves |
+|--------|---------------|
+| `BUAttestation` on-chain | Every deposit, withdrawal, transfer, invoice, payroll, rebalance has a DON-signed immutable attestation |
+| `EscrowWithAgentV3` state | Every milestone change, decision, fund release, bond deposit/forfeit, and `VerdictRecord` is recorded with events |
 | CRE consensus signatures | Every API call (Shiva, Motora, Circle) was independently executed by multiple DON nodes and agreed upon |
-| Encrypted Supabase storage | Arbitration evidence, tribunal verdicts, and advocate briefs are encrypted at rest — only document hashes go on-chain |
-
-Remove any layer and the product is either illegal, unprofitable, or not private.
-
----
-
-*Built with righteous fury and an unreasonable number of CRE workflows.*
+| Encrypted Supabase storage | Arbitration evidence encrypted at rest; only document hashes go on-chain |
 
 ---
 ---
 
-# Chainlink Integration — BUFI Financial OS
+# Chainlink Integration — File Reference
 
-> **All files in this project that use Chainlink CRE, smart contracts, and oracle technology.**
->
-> Submitted for [Convergence | A Chainlink Hackathon](https://chainlink-hackathon.devpost.com/)
+> All files that use Chainlink CRE, smart contracts, and oracle technology.
 
 ---
 
