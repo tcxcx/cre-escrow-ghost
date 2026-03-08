@@ -1,0 +1,8 @@
+{
+  "chainSelectorName": "ethereum-testnet-sepolia",
+  "attestationContract": "0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C",
+  "gasLimit": "800000",
+  "escrowFactoryAddress": "0x0f8b653aadd4f04008fdaca3429f6ea24951b129",
+  "executorAgent": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474",
+  "owner": "bu-escrow-deploy"
+}

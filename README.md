@@ -389,3 +389,324 @@ Remove any layer and the product is either illegal, unprofitable, or not private
 ---
 
 *Built with righteous fury and an unreasonable number of CRE workflows.*
+
+---
+---
+
+# Chainlink Integration — BUFI Financial OS
+
+> **All files in this project that use Chainlink CRE, smart contracts, and oracle technology.**
+>
+> Submitted for [Convergence | A Chainlink Hackathon](https://chainlink-hackathon.devpost.com/)
+
+---
+
+## Quick Links
+
+| Resource | Link |
+|----------|------|
+| **CRE Workflows** | [`apps/cre/`](apps/cre/) |
+| **Smart Contracts (CRE)** | [`apps/cre/contracts/src/`](apps/cre/contracts/src/) |
+| **Smart Contracts (Escrow)** | [`contracts/escrow/src/`](contracts/escrow/src/) |
+| **Shared CRE Utilities** | [`apps/cre/shared/`](apps/cre/shared/) |
+| **CRE Client Package** | [`packages/cre/`](packages/cre/) |
+| **Private Transfer Package** | [`packages/private-transfer/`](packages/private-transfer/) |
+| **Environment Config (ACE)** | [`packages/env/src/ace.ts`](packages/env/src/ace.ts) |
+| **Contract UI Components** | [`apps/app/src/components/contract/`](apps/app/src/components/contract/) |
+
+---
+
+## Deployed Contracts (Ethereum Sepolia)
+
+| Contract | Address | Etherscan | Role |
+|----------|---------|-----------|------|
+| **BUAttestation** | `0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C` | [View](https://sepolia.etherscan.io/address/0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C) | On-chain attestation registry — all CRE workflows write here |
+| **USDCg** | `0x2F28A8378798c5B42FC28f209E903508DD8F878b` | [View](https://sepolia.etherscan.io/address/0x2F28A8378798c5B42FC28f209E903508DD8F878b) | Compliant stablecoin with backing invariant |
+| **PolicyEngine** | `0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926` | [View](https://sepolia.etherscan.io/address/0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926) | Chainlink ACE compliance — gates every transfer |
+| **TreasuryManager** | `0x33A4a73FD81bB6314AB7dc77301894728E6825A4` | [View](https://sepolia.etherscan.io/address/0x33A4a73FD81bB6314AB7dc77301894728E6825A4) | USDC → USYC yield orchestration (CRE ALLOCATE/REDEEM) |
+| **ACE Vault** | `0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13` | [View](https://sepolia.etherscan.io/address/0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13) | Chainlink-managed private ledger |
+| **GhostUSDC (eUSDCg)** | `0xAc547f37E3B20F85E288f7843E979eFCf1a0f235` | [View](https://sepolia.etherscan.io/address/0xAc547f37E3B20F85E288f7843E979eFCf1a0f235) | FHE-encrypted transfers via CoFHE TaskManager |
+| **EscrowFactoryV3** | `0x0f8b653aadd4f04008fdaca3429f6ea24951b129` | [View](https://sepolia.etherscan.io/address/0x0f8b653aadd4f04008fdaca3429f6ea24951b129) | Deploy milestone-based escrow instances |
+
+**CoFHE TaskManager (Fhenix):** `0xeA30c4B8b44078Bbf8a6ef5b9f1eC1626C7848D9`
+
+## Deployed Contracts (Arbitrum Sepolia)
+
+| Contract | Address | Arbiscan | Role |
+|----------|---------|----------|------|
+| **PolicyEngineMock** | `0x43b8c40dc785c6ab868d2dfa0a91a8cc8e7d4ef6` | [View](https://sepolia.arbiscan.io/address/0x43b8c40dc785c6ab868d2dfa0a91a8cc8e7d4ef6) | Testnet compliance (defaultAllow=true) |
+| **BUAttestationMock** | `0xaaf50d1ccf481657f9719a71b8384a9e1bbe1348` | [View](https://sepolia.arbiscan.io/address/0xaaf50d1ccf481657f9719a71b8384a9e1bbe1348) | Testnet attestation registry |
+| **EscrowFactoryV3** | `0x806dd4d26a0930d4bed506b81eb8f57f334cd53e` | [View](https://sepolia.arbiscan.io/address/0x806dd4d26a0930d4bed506b81eb8f57f334cd53e) | Deploy milestone-based escrow instances |
+| **GhostUSDC (eUSDCg)** | `0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765` | [View](https://sepolia.arbiscan.io/address/0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765) | FHE-encrypted transfers via CoFHE |
+
+---
+
+## CRE Workflows (18 total)
+
+Each workflow integrates **at least one blockchain** with **external APIs, data sources, or AI agents** — executed with DON consensus via the Chainlink Runtime Environment.
+
+### Ghost Mode — FHE-Encrypted Private Transfers
+
+| Workflow | Trigger | Blockchain | External Integration | Files |
+|----------|---------|------------|---------------------|-------|
+| **ghost-deposit** | HTTP | GhostUSDC, PolicyEngine, TreasuryManager | Shiva API (Circle SDK), ACE API (KYC/DON state), FHE balances | [`main.ts`](apps/cre/workflow-ghost-deposit/main.ts), [`handlers.ts`](apps/cre/workflow-ghost-deposit/handlers.ts) |
+| **ghost-transfer** | EVM Log (ConfidentialTransfer) | GhostUSDC events | ACE API (KYC/DON sync), FHE encrypted indicators | [`main.ts`](apps/cre/workflow-ghost-transfer/main.ts), [`handlers.ts`](apps/cre/workflow-ghost-transfer/handlers.ts) |
+| **ghost-withdraw** | HTTP | GhostUSDC, TreasuryManager | ACE API (balance validation, backing verification) | [`main.ts`](apps/cre/workflow-ghost-withdraw/main.ts), [`handlers.ts`](apps/cre/workflow-ghost-withdraw/handlers.ts) |
+
+### Escrow — AI-Powered Smart Contract Arbitration
+
+| Workflow | Trigger | Blockchain | External Integration | Files |
+|----------|---------|------------|---------------------|-------|
+| **escrow-deploy** | HTTP | EscrowFactoryV3 | Supabase (callback), Shiva API | [`main.ts`](apps/cre/workflow-escrow-deploy/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-deploy/handlers.ts) |
+| **escrow-verify** | HTTP | EscrowWithAgentV3 | **Shiva CONFIDENTIAL** (AI milestone verification via LLM), Deliverable files | [`main.ts`](apps/cre/workflow-escrow-verify/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-verify/handlers.ts) |
+| **escrow-finalize** | HTTP | EscrowWithAgentV3 | **Shiva CONFIDENTIAL** (AI receipt generation via LLM) | [`main.ts`](apps/cre/workflow-escrow-finalize/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-finalize/handlers.ts) |
+| **escrow-dispute** | HTTP | EscrowWithAgentV3 | **Shiva CONFIDENTIAL** (4-layer AI arbitration: Advocates → Tribunal → Supreme Court) | [`main.ts`](apps/cre/workflow-escrow-dispute/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-dispute/handlers.ts) |
+| **escrow-monitor** | EVM Log + Cron (6h) | EscrowFactory events | Supabase, Proof of Reserves aggregation | [`main.ts`](apps/cre/workflow-escrow-monitor/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-monitor/handlers.ts) |
+| **escrow-yield** | HTTP | EscrowWithAgentV3 | Motora API (strategy selection), Deframe yield protocols | [`main.ts`](apps/cre/workflow-escrow-yield/main.ts), [`handlers.ts`](apps/cre/workflow-escrow-yield/handlers.ts) |
+
+### Treasury & Private Transfers
+
+| Workflow | Trigger | Blockchain | External Integration | Files |
+|----------|---------|------------|---------------------|-------|
+| **private-transfer** | EVM Log (ACE Vault) | ACE Vault, USDCg | ACE API (DON sync, compliance), HTTP verification | [`main.ts`](apps/cre/workflow-private-transfer/main.ts), [`handlers.ts`](apps/cre/workflow-private-transfer/handlers.ts) |
+| **treasury-rebalance** | Cron | TreasuryManager, USDCg | On-chain state monitoring, BUAttestation publishing | [`main.ts`](apps/cre/workflow-treasury-rebalance/main.ts), [`handlers.ts`](apps/cre/workflow-treasury-rebalance/handlers.ts) |
+
+### Financial Operations
+
+| Workflow | Trigger | Blockchain | External Integration | Files |
+|----------|---------|------------|---------------------|-------|
+| **invoice-settle** | HTTP | BUAttestation | Supabase (invoice verification) | [`main.ts`](apps/cre/workflow-invoice-settle/main.ts), [`handlers.ts`](apps/cre/workflow-invoice-settle/handlers.ts) |
+| **payroll-attest** | HTTP | BUAttestation | Supabase (payroll execution data) | [`main.ts`](apps/cre/workflow-payroll-attest/main.ts), [`handlers.ts`](apps/cre/workflow-payroll-attest/handlers.ts) |
+| **report-verify** | HTTP | BUAttestation | Supabase (financial report hashing) | [`main.ts`](apps/cre/workflow-report-verify/main.ts), [`handlers.ts`](apps/cre/workflow-report-verify/handlers.ts) |
+
+---
+
+## Shared CRE Utilities
+
+All workflows share a common foundation in [`apps/cre/shared/`](apps/cre/shared/):
+
+### Core
+- [`create-workflow.ts`](apps/cre/shared/create-workflow.ts) — Factory function for 3-line workflow definitions
+- [`triggers.ts`](apps/cre/shared/triggers.ts) — `withHttp()`, `withLog()`, `withCron()` trigger composers
+- [`addresses.ts`](apps/cre/shared/addresses.ts) — All deployed contract addresses
+- [`validate-config.ts`](apps/cre/shared/validate-config.ts) — Config validation
+
+### Services
+- [`services/attestation.ts`](apps/cre/shared/services/attestation.ts) — `publishAttestation()` — single function to write to BUAttestation contract
+- [`services/evm.ts`](apps/cre/shared/services/evm.ts) — `callView()` for contract reads (encode → call → decode)
+- [`services/escrow.ts`](apps/cre/shared/services/escrow.ts) — EscrowFactoryV3/EscrowWithAgentV3 integration
+- [`services/fhe.ts`](apps/cre/shared/services/fhe.ts) — FHE state readers: `readGhostIndicator()`, `readGhostTotalSupply()`, `readUserClaims()`
+
+### Clients (Consensus-Verified HTTP)
+- [`clients/create-client.ts`](apps/cre/shared/clients/create-client.ts) — Client factory with viem integration
+- [`clients/presets.ts`](apps/cre/shared/clients/presets.ts) — Chain selector presets
+- [`clients/confidential.ts`](apps/cre/shared/clients/confidential.ts) — FHE-specific client
+- [`clients/confidential-presets.ts`](apps/cre/shared/clients/confidential-presets.ts) — FHE chain presets
+
+### ABIs (Contract Interfaces)
+- [`abi/bu-attestation.ts`](apps/cre/shared/abi/bu-attestation.ts) — BUAttestation ABI
+- [`abi/escrow-v3.ts`](apps/cre/shared/abi/escrow-v3.ts) — EscrowWithAgentV3 ABI
+- [`abi/ghost-usdc.ts`](apps/cre/shared/abi/ghost-usdc.ts) — GhostUSDC (FHERC20Wrapper) ABI
+- [`abi/usdcg.ts`](apps/cre/shared/abi/usdcg.ts) — USDCg token ABI
+- [`abi/treasury-manager.ts`](apps/cre/shared/abi/treasury-manager.ts) — TreasuryManager ABI
+- [`abi/vault.ts`](apps/cre/shared/abi/vault.ts) — ACE Vault ABI
+- [`abi/usyc-oracle.ts`](apps/cre/shared/abi/usyc-oracle.ts) — USYC price oracle ABI
+- [`abi/erc20.ts`](apps/cre/shared/abi/erc20.ts) — Standard ERC20 ABI
+
+---
+
+## Solidity Smart Contracts
+
+### Core Protocol — [`apps/cre/contracts/src/`](apps/cre/contracts/src/)
+- [`BUAttestation.sol`](apps/cre/contracts/src/BUAttestation.sol) — On-chain attestation registry (Pausable, rate limits, TTL, severity levels)
+- [`USDg.sol`](apps/cre/contracts/src/USDg.sol) — Compliant stablecoin (Ownable2Step, Pausable, backing invariant)
+- [`TreasuryManager.sol`](apps/cre/contracts/src/TreasuryManager.sol) — CRE-managed yield orchestration (ALLOCATE/REDEEM)
+- [`GhostUSDC.sol`](apps/cre/contracts/src/GhostUSDC.sol) — FHE-encrypted stablecoin (server-side encryption via CoFHE)
+
+### FHE (Fully Homomorphic Encryption) — [`apps/cre/contracts/src/fherc20/`](apps/cre/contracts/src/fherc20/)
+- [`FHERC20.sol`](apps/cre/contracts/src/fherc20/FHERC20.sol) — FHE-enabled ERC20 base
+- [`FHERC20Wrapper.sol`](apps/cre/contracts/src/fherc20/FHERC20Wrapper.sol) — Wrap standard ERC20 into FHE-encrypted token
+- [`FHERC20UnwrapClaim.sol`](apps/cre/contracts/src/fherc20/FHERC20UnwrapClaim.sol) — Async decrypt → claim pipeline
+
+### Escrow Arbitration — [`apps/cre/contracts/src/arbitration/`](apps/cre/contracts/src/arbitration/)
+- [`EscrowFactoryV3.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/EscrowFactoryV3.sol) — Deploy escrow instances
+- [`EscrowWithAgentV3.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/EscrowWithAgentV3.sol) — AI agent-arbitrated escrow
+- [`PayoutLimitPolicy.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/policies/PayoutLimitPolicy.sol) — Payout caps
+- [`DisputeWindowPolicy.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/policies/DisputeWindowPolicy.sol) — Dispute time windows
+- [`AgentIdentityPolicy.sol`](apps/cre/contracts/src/arbitration/arbitration-factory/policies/AgentIdentityPolicy.sol) — Agent identity verification
+
+### Escrow v3 (Foundry) — [`contracts/escrow/src/`](contracts/escrow/src/)
+- [`EscrowFactoryV3.sol`](contracts/escrow/src/EscrowFactoryV3.sol) — Factory for milestone-based escrow (deployed to both chains)
+- [`EscrowWithAgentV3.sol`](contracts/escrow/src/EscrowWithAgentV3.sol) — CRE executor-controlled escrow with 9 milestone statuses
+- [`EscrowExtractor.sol`](contracts/escrow/src/EscrowExtractor.sol) — Decodes CRE consensus reports into escrow operations
+- [`BUAttestationMock.sol`](contracts/escrow/src/BUAttestationMock.sol) — Testnet attestation mock (Arb Sepolia)
+- [`PolicyEngineMock.sol`](contracts/escrow/src/PolicyEngineMock.sol) — Testnet compliance mock (Arb Sepolia)
+
+### CRE Receiver Pattern — [`apps/cre/contracts/src/cre-receiver/`](apps/cre/contracts/src/cre-receiver/)
+- [`ReceiverTemplate.sol`](apps/cre/contracts/src/cre-receiver/ReceiverTemplate.sol) — Chainlink CRE callback receiver
+- [`IReceiver.sol`](apps/cre/contracts/src/cre-receiver/IReceiver.sol) — CRE receiver interface
+
+### Deployment Scripts
+- [`script/DeployAll.s.sol`](apps/cre/contracts/script/DeployAll.s.sol) — Full deployment pipeline
+- [`script/DeployGhostUSDC.s.sol`](apps/cre/contracts/script/DeployGhostUSDC.s.sol) — GhostUSDC deployment
+
+### Tests
+- [`test/BUAttestation.t.sol`](apps/cre/contracts/test/BUAttestation.t.sol) — Attestation unit tests
+- [`test/BUAttestationHardened.t.sol`](apps/cre/contracts/test/BUAttestationHardened.t.sol) — Hardened security tests
+- [`test/USDCg.t.sol`](apps/cre/contracts/test/USDCg.t.sol) — USDCg token tests
+
+---
+
+## TypeScript Packages Using Chainlink
+
+### `packages/cre/` — CRE Client Library
+- [`bufi-lifecycle/workflow/main.ts`](packages/cre/bufi-lifecycle/workflow/main.ts) — Escrow lifecycle workflow entry point
+- [`bufi-lifecycle/workflow/handlers/verify.ts`](packages/cre/bufi-lifecycle/workflow/handlers/verify.ts) — AI-powered deliverable verification
+- [`bufi-lifecycle/workflow/handlers/dispute.ts`](packages/cre/bufi-lifecycle/workflow/handlers/dispute.ts) — 4-layer arbitration handler
+- [`bufi-lifecycle/workflow/handlers/finalize.ts`](packages/cre/bufi-lifecycle/workflow/handlers/finalize.ts) — Decision execution + fund release
+
+### `packages/contracts/` — Smart Contract ABIs
+- [`src/escrow/abi.ts`](packages/contracts/src/escrow/abi.ts) — EscrowWithAgentV3 + EscrowFactoryV3 ABIs for app consumption
+
+### `packages/env/` — Environment Configuration
+- [`src/ace.ts`](packages/env/src/ace.ts) — All ACE/CRE env vars: gateway URLs, forwarder address, contract addresses
+
+---
+
+## Contract UI Components — [`apps/app/src/components/contract/`](apps/app/src/components/contract/)
+
+The frontend for the entire escrow pipeline — 98 React components covering the full lifecycle:
+
+### Contract Builder
+- [`contract-builder/ai-contract-builder.tsx`](apps/app/src/components/contract/contract-builder/ai-contract-builder.tsx) — AI-assisted contract creation
+- [`contract-builder/deploy-modal.tsx`](apps/app/src/components/contract/contract-builder/deploy-modal.tsx) — On-chain escrow deployment trigger
+- [`contract-builder/flow-canvas.tsx`](apps/app/src/components/contract/contract-builder/flow-canvas.tsx) — Visual contract flow editor
+- [`contract-builder/node-palette.tsx`](apps/app/src/components/contract/contract-builder/node-palette.tsx) — Drag-drop node types
+
+### Escrow & Funding
+- [`contracts/funding/funding-view.tsx`](apps/app/src/components/contract/contracts/funding/funding-view.tsx) — USDC funding with BuFi deposits + external wallet
+- [`contracts/escrow/escrow-balance-card.tsx`](apps/app/src/components/contract/contracts/escrow/escrow-balance-card.tsx) — On-chain escrow balance display
+- [`contracts/escrow/escrow-transaction-history.tsx`](apps/app/src/components/contract/contracts/escrow/escrow-transaction-history.tsx) — Escrow transaction log
+- [`contracts/escrow/yield-projection-chart.tsx`](apps/app/src/components/contract/contracts/escrow/yield-projection-chart.tsx) — Yield projections on idle escrow
+
+### Signing & Verification
+- [`contracts/signing/signing-view.tsx`](apps/app/src/components/contract/contracts/signing/signing-view.tsx) — Contract signing with Etherscan links
+- [`contracts/verification/ai-verification-report.tsx`](apps/app/src/components/contract/contracts/verification/ai-verification-report.tsx) — AI milestone verification results
+- [`contracts/verification/ai-transparency-panel.tsx`](apps/app/src/components/contract/contracts/verification/ai-transparency-panel.tsx) — Verification transparency display
+
+### Arbitration
+- [`contracts/arbitration/arbitration-view.tsx`](apps/app/src/components/contract/contracts/arbitration/arbitration-view.tsx) — Full arbitration dashboard
+- [`contracts/arbitration/tribunal-panel.tsx`](apps/app/src/components/contract/contracts/arbitration/tribunal-panel.tsx) — 3-judge tribunal UI
+- [`contracts/arbitration/supreme-court-panel.tsx`](apps/app/src/components/contract/contracts/arbitration/supreme-court-panel.tsx) — 5-judge supreme court UI
+- [`contracts/arbitration/advocate-brief-card.tsx`](apps/app/src/components/contract/contracts/arbitration/advocate-brief-card.tsx) — Advocate brief display
+- [`contracts/arbitration/dispute-window-banner.tsx`](apps/app/src/components/contract/contracts/arbitration/dispute-window-banner.tsx) — Dispute window countdown
+
+### Deliverables & Verdicts
+- [`contracts/submission/file-upload-zone.tsx`](apps/app/src/components/contract/contracts/submission/file-upload-zone.tsx) — Deliverable submission
+- [`contracts/submission/verification-progress.tsx`](apps/app/src/components/contract/contracts/submission/verification-progress.tsx) — AI verification progress
+- [`contracts/verdict/final-verdict.tsx`](apps/app/src/components/contract/contracts/verdict/final-verdict.tsx) — Final ruling display
+- [`contracts/verdict/payment-release.tsx`](apps/app/src/components/contract/contracts/verdict/payment-release.tsx) — Fund release confirmation
+- [`contracts/completion/completion-view.tsx`](apps/app/src/components/contract/contracts/completion/completion-view.tsx) — Contract completion summary
+
+### Yield & Analytics
+- [`contracts/yield/yield-dashboard.tsx`](apps/app/src/components/contract/contracts/yield/yield-dashboard.tsx) — Escrow yield tracking
+
+---
+
+## Backend API (Shiva — Cloudflare Worker)
+
+### Ghost Mode & FHE
+- [`apps/shiva/src/services/ghost-fhe.service.ts`](apps/shiva/src/services/ghost-fhe.service.ts) — Ghost Mode FHE operations (on-chain reads + Circle DCW writes)
+- [`apps/shiva/src/routes/ghost-fhe.ts`](apps/shiva/src/routes/ghost-fhe.ts) — Ghost Mode HTTP endpoints
+- [`apps/shiva/src/routes/private-transfer.ts`](apps/shiva/src/routes/private-transfer.ts) — Private transfer orchestration
+
+### CRE Integration
+- [`apps/shiva/src/services/cre-trigger.service.ts`](apps/shiva/src/services/cre-trigger.service.ts) — Trigger CRE workflows from API
+- [`apps/shiva/src/services/fallback-attestation.service.ts`](apps/shiva/src/services/fallback-attestation.service.ts) — BUAttestation fallback (direct write when CRE unavailable)
+
+### Escrow
+- [`apps/shiva/src/services/escrow-decrypt.service.ts`](apps/shiva/src/services/escrow-decrypt.service.ts) — Escrow data decryption
+- [`apps/shiva/src/controllers/contracts.controller.ts`](apps/shiva/src/controllers/contracts.controller.ts) — Contract management endpoints
+
+---
+
+## Architecture: How CRE Connects Everything
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    BUFI Frontend                         │
+│         (Next.js 16 + React 19 — 98 contract UI files)  │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│               Shiva API (Cloudflare Worker)              │
+│    JWT Auth → Wallet Resolution → CRE Trigger Service    │
+└──────┬───────────────┬──────────────────┬───────────────┘
+       │               │                  │
+       ▼               ▼                  ▼
+┌──────────┐   ┌──────────────┐   ┌──────────────┐
+│ Supabase │   │  Circle SDK  │   │   ACE API    │
+│ (DB/Auth)│   │ (DCW Wallets)│   │ (DON State)  │
+└──────────┘   └──────────────┘   └──────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              Chainlink CRE (18 Workflows)                │
+│                                                          │
+│  Ghost Mode:     deposit → transfer → withdraw           │
+│  Escrow:         deploy → verify(AI) → finalize → dispute│
+│  Treasury:       rebalance → yield → reserves            │
+│  Financial:      invoice → payroll → report → audit      │
+│                                                          │
+│  Each workflow: Blockchain reads/writes + External APIs   │
+│  Consensus: DON-signed attestations → BUAttestation.sol  │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│       Ethereum Sepolia + Arbitrum Sepolia Contracts      │
+│                                                          │
+│  BUAttestation ← all workflows write attestations here   │
+│  PolicyEngine  ← compliance gates (Chainlink ACE)        │
+│  ACE Vault     ← managed private ledger                  │
+│  USDCg         ← compliant stablecoin                    │
+│  TreasuryMgr   ← yield orchestration                    │
+│  GhostUSDC     ← FHE-encrypted transfers (CoFHE)        │
+│  EscrowFactory ← milestone-based escrow deployment       │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Simulation
+
+```bash
+# Install CRE CLI
+curl -sSL https://smartcontract.codes/cre-cli/install.sh | bash
+
+# Navigate to a workflow
+cd apps/cre/workflow-ghost-deposit
+
+# Simulate (non-interactive, HTTP trigger)
+cre simulate --non-interactive --trigger-index 0
+
+# Simulate with cron trigger
+cre simulate --non-interactive --trigger-index 1
+```
+
+---
+
+## File Count Summary
+
+| Category | Files |
+|----------|-------|
+| CRE Workflow TypeScript | ~45 |
+| Solidity Smart Contracts | ~36 |
+| Shared CRE Utilities | ~20 |
+| Contract UI Components (React) | ~98 |
+| TypeScript Packages (CRE/private-transfer) | ~40 |
+| Backend API (Shiva CRE integration) | ~8 |
+| Deployment Scripts | ~7 |
+| Tests | ~15 |
+| **Total Chainlink-related files** | **~269** |

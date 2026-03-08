@@ -1,0 +1,15 @@
+{
+  "name": "@bu/cre-workflows",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@bu/cre": "workspace:*"
+  },
+  "scripts": {
+    "simulate": "./scripts/simulate.sh",
+    "new-workflow": "./scripts/new-workflow.sh",
+    "deploy": "./scripts/deploy.sh",
+    "forge:build": "cd contracts && forge build",
+    "forge:test": "cd contracts && forge test"
+  }
+}

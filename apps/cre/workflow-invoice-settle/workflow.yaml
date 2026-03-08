@@ -1,0 +1,22 @@
+# ==========================================================================
+# Workflow: Invoice Settlement Proof
+# ==========================================================================
+# On-chain attestation of invoice payments.
+# Triggered by triggerInvoiceSettlement() after payment completes.
+# Run: cre workflow simulate workflow-invoice-settle --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-invoice-settle"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "../secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-invoice-settle"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "../secrets.yaml"

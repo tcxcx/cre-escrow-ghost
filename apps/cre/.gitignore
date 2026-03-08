@@ -1,0 +1,14 @@
+# Secrets
+.env
+
+# Dependencies
+node_modules/
+bun.lock
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/lib/
+
+# CRE build artifacts
+*.wasm
