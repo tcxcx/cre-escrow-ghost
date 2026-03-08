@@ -28,7 +28,7 @@ Both produce **on-chain attestations** via `BUAttestation` for every operation â
 | **Compliance** | Circle Compliance Engine + Chainlink ACE PolicyEngine + Persona KYC/KYB |
 | **Backend** | Hono on Cloudflare Workers (Shiva) + Supabase PostgreSQL |
 | **Frontend** | Next.js 16 + React 19 â€” 98 contract UI components |
-| **Yield** | Hashnote USYC (~6.5% APY) via TreasuryManager |
+| **Yield** | Hashnote USYC (~3.4% APY) via TreasuryManager |
 
 ---
 
@@ -320,7 +320,7 @@ function appealWithBond(uint256 milestoneIndex) external payable;
 
 ### Yield Model
 
-TreasuryManager allocates USDC into Hashnote USYC (~6.5% APY) from Ghost deposits + idle escrow balances. `workflow-treasury-rebalance` monitors buffer ratios and redeems when reserves drop.
+TreasuryManager allocates USDC into Hashnote USYC (~3.4% APY) from Ghost deposits + idle escrow balances. `workflow-treasury-rebalance` monitors buffer ratios and redeems when reserves drop.
 
 ---
 
