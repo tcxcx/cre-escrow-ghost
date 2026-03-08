@@ -1,0 +1,22 @@
+# ==========================================================================
+# Workflow: Private Transfer Pipeline Registration
+# ==========================================================================
+# Monitors ACE Vault events, verifies private transfers, and runs
+# periodic proof-of-reserves checks on USDg backing.
+# Run: cre workflow simulate workflow-private-transfer --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-private-transfer"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-private-transfer"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
