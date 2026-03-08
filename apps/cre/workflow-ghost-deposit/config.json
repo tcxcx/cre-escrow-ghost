@@ -6,5 +6,6 @@
   "policyEngineAddress": "0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926",
   "treasuryManagerAddress": "0x33A4a73FD81bB6314AB7dc77301894728E6825A4",
   "fheChainSelectorName": "ethereum-testnet-sepolia-arbitrum-1",
-  "ghostUsdcAddress": "0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5"
+  "ghostUsdcAddress": "0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5",
+  "owner": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474"
 }

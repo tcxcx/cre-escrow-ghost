@@ -93,10 +93,10 @@ interface DisputeViewProps {
 }
 
 const statusConfig: Record<DisputeStatus, { label: string; color: string; icon: React.ElementType }> = {
-  open: { label: 'Open', color: 'bg-[#FF507A]/10 text-[#FF507A] border-[#FF507A]/20', icon: AlertTriangle },
-  'evidence-collection': { label: 'Evidence Collection', color: 'bg-[#FFE48C]/10 text-[#c9a93a] border-[#FFE48C]/20', icon: FileText },
-  'under-review': { label: 'Under Review', color: 'bg-[#6854CF]/10 text-[#6854CF] border-[#6854CF]/20', icon: Scale },
-  resolved: { label: 'Resolved', color: 'bg-[#82e664]/10 text-[#5cb346] border-[#82e664]/20', icon: CheckCircle2 },
+  open: { label: 'Open', color: 'bg-rose-50 dark:bg-rose-950 text-rojo border-rojo/20', icon: AlertTriangle },
+  'evidence-collection': { label: 'Evidence Collection', color: 'bg-amber-50 dark:bg-amber-950 text-amarillo border-amarillo/20', icon: FileText },
+  'under-review': { label: 'Under Review', color: 'bg-violet-50 dark:bg-violet-950 text-purpleDanis border-purpleDanis/20', icon: Scale },
+  resolved: { label: 'Resolved', color: 'bg-emerald-50 dark:bg-emerald-950 text-vverde border-vverde/20', icon: CheckCircle2 },
 }
 
 export function DisputeView({ contractId: propContractId, milestoneId: propMilestoneId, currentUserRole = 'payer' }: DisputeViewProps = {}) {
@@ -175,7 +175,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-[#6854CF]" />
+          <Loader2 className="w-8 h-8 animate-spin text-purpleDanis" />
           <p className="text-sm text-muted-foreground">Loading dispute details...</p>
         </div>
       </div>
@@ -250,7 +250,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-b from-[#FF507A]/5 to-transparent border-b border-border">
+      <div className="bg-gradient-to-b from-rose-50 dark:from-rose-950 to-transparent border-b border-border">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-start justify-between">
             <div>
@@ -272,7 +272,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
             </div>
             {data.status === 'evidence-collection' && (
               <div className="text-right">
-                <div className="flex items-center gap-1 text-[#FFE48C]">
+                <div className="flex items-center gap-1 text-amarillo">
                   <Clock className="w-4 h-4" />
                   <span className="font-medium">{daysRemaining} days left</span>
                 </div>
@@ -307,7 +307,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                     <p className="text-sm text-foreground">{data.milestoneName}</p>
                   </div>
                 )}
-                <div className="p-3 rounded-lg bg-[#FF507A]/5 border border-[#FF507A]/20">
+                <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950 border border-rojo/20">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Amount in Dispute</span>
                     <span className="font-semibold text-foreground">
@@ -343,20 +343,20 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                           className={cn(
                             'p-4 rounded-lg',
                             isSystem && 'bg-muted/30 border border-border text-center',
-                            isPayer && 'bg-[#6854CF]/5 border border-[#6854CF]/20 ml-0 mr-8',
-                            isPayee && 'bg-[#82e664]/5 border border-[#82e664]/20 ml-8 mr-0',
+                            isPayer && 'bg-violet-50 dark:bg-violet-950 border border-purpleDanis/20 ml-0 mr-8',
+                            isPayee && 'bg-emerald-50 dark:bg-emerald-950 border border-vverde/20 ml-8 mr-0',
                           )}
                         >
                           {!isSystem && (
                             <div className="flex items-center gap-2 mb-2">
                               <div className={cn(
                                 'w-6 h-6 rounded-full flex items-center justify-center',
-                                isPayer ? 'bg-[#6854CF]/10' : 'bg-[#82e664]/10'
+                                isPayer ? 'bg-violet-100 dark:bg-violet-900' : 'bg-emerald-100 dark:bg-emerald-900'
                               )}>
                                 {isPayer ? (
-                                  <Building2 className="w-3 h-3 text-[#6854CF]" />
+                                  <Building2 className="w-3 h-3 text-purpleDanis" />
                                 ) : (
-                                  <User className="w-3 h-3 text-[#82e664]" />
+                                  <User className="w-3 h-3 text-vverde" />
                                 )}
                               </div>
                               <span className="text-sm font-medium text-foreground">
@@ -411,7 +411,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                         </Button>
                         <Button 
                           size="sm" 
-                          className="gap-2 bg-[#6854CF] hover:bg-[#5a46b8] text-white"
+                          className="gap-2 bg-purpleDanis hover:bg-purpleDanis/90 text-white"
                           onClick={handleSendMessage}
                           disabled={!newMessage.trim() || isSending}
                         >
@@ -443,7 +443,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
               <CardContent className="space-y-4">
                 <div className="p-3 rounded-lg bg-muted/30">
                   <div className="flex items-center gap-2 mb-1">
-                    <Building2 className="w-4 h-4 text-[#6854CF]" />
+                    <Building2 className="w-4 h-4 text-purpleDanis" />
                     <span className="text-sm font-medium text-foreground">{data.payer.name}</span>
                     {data.filedBy === 'payer' && (
                       <Badge variant="outline" className="text-[10px] h-4">Filed</Badge>
@@ -453,7 +453,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                 </div>
                 <div className="p-3 rounded-lg bg-muted/30">
                   <div className="flex items-center gap-2 mb-1">
-                    <User className="w-4 h-4 text-[#82e664]" />
+                    <User className="w-4 h-4 text-vverde" />
                     <span className="text-sm font-medium text-foreground">{data.payee.name}</span>
                     {data.filedBy === 'payee' && (
                       <Badge variant="outline" className="text-[10px] h-4">Filed</Badge>
@@ -462,9 +462,9 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                   <p className="text-xs text-muted-foreground">Payee</p>
                 </div>
                 {data.arbitrator && (
-                  <div className="p-3 rounded-lg bg-[#6854CF]/5 border border-[#6854CF]/20">
+                  <div className="p-3 rounded-lg bg-violet-50 dark:bg-violet-950 border border-purpleDanis/20">
                     <div className="flex items-center gap-2 mb-1">
-                      <Gavel className="w-4 h-4 text-[#6854CF]" />
+                      <Gavel className="w-4 h-4 text-purpleDanis" />
                       <span className="text-sm font-medium text-foreground">{data.arbitrator.name}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">Assigned Arbitrator</p>
@@ -484,7 +484,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#82e664] mt-1.5" />
+                    <div className="w-2 h-2 rounded-full bg-vverde mt-1.5" />
                     <div>
                       <p className="text-sm font-medium text-foreground">Dispute Filed</p>
                       <p className="text-xs text-muted-foreground">{data.filedAt.toLocaleDateString()}</p>
@@ -494,7 +494,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                     <div className={cn(
                       'w-2 h-2 rounded-full mt-1.5',
                       data.status === 'evidence-collection' || data.status === 'under-review' || data.status === 'resolved'
-                        ? 'bg-[#82e664]'
+                        ? 'bg-vverde'
                         : 'bg-muted'
                     )} />
                     <div>
@@ -506,7 +506,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                     <div className={cn(
                       'w-2 h-2 rounded-full mt-1.5',
                       data.status === 'under-review' || data.status === 'resolved'
-                        ? 'bg-[#82e664]'
+                        ? 'bg-vverde'
                         : 'bg-muted'
                     )} />
                     <div>
@@ -518,7 +518,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                     <div className={cn(
                       'w-2 h-2 rounded-full mt-1.5',
                       data.status === 'resolved'
-                        ? 'bg-[#82e664]'
+                        ? 'bg-vverde'
                         : 'bg-muted'
                     )} />
                     <div>
@@ -544,7 +544,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                 {milestoneId && data.status !== 'resolved' && (
                   <Button
                     variant="outline"
-                    className="w-full justify-start gap-2 bg-transparent text-[#FF507A] border-[#FF507A]/30 hover:bg-[#FF507A]/10"
+                    className="w-full justify-start gap-2 bg-transparent text-rojo border-rojo/30 hover:bg-rose-50 dark:hover:bg-rose-950"
                     onClick={() => setShowFileDisputeDialog(true)}
                   >
                     <AlertTriangle className="w-4 h-4" />
@@ -554,7 +554,7 @@ export function DisputeView({ contractId: propContractId, milestoneId: propMiles
                 {data.status !== 'resolved' && (
                   <Button
                     variant="outline"
-                    className="w-full justify-start gap-2 bg-transparent text-[#82e664] border-[#82e664]/30 hover:bg-[#82e664]/10"
+                    className="w-full justify-start gap-2 bg-transparent text-vverde border-vverde/30 hover:bg-emerald-50 dark:hover:bg-emerald-950"
                     onClick={() => setShowResolveDialog(true)}
                   >
                     <CheckCircle2 className="w-4 h-4" />

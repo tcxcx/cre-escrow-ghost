@@ -158,7 +158,7 @@ export function CompletionView() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-[#6854CF]" />
+          <Loader2 className="w-8 h-8 animate-spin text-purpleDanis" />
           <p className="text-sm text-muted-foreground">Loading completion details...</p>
         </div>
       </div>
@@ -184,10 +184,10 @@ export function CompletionView() {
   return (
     <div className="min-h-screen bg-background">
       {/* Success Header */}
-      <div className="bg-gradient-to-b from-[#82e664]/10 to-transparent border-b border-border">
+      <div className="bg-gradient-to-b from-emerald-50 dark:from-emerald-950 to-transparent border-b border-border">
         <div className="max-w-4xl mx-auto px-6 py-12 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#82e664]/20 mb-6">
-            <Trophy className="w-10 h-10 text-[#82e664]" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900 mb-6">
+            <Trophy className="w-10 h-10 text-vverde" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Contract Completed!
@@ -196,7 +196,7 @@ export function CompletionView() {
             {data.contractName} has been successfully completed and settled
           </p>
           <div className="flex items-center justify-center gap-2">
-            <Badge className="bg-[#82e664]/10 text-[#5cb346] border-[#82e664]/20">
+            <Badge className="bg-emerald-50 dark:bg-emerald-950 text-vverde border-vverde/20">
               <CheckCircle2 className="w-3 h-3 mr-1" />
               Settled
             </Badge>
@@ -213,7 +213,7 @@ export function CompletionView() {
         <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-[#6854CF]" />
+              <DollarSign className="w-5 h-5 text-purpleDanis" />
               Settlement Summary
             </CardTitle>
             <CardDescription>
@@ -231,7 +231,7 @@ export function CompletionView() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total Yield Generated</span>
-                <span className="text-lg font-semibold text-[#82e664]">
+                <span className="text-lg font-semibold text-vverde">
                   +${totalYield.toFixed(2)} ({yieldPercentage.toFixed(2)}%)
                 </span>
               </div>
@@ -242,14 +242,14 @@ export function CompletionView() {
             {/* Distribution Breakdown */}
             <div className="space-y-4">
               {/* Payee Section */}
-              <div className="flex items-start gap-4 p-4 rounded-lg bg-[#82e664]/5 border border-[#82e664]/20">
-                <div className="p-2 rounded-lg bg-[#82e664]/10">
-                  <User className="w-5 h-5 text-[#82e664]" />
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 border border-vverde/20">
+                <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900">
+                  <User className="w-5 h-5 text-vverde" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-foreground">{data.payee.name}</span>
-                    <Badge variant="outline" className="text-[#82e664] border-[#82e664]/30">Payee</Badge>
+                    <Badge variant="outline" className="text-vverde border-vverde/30">Payee</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3">{data.payee.address}</p>
                   <div className="space-y-1">
@@ -259,7 +259,7 @@ export function CompletionView() {
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Yield Earned (50%)</span>
-                      <span className="text-[#82e664]">+${data.settlement.payeeYield.toFixed(2)}</span>
+                      <span className="text-vverde">+${data.settlement.payeeYield.toFixed(2)}</span>
                     </div>
                     <Separator className="my-2" />
                     <div className="flex items-center justify-between text-sm font-medium">
@@ -273,20 +273,20 @@ export function CompletionView() {
               </div>
 
               {/* Payer Section */}
-              <div className="flex items-start gap-4 p-4 rounded-lg bg-[#6854CF]/5 border border-[#6854CF]/20">
-                <div className="p-2 rounded-lg bg-[#6854CF]/10">
-                  <Building2 className="w-5 h-5 text-[#6854CF]" />
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-violet-50 dark:bg-violet-950 border border-purpleDanis/20">
+                <div className="p-2 rounded-lg bg-violet-100 dark:bg-violet-900">
+                  <Building2 className="w-5 h-5 text-purpleDanis" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-foreground">{data.payer.name}</span>
-                    <Badge variant="outline" className="text-[#6854CF] border-[#6854CF]/30">Payer</Badge>
+                    <Badge variant="outline" className="text-purpleDanis border-purpleDanis/30">Payer</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3">{data.payer.address}</p>
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Yield Earned (50%)</span>
-                      <span className="text-[#82e664]">+${data.settlement.payerYield.toFixed(2)}</span>
+                      <span className="text-vverde">+${data.settlement.payerYield.toFixed(2)}</span>
                     </div>
                     {data.settlement.payerRefund > 0 && (
                       <div className="flex items-center justify-between text-sm">
@@ -336,7 +336,7 @@ export function CompletionView() {
         <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#82e664]" />
+              <CheckCircle2 className="w-5 h-5 text-vverde" />
               Milestones Completed
             </CardTitle>
           </CardHeader>
@@ -348,8 +348,8 @@ export function CompletionView() {
                   className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#82e664]/10 flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4 text-[#82e664]" />
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-vverde" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground">{milestone.name}</p>
@@ -371,7 +371,7 @@ export function CompletionView() {
         <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#6854CF]" />
+              <Shield className="w-5 h-5 text-purpleDanis" />
               Blockchain Verification
             </CardTitle>
             <CardDescription>

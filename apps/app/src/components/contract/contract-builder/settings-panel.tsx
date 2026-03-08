@@ -257,7 +257,7 @@ export function SettingsPanel() {
                             'w-full flex items-start gap-3 p-3 rounded-lg border transition-all text-left',
                             isSelected
                               ? 'border-purpleDanis bg-muted/30'
-                              : 'border-borderFine hover:border-purpleDanis/40',
+                              : 'border-borderFine hover:border-violet-300 dark:hover:border-violet-700',
                           )}
                         >
                           <div
@@ -289,7 +289,7 @@ export function SettingsPanel() {
               )}
 
               {yieldEnabled && (
-                <div className="flex items-start gap-2 p-3 rounded-xl bg-[rgba(255,235,180,0.2)] border border-borderFine">
+                <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-50 dark:bg-amber-950 border border-borderFine">
                   <AlertTriangle className="w-4 h-4 text-textDanis shrink-0 mt-0.5" />
                   <p className="text-xs text-textDanis">
                     Yield strategies involve DeFi protocols which carry smart contract risks. Funds may be subject to protocol fees and variable APY.

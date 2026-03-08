@@ -11,8 +11,8 @@ interface ConditionNodeData extends ConditionData {
   label: string
 }
 
-export const ConditionNode = memo(function ConditionNode({ 
-  data, 
+export const ConditionNode = memo(function ConditionNode({
+  data,
   selected,
   id,
 }: NodeProps & { data: ConditionNodeData }) {
@@ -23,16 +23,16 @@ export const ConditionNode = memo(function ConditionNode({
     <div
       className={cn(
         'relative min-w-[180px] max-w-[240px] rounded-xl border-2 bg-card shadow-lg transition-all duration-200',
-        isInvalid 
-          ? 'border-[#FF507A] hover:border-[#FF507A]/80 animate-pulse' 
-          : 'border-[#FFE48C]/50 hover:border-[#FFE48C]',
-        selected && !isInvalid && 'ring-2 ring-[#FFE48C]/50 ring-offset-2 ring-offset-background',
-        selected && isInvalid && 'ring-2 ring-[#FF507A]/50 ring-offset-2 ring-offset-background'
+        isInvalid
+          ? 'border-rojo hover:border-rose-400 animate-pulse'
+          : 'border-amber-200 hover:border-amarillo',
+        selected && !isInvalid && 'ring-2 ring-amber-200 ring-offset-2 ring-offset-background',
+        selected && isInvalid && 'ring-2 ring-rose-300 ring-offset-2 ring-offset-background'
       )}
     >
       {/* Validation indicator */}
       {isInvalid && (
-        <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#FF507A] flex items-center justify-center z-10">
+        <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-rojo flex items-center justify-center z-10">
           <AlertCircle className="w-3 h-3 text-white" />
         </div>
       )}
@@ -40,17 +40,17 @@ export const ConditionNode = memo(function ConditionNode({
       {/* Header */}
       <div className={cn(
         'flex items-center gap-2 px-3 py-2 rounded-t-[10px]',
-        isInvalid ? 'bg-[#FF507A]/10' : 'bg-[#FFE48C]/10'
+        isInvalid ? 'bg-rose-50 dark:bg-rose-950' : 'bg-amber-50 dark:bg-amber-950'
       )}>
         <div className={cn(
           'flex items-center justify-center w-6 h-6 rounded-md',
-          isInvalid ? 'bg-[#FF507A]/20 text-[#FF507A]' : 'bg-[#FFE48C]/20 text-[#c9a93a] dark:text-[#FFE48C]'
+          isInvalid ? 'bg-rose-100 dark:bg-rose-900 text-rojo' : 'bg-amber-100 dark:bg-amber-900 text-amarillo dark:text-amarillo'
         )}>
           <GitBranch className="w-3.5 h-3.5" />
         </div>
         <span className={cn(
           'text-xs font-semibold uppercase tracking-wider',
-          isInvalid ? 'text-[#FF507A]' : 'text-[#c9a93a] dark:text-[#FFE48C]'
+          isInvalid ? 'text-rojo' : 'text-amarillo dark:text-amarillo'
         )}>
           {data.type === 'if-else' ? 'Condition' : data.type === 'approval' ? 'Approval' : 'Timer'}
         </span>
@@ -66,7 +66,7 @@ export const ConditionNode = memo(function ConditionNode({
             "{data.condition}"
           </p>
         ) : (
-          <p className="text-xs text-[#FF507A] mt-1">
+          <p className="text-xs text-rojo mt-1">
             Condition required
           </p>
         )}
@@ -75,10 +75,10 @@ export const ConditionNode = memo(function ConditionNode({
       {/* Branch Labels */}
       <div className={cn(
         'flex items-center justify-between px-3 py-2 rounded-b-[10px] border-t',
-        isInvalid ? 'bg-[#FF507A]/5 border-[#FF507A]/20' : 'bg-[#FFE48C]/5 border-[#FFE48C]/20'
+        isInvalid ? 'bg-rose-50 dark:bg-rose-950 border-rose-200 dark:border-rose-800' : 'bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800'
       )}>
-        <span className="text-xs text-[#82e664] font-medium">{data.trueLabel}</span>
-        <span className="text-xs text-[#FF507A] font-medium">{data.falseLabel}</span>
+        <span className="text-xs text-vverde font-medium">{data.trueLabel}</span>
+        <span className="text-xs text-rojo font-medium">{data.falseLabel}</span>
       </div>
 
       {/* Handles */}
@@ -87,7 +87,7 @@ export const ConditionNode = memo(function ConditionNode({
         position={Position.Left}
         className={cn(
           '!w-3 !h-3 !border-2',
-          isInvalid ? '!bg-[#FF507A] !border-[#FF507A]/50' : '!bg-[#FFE48C] !border-[#FFECB4]'
+          isInvalid ? '!bg-rojo !border-rose-300' : '!bg-amarillo !border-agnusDei'
         )}
       />
       <Handle
@@ -95,14 +95,14 @@ export const ConditionNode = memo(function ConditionNode({
         position={Position.Right}
         id="true"
         style={{ top: '40%' }}
-        className="!w-3 !h-3 !bg-[#82e664] !border-2 !border-[#c5f5b0]"
+        className="!w-3 !h-3 !bg-vverde !border-2 !border-emerald-200"
       />
       <Handle
         type="source"
         position={Position.Right}
         id="false"
         style={{ top: '70%' }}
-        className="!w-3 !h-3 !bg-[#FF507A] !border-2 !border-[#FF507A]/50"
+        className="!w-3 !h-3 !bg-rojo !border-2 !border-rose-300"
       />
     </div>
   )

@@ -122,14 +122,14 @@ export function FlowCanvas() {
 
   const miniMapNodeColor = useCallback((node: ContractNode) => {
     const colors: Record<NodeType, string> = {
-      'party-payer': '#3b82f6',
-      'party-payee': '#22c55e',
-      milestone: '#8b5cf6',
-      condition: '#f59e0b',
-      payment: '#22c55e',
-      signature: '#3b82f6',
-      clause: '#71717a',
-      commission: '#eab308',
+      'party-payer': 'hsl(var(--purpleDanis))',
+      'party-payee': 'hsl(var(--vverde))',
+      milestone: 'hsl(var(--violeta))',
+      condition: 'hsl(var(--amarillo))',
+      payment: 'hsl(var(--vverde))',
+      signature: 'hsl(var(--purpleDanis))',
+      clause: 'hsl(var(--lila))',
+      commission: 'hsl(var(--belanova))',
     }
     return colors[node.type as NodeType] || '#71717a'
   }, [])

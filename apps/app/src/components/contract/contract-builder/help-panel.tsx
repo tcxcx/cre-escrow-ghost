@@ -48,8 +48,8 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
         <SheetHeader className="flex-shrink-0 p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#6854CF]/10">
-                <HelpCircle className="w-5 h-5 text-[#6854CF]" />
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-violet-100 dark:bg-violet-900">
+                <HelpCircle className="w-5 h-5 text-purpleDanis" />
               </div>
               <div>
                 <SheetTitle className="text-lg font-semibold text-foreground">
@@ -104,20 +104,20 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
                   <div className="space-y-4">
                     <div className="p-4 rounded-lg bg-muted/30 border border-border">
                       <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                        <MousePointer className="w-4 h-4 text-[#6854CF]" />
+                        <MousePointer className="w-4 h-4 text-purpleDanis" />
                         How to Connect
                       </h4>
                       <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
                         <li>Hover over a node to see its connection handles (circles on edges)</li>
-                        <li>Click and drag from a <span className="text-[#6854CF] font-medium">source handle</span> (right side)</li>
-                        <li>Drop onto a <span className="text-[#82e664] font-medium">target handle</span> (left side) of another node</li>
+                        <li>Click and drag from a <span className="text-purpleDanis font-medium">source handle</span> (right side)</li>
+                        <li>Drop onto a <span className="text-vverde font-medium">target handle</span> (left side) of another node</li>
                         <li>The connection will animate to show data flow direction</li>
                       </ol>
                     </div>
                     
-                    <div className="flex items-center gap-4 p-4 rounded-lg bg-[#6854CF]/5 border border-[#6854CF]/20">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#6854CF]/20 flex items-center justify-center">
-                        <ArrowRight className="w-4 h-4 text-[#6854CF]" />
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-violet-50 dark:bg-violet-950 border border-borderFine">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-violet-200 dark:bg-violet-800 flex items-center justify-center">
+                        <ArrowRight className="w-4 h-4 text-purpleDanis" />
                       </div>
                       <div className="text-sm">
                         <span className="font-medium text-foreground">Flow Direction:</span>{' '}
@@ -148,52 +148,52 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
                     <NodeTypeCard
                       icon={Users}
                       name="Party (Payer)"
-                      color="bg-[#6854CF]"
+                      color="bg-purpleDanis"
                       description="The client or buyer who funds the contract. Every contract must start with a payer."
                       requiresSignature
                     />
                     <NodeTypeCard
                       icon={Users}
                       name="Party (Payee)"
-                      color="bg-[#82e664]"
+                      color="bg-vverde"
                       description="The provider or seller who receives payment. Every contract must end with a payee."
                       requiresSignature
                     />
                     <NodeTypeCard
                       icon={Target}
                       name="Milestone"
-                      color="bg-[#C4A1FF]"
+                      color="bg-violeta"
                       description="A deliverable checkpoint that triggers payment release. Define clear acceptance criteria."
                     />
                     <NodeTypeCard
                       icon={GitBranch}
                       name="Condition"
-                      color="bg-[#FFE48C]"
+                      color="bg-amarillo"
                       description="If/else branching logic. Routes the contract flow based on conditions being met."
                       hasMultipleOutputs
                     />
                     <NodeTypeCard
                       icon={Banknote}
                       name="Payment"
-                      color="bg-[#82e664]"
+                      color="bg-vverde"
                       description="Releases funds from escrow to the payee when triggered by a milestone."
                     />
                     <NodeTypeCard
                       icon={PenLine}
                       name="Signature"
-                      color="bg-[#6854CF]"
+                      color="bg-purpleDanis"
                       description="Captures eSignature from a party. Required for each payer and payee in the contract."
                     />
                     <NodeTypeCard
                       icon={FileText}
                       name="Clause"
-                      color="bg-[#E2D0FC]"
+                      color="bg-lila"
                       description="Legal text block that can be AI-generated. Adds terms and conditions."
                     />
                     <NodeTypeCard
                       icon={Percent}
                       name="Commission"
-                      color="bg-[#FEADEC]"
+                      color="bg-belanova"
                       description="Third-party fee split (max 10%). Non-blocking link payment on execution."
                       isNonBlocking
                     />
@@ -201,9 +201,9 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
                 </Section>
 
                 <Section title="Signature Requirements" icon={PenLine}>
-                  <div className="p-4 rounded-lg bg-[#6854CF]/5 border border-[#6854CF]/20">
+                  <div className="p-4 rounded-lg bg-violet-50 dark:bg-violet-950 border border-borderFine">
                     <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-[#6854CF] flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="w-5 h-5 text-purpleDanis flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
                         <p className="font-medium text-foreground mb-2">
                           Every Payer and Payee must have a Signature node
@@ -242,9 +242,9 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
                   </p>
                   
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-lg bg-[#82e664]/10 border border-[#82e664]/30">
+                    <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950 border border-borderFine">
                       <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#82e664]" />
+                        <CheckCircle2 className="w-4 h-4 text-vverde" />
                         <span className="font-medium text-sm text-foreground">True Branch</span>
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -274,9 +274,9 @@ export function HelpPanel({ open, onOpenChange }: HelpPanelProps) {
                 </Section>
 
                 <Section title="Commission Payments" icon={Percent}>
-                  <div className="p-4 rounded-lg bg-[#FEADEC]/10 border border-[#FEADEC]/30">
+                  <div className="p-4 rounded-lg bg-pink-50 dark:bg-pink-950 border border-borderFine">
                     <div className="flex items-start gap-3">
-                      <Lightbulb className="w-5 h-5 text-[#FEADEC] flex-shrink-0 mt-0.5" />
+                      <Lightbulb className="w-5 h-5 text-belanova flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
                         <p className="font-medium text-foreground mb-2">
                           Non-Blocking Link Payments
@@ -378,7 +378,7 @@ function Section({ title, icon: Icon, children }: { title: string; icon: React.E
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <Icon className="w-5 h-5 text-[#6854CF]" />
+        <Icon className="w-5 h-5 text-purpleDanis" />
         <h3 className="font-semibold text-foreground">{title}</h3>
       </div>
       {children}
@@ -391,7 +391,7 @@ function StepList({ steps }: { steps: string[] }) {
     <ol className="space-y-2">
       {steps.map((step, i) => (
         <li key={i} className="flex items-start gap-3 text-sm">
-          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#6854CF]/10 text-[#6854CF] flex items-center justify-center text-xs font-medium">
+          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-100 dark:bg-violet-900 text-purpleDanis flex items-center justify-center text-xs font-medium">
             {i + 1}
           </span>
           <span className="text-muted-foreground pt-0.5">{step}</span>
@@ -442,17 +442,17 @@ function NodeTypeCard({
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-medium text-sm text-foreground">{name}</span>
           {requiresSignature && (
-            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#6854CF]/30 text-[#6854CF]">
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-borderFine text-purpleDanis">
               Requires Signature
             </Badge>
           )}
           {hasMultipleOutputs && (
-            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#FFE48C]/30 text-[#c9a93a]">
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-borderFine text-amarillo">
               2 Outputs
             </Badge>
           )}
           {isNonBlocking && (
-            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#FEADEC]/30 text-[#e07bc7]">
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-borderFine text-belanova">
               Non-Blocking
             </Badge>
           )}
@@ -466,7 +466,7 @@ function NodeTypeCard({
 function FlowStep({ number, title, description }: { number: number; title: string; description: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#6854CF] text-white flex items-center justify-center text-xs font-medium">
+      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purpleDanis text-white flex items-center justify-center text-xs font-medium">
         {number}
       </span>
       <div className="flex-1">
@@ -491,7 +491,7 @@ function PatternCard({ name, pattern, description }: { name: string; pattern: st
     <div className="p-3 rounded-lg bg-muted/30 border border-border">
       <h4 className="font-medium text-sm text-foreground mb-1">{name}</h4>
       <p className="text-xs text-muted-foreground mb-2">{description}</p>
-      <code className="text-[10px] font-mono bg-background px-2 py-1 rounded border border-border text-[#6854CF] block overflow-x-auto">
+      <code className="text-[10px] font-mono bg-background px-2 py-1 rounded border border-border text-purpleDanis block overflow-x-auto">
         {pattern}
       </code>
     </div>
@@ -501,7 +501,7 @@ function PatternCard({ name, pattern, description }: { name: string; pattern: st
 function ChecklistItem({ text }: { text: string }) {
   return (
     <div className="flex items-center gap-2 text-sm">
-      <CheckCircle2 className="w-4 h-4 text-[#82e664]" />
+      <CheckCircle2 className="w-4 h-4 text-vverde" />
       <span className="text-muted-foreground">{text}</span>
     </div>
   )

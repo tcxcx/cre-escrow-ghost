@@ -467,6 +467,7 @@ export function FundingView({ contractId }: FundingViewProps) {
                   }}
                 />
                 {isExternalWalletConnected && (
+                  <>
                   {!contract?.escrowAddress && (
                     <p className="text-xs text-muted-foreground mt-2 text-center">
                       Escrow contract is being deployed on-chain. External wallet funding will be available shortly.
@@ -494,6 +495,7 @@ export function FundingView({ contractId }: FundingViewProps) {
                       </>
                     )}
                   </Button>
+                  </>
                 )}
               </>
             ) : (

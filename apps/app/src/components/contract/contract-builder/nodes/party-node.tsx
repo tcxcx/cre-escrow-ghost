@@ -11,8 +11,8 @@ interface PartyNodeData extends PartyData {
   label: string
 }
 
-export const PartyNode = memo(function PartyNode({ 
-  data, 
+export const PartyNode = memo(function PartyNode({
+  data,
   selected,
   type,
   id,
@@ -20,57 +20,57 @@ export const PartyNode = memo(function PartyNode({
   const isPayer = type === 'party-payer' || data.role === 'payer'
   const invalidNodeIds = useContractStore((state) => state.invalidNodeIds)
   const isInvalid = invalidNodeIds.includes(id)
-  
+
   return (
     <div
       className={cn(
         'relative min-w-[180px] rounded-xl border-2 bg-card shadow-lg transition-all duration-200',
         selected && 'ring-2 ring-offset-2 ring-offset-background',
         isInvalid && 'animate-pulse',
-        isPayer 
-          ? isInvalid 
-            ? 'border-[#FF507A] hover:border-[#FF507A]/80' 
-            : 'border-[#6854CF]/50 hover:border-[#6854CF] dark:border-[#AB8DFF]/50 dark:hover:border-[#AB8DFF]'
+        isPayer
+          ? isInvalid
+            ? 'border-rojo hover:border-rose-400'
+            : 'border-violet-300 hover:border-purpura dark:border-violet-400 dark:hover:border-violeta'
           : isInvalid
-            ? 'border-[#FF507A] hover:border-[#FF507A]/80'
-            : 'border-[#82e664]/50 hover:border-[#82e664]',
-        selected && isPayer && !isInvalid && 'ring-[#6854CF]/50 dark:ring-[#AB8DFF]/50',
-        selected && !isPayer && !isInvalid && 'ring-[#82e664]/50',
-        selected && isInvalid && 'ring-[#FF507A]/50'
+            ? 'border-rojo hover:border-rose-400'
+            : 'border-emerald-300 hover:border-vverde',
+        selected && isPayer && !isInvalid && 'ring-violet-300 dark:ring-violet-400',
+        selected && !isPayer && !isInvalid && 'ring-emerald-300',
+        selected && isInvalid && 'ring-rose-300'
       )}
     >
       {/* Validation indicator */}
       {isInvalid && (
-        <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#FF507A] flex items-center justify-center z-10">
+        <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-rojo flex items-center justify-center z-10">
           <AlertCircle className="w-3 h-3 text-white" />
         </div>
       )}
 
       {/* Header */}
-      <div 
+      <div
         className={cn(
           'flex items-center gap-2 px-3 py-2 rounded-t-[10px]',
-          isInvalid 
-            ? 'bg-[#FF507A]/10' 
-            : isPayer ? 'bg-[#6854CF]/10 dark:bg-[#AB8DFF]/10' : 'bg-[#82e664]/10'
+          isInvalid
+            ? 'bg-rose-50 dark:bg-rose-950'
+            : isPayer ? 'bg-violet-100 dark:bg-violet-900' : 'bg-emerald-50 dark:bg-emerald-950'
         )}
       >
-        <div 
+        <div
           className={cn(
             'flex items-center justify-center w-6 h-6 rounded-md',
             isInvalid
-              ? 'bg-[#FF507A]/20 text-[#FF507A]'
-              : isPayer ? 'bg-[#6854CF]/20 text-[#6854CF] dark:bg-[#AB8DFF]/20 dark:text-[#AB8DFF]' : 'bg-[#82e664]/20 text-[#5cb346] dark:text-[#82e664]'
+              ? 'bg-rose-100 dark:bg-rose-900 text-rojo'
+              : isPayer ? 'bg-violet-100 dark:bg-violet-900 text-purpura dark:text-violeta' : 'bg-emerald-100 dark:bg-emerald-900 text-vverde'
           )}
         >
           {isPayer ? <Building2 className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
         </div>
-        <span 
+        <span
           className={cn(
             'text-xs font-semibold uppercase tracking-wider',
-            isInvalid 
-              ? 'text-[#FF507A]'
-              : isPayer ? 'text-[#6854CF] dark:text-[#AB8DFF]' : 'text-[#5cb346] dark:text-[#82e664]'
+            isInvalid
+              ? 'text-rojo'
+              : isPayer ? 'text-purpura dark:text-violeta' : 'text-vverde'
           )}
         >
           {isPayer ? 'Payer' : 'Payee'}
@@ -87,7 +87,7 @@ export const PartyNode = memo(function PartyNode({
             {data.name}
           </p>
         ) : (
-          <p className="text-xs text-[#FF507A] truncate mt-0.5">
+          <p className="text-xs text-rojo truncate mt-0.5">
             Name required
           </p>
         )}
@@ -96,7 +96,7 @@ export const PartyNode = memo(function PartyNode({
             {data.email}
           </p>
         ) : (
-          <p className="text-xs text-[#FF507A]/70 truncate">
+          <p className="text-xs text-rose-400 truncate">
             Email required
           </p>
         )}
@@ -108,9 +108,9 @@ export const PartyNode = memo(function PartyNode({
         position={Position.Left}
         className={cn(
           '!w-3 !h-3 !border-2',
-          isPayer 
-            ? '!bg-[#6854CF] dark:!bg-[#AB8DFF] !border-[#E2D0FC]' 
-            : '!bg-[#82e664] !border-[#c5f5b0]'
+          isPayer
+            ? '!bg-purpura dark:!bg-violeta !border-lila'
+            : '!bg-vverde !border-emerald-200'
         )}
       />
       <Handle
@@ -118,9 +118,9 @@ export const PartyNode = memo(function PartyNode({
         position={Position.Right}
         className={cn(
           '!w-3 !h-3 !border-2',
-          isPayer 
-            ? '!bg-[#6854CF] dark:!bg-[#AB8DFF] !border-[#E2D0FC]' 
-            : '!bg-[#82e664] !border-[#c5f5b0]'
+          isPayer
+            ? '!bg-purpura dark:!bg-violeta !border-lila'
+            : '!bg-vverde !border-emerald-200'
         )}
       />
     </div>

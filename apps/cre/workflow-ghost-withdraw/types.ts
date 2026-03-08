@@ -12,6 +12,7 @@ export const configSchema = z.object({
   // Arbitrum Sepolia (FHE chain) — GhostUSDC wraps USDC directly
   fheChainSelectorName: z.string().min(1),
   ghostUsdcAddress: addr,
+  owner: addr,
 })
 
 export type Config = z.infer<typeof configSchema>

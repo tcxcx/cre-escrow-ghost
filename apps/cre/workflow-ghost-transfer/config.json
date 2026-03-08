@@ -4,5 +4,6 @@
   "gasLimit": "500000",
   "policyEngineAddress": "0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926",
   "fheChainSelectorName": "ethereum-testnet-sepolia-arbitrum-1",
-  "ghostUsdcAddress": "0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5"
+  "ghostUsdcAddress": "0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5",
+  "transferEventTopic": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
 }

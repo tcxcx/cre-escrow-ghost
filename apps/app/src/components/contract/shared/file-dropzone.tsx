@@ -161,7 +161,7 @@ export function FileDropzone({
         className={cn(
           'relative rounded-xl p-12 text-center transition-all',
           'border-2 border-dashed',
-          isDragging && 'border-[#4fc3f7] bg-[#e3f2fd]',
+          isDragging && 'border-primary bg-primary/5',
           !isDragging && !hasFile && 'border-border/60 bg-muted/30 hover:border-muted-foreground/30 cursor-pointer',
           !isDragging && hasFile && 'border-border/60 bg-muted/30',
           isProcessing && 'pointer-events-none'

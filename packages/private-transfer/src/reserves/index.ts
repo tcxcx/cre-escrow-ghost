@@ -97,6 +97,36 @@ async function computeReserves(): Promise<Omit<ReserveAttestation, 'triggerType'
 }
 
 async function submitReserveAttestation(data: ReserveAttestation): Promise<void> {
+  // Try CRE-orchestrated attestation first (trustless Chainlink function).
+  // The CRE workflow-private-transfer has a proofOfReserves cron handler,
+  // but per-transfer attestations provide continuous backing verification.
+  try {
+    const { getEnvVar } = await import('@bu/env/workers');
+    const baseUrl = getEnvVar('CRE_GATEWAY_URL') ?? 'http://localhost:8088';
+    const url = `${baseUrl}/workflows/workflow-private-transfer/trigger`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'proof_of_reserves',
+        triggerType: data.triggerType,
+        timestamp: data.timestamp,
+      }),
+    });
+
+    if (response.ok) {
+      logger.info('Reserve attestation submitted via CRE', { triggerType: data.triggerType });
+      return;
+    }
+    logger.warn('CRE reserve attestation failed, falling back to direct', { status: response.status });
+  } catch (creError) {
+    logger.warn('CRE gateway unreachable, falling back to direct attestation', {
+      error: (creError as Error).message,
+    });
+  }
+
+  // Fallback: direct HTTP to ACE API (trusted server call)
   await fetchJson(`${getAceApiUrl()}/attestations`, {
     method: 'POST',
     body: JSON.stringify({

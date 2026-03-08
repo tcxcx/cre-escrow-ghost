@@ -43,6 +43,13 @@ export async function triggerCreWorkflow<T = unknown>(
     deploy: 'workflow-escrow-deploy',
     yield: 'workflow-escrow-yield',
     monitor: 'workflow-escrow-monitor',
+    // Ghost Mode — CRE-orchestrated deposit verification + yield allocation
+    ghost_deposit: 'workflow-ghost-deposit',
+    ghost_transfer: 'workflow-ghost-transfer',
+    ghost_withdraw: 'workflow-ghost-withdraw',
+    treasury_rebalance: 'workflow-treasury-rebalance',
+    private_transfer_verify: 'workflow-private-transfer',
+    allowlist_sync: 'workflow-allowlist-sync',
   }
 
   const workflowId = workflowMap[action]

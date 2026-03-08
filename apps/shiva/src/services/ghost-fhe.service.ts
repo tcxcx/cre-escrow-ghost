@@ -326,27 +326,12 @@ export async function executeDeposit(walletId: string, walletAddress: string, am
 
   logger.info('Ghost deposit complete', { walletId, txHash });
 
-  // Yield allocation: trigger treasury USDC → USYC subscription (non-fatal).
-  // The user's USDC is locked as GhostUSDC collateral, but the treasury can
-  // separately allocate its own USDC reserves to Hashnote USYC for yield.
-  // Same pattern as USDCg deposit path (subscribe-usyc step).
-  try {
-    const { subscribe } = await import('@bu/treasury-yield/teller');
-    const treasurySdk = await getCircleSdk();
-    const yieldTxId = await subscribe(treasurySdk, amount);
-    if (yieldTxId) await waitForCircleTx(treasurySdk, yieldTxId);
-    logger.info('Ghost deposit: treasury USYC yield allocation succeeded', { yieldTxId });
-  } catch (yieldError) {
-    const yieldMsg = (yieldError as Error).message;
-    logger.warn(
-      'Ghost deposit: USYC yield allocation failed (non-fatal) — treasury USDC stays unallocated. ' +
-      'Hashnote requires wallet entitlement on Sepolia: check ' +
-      'https://api.dev.hashnote.com/v1/entitlements/token_access?address=TREASURY_ADDRESS&symbol=USYC. ' +
-      'Official Sepolia Teller: 0xbb0524426bc1d13dAB721DB69D86374FC6BaCDba (verify against addresses.ts). ' +
-      'Yield allocation deferred to treasury-rebalance CRE cron once entitled.',
-      { error: yieldMsg },
-    );
-  }
+  // Yield allocation is NOT done inline — it's orchestrated by CRE as a
+  // trustless Chainlink function. After this deposit, Shiva triggers:
+  //   1. CRE workflow-ghost-deposit (HTTP) → compliance verify + attestation
+  //   2. CRE workflow-treasury-rebalance (cron) → detects excess USDC buffer
+  //      → publishes "allocate_to_yield" attestation → Shiva executes subscribe()
+  // This ensures yield allocation is verifiable on-chain, not a trusted server call.
 
   return { txHash: txHash ?? '0x' + '0'.repeat(64) };
 }

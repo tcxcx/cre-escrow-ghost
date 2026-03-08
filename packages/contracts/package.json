@@ -13,7 +13,7 @@
     "./contract-flow/validation": "./src/contract-flow/validation.ts",
     "./prompts": "./src/prompts/index.ts",
     "./pdf": "./src/pdf/pdf-service.ts",
-    "./pdf/signed": "./src/pdf/signed-pdf-service.ts",
+    "./pdf/signed": "./src/pdf/signed-pdf-service.tsx",
     "./templates": "./src/templates/index.ts",
     "./escrow": "./src/escrow/abi.ts"
   },

@@ -230,14 +230,14 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
 
   const getNodeColor = (type: string) => {
     switch (type) {
-      case 'party-payer': return 'bg-[#6854CF]/10 text-[#6854CF] border-[#6854CF]/30'
-      case 'party-payee': return 'bg-[#82e664]/10 text-[#5cb346] border-[#82e664]/30'
-      case 'milestone': return 'bg-[#C4A1FF]/10 text-[#6854CF] border-[#C4A1FF]/30'
-      case 'condition': return 'bg-[#FFE48C]/10 text-[#c9a93a] border-[#FFE48C]/30'
-      case 'payment': return 'bg-[#82e664]/10 text-[#5cb346] border-[#82e664]/30'
-      case 'signature': return 'bg-[#6854CF]/10 text-[#6854CF] border-[#6854CF]/30'
-      case 'clause': return 'bg-[#E2D0FC]/10 text-[#6854CF] border-[#E2D0FC]/30'
-      case 'commission': return 'bg-[#FEADEC]/10 text-[#e07bc7] border-[#FEADEC]/30'
+      case 'party-payer': return 'bg-violet-50 dark:bg-violet-950 text-purpleDanis border-borderFine'
+      case 'party-payee': return 'bg-emerald-50 dark:bg-emerald-950 text-vverde border-borderFine'
+      case 'milestone': return 'bg-violet-50 dark:bg-violet-950 text-purpleDanis border-borderFine'
+      case 'condition': return 'bg-amber-50 dark:bg-amber-950 text-amarillo border-borderFine'
+      case 'payment': return 'bg-emerald-50 dark:bg-emerald-950 text-vverde border-borderFine'
+      case 'signature': return 'bg-violet-50 dark:bg-violet-950 text-purpleDanis border-borderFine'
+      case 'clause': return 'bg-violet-50 dark:bg-violet-950 text-purpleDanis border-borderFine'
+      case 'commission': return 'bg-pink-50 dark:bg-pink-950 text-belanova border-borderFine'
       default: return 'bg-muted text-muted-foreground border-border'
     }
   }
@@ -251,10 +251,10 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
     return (
       <div className="w-full max-w-4xl mx-4 h-[85vh] flex flex-col items-center justify-center bg-card/95 backdrop-blur-xl border border-border rounded-xl shadow-2xl">
         <div className="relative">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#6854CF] to-[#C4A1FF] flex items-center justify-center">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purpleDanis to-violeta flex items-center justify-center">
             <Zap className="w-10 h-10 text-white animate-pulse" />
           </div>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#6854CF] to-[#C4A1FF] blur-xl opacity-30 animate-pulse" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purpleDanis to-violeta blur-xl opacity-30 animate-pulse" />
         </div>
         <div className="text-center mt-6">
           <h3 className="text-xl font-semibold text-foreground mb-2">Building Your Contract</h3>
@@ -278,8 +278,8 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
             >
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-[#6854CF]/20 to-[#C4A1FF]/20">
-              <CheckCircle2 className="w-5 h-5 text-[#6854CF]" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900 dark:to-violet-800">
+              <CheckCircle2 className="w-5 h-5 text-purpleDanis" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-foreground">Review Generated Contract</h2>
@@ -292,9 +292,9 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
 
         <ScrollArea className="flex-1 min-h-0">
           <div className="p-6 space-y-6">
-            <div className="p-4 rounded-xl bg-[#6854CF]/5 border border-[#6854CF]/20">
+            <div className="p-4 rounded-xl bg-violet-50 dark:bg-violet-950 border border-borderFine">
               <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#6854CF]" />
+                <Sparkles className="w-4 h-4 text-purpleDanis" />
                 AI Summary
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{generatedContract.summary}</p>
@@ -353,7 +353,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
           </Button>
           <Button
             onClick={handleConfirmAndBuild}
-            className="gap-2 bg-gradient-to-r from-[#6854CF] to-[#C4A1FF] hover:from-[#5a47b8] hover:to-[#b38aff]"
+            className="gap-2 bg-gradient-to-r from-purpleDanis to-violeta hover:from-purple-700 hover:to-violet-400"
           >
             <Zap className="w-4 h-4" />
             Build Contract
@@ -379,8 +379,8 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
             >
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-[#6854CF]/20 to-[#C4A1FF]/20">
-              <FileCheck className="w-5 h-5 text-[#6854CF]" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900 dark:to-violet-800">
+              <FileCheck className="w-5 h-5 text-purpleDanis" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-foreground">Define Project Requirements</h2>
@@ -436,14 +436,14 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                     <span className={cn(
                       'text-xs',
                       completedCount === categoryItems.length 
-                        ? 'text-[#82e664]' 
+                        ? 'text-vverde' 
                         : hasRequired 
-                          ? 'text-[#FF507A]'
+                          ? 'text-rojo'
                           : 'text-muted-foreground'
                     )}>
                       {completedCount}/{categoryItems.length}
                     </span>
-                    {hasRequired && <AlertCircle className="w-3.5 h-3.5 text-[#FF507A]" />}
+                    {hasRequired && <AlertCircle className="w-3.5 h-3.5 text-rojo" />}
                   </button>
                 )
               })}
@@ -455,9 +455,9 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                 <span className="text-sm font-medium text-foreground">AI Confidence</span>
                 <span className={cn(
                   'text-sm font-bold',
-                  analysis.confidence >= 75 ? 'text-[#82e664]' :
-                  analysis.confidence >= 50 ? 'text-[#FFE48C]' :
-                  'text-[#FF507A]'
+                  analysis.confidence >= 75 ? 'text-vverde' :
+                  analysis.confidence >= 50 ? 'text-amarillo' :
+                  'text-rojo'
                 )}>
                   {analysis.confidence}%
                 </span>
@@ -466,9 +466,9 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                 value={analysis.confidence} 
                 className={cn(
                   'h-2',
-                  analysis.confidence >= 75 ? '[&>div]:bg-[#82e664]' :
-                  analysis.confidence >= 50 ? '[&>div]:bg-[#FFE48C]' :
-                  '[&>div]:bg-[#FF507A]'
+                  analysis.confidence >= 75 ? '[&>div]:bg-vverde' :
+                  analysis.confidence >= 50 ? '[&>div]:bg-amarillo' :
+                  '[&>div]:bg-rojo'
                 )}
               />
               <p className="text-xs text-muted-foreground mt-2">
@@ -484,15 +484,15 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
             <div className="p-6 space-y-6">
               {/* Missing Critical Items */}
               {analysis.missingCritical.length > 0 && (
-                <div className="p-4 rounded-xl bg-[#FF507A]/5 border border-[#FF507A]/20">
-                  <h3 className="font-medium text-[#FF507A] mb-2 flex items-center gap-2">
+                <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950 border border-borderFine">
+                  <h3 className="font-medium text-rojo mb-2 flex items-center gap-2">
                     <AlertCircle className="w-4 h-4" />
                     Missing Required Information
                   </h3>
                   <ul className="space-y-1">
                     {analysis.missingCritical.map((item, index) => (
                       <li key={index} className="text-sm text-foreground/80 flex items-center gap-2">
-                        <ChevronRight className="w-3 h-3 text-[#FF507A]" />
+                        <ChevronRight className="w-3 h-3 text-rojo" />
                         {item}
                       </li>
                     ))}
@@ -504,7 +504,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
               {analysis.clarificationQuestions.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="font-medium text-foreground flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-[#6854CF]" />
+                    <HelpCircle className="w-4 h-4 text-purpleDanis" />
                     Help AI Understand Better
                   </h3>
                   {analysis.clarificationQuestions.map((question, index) => (
@@ -534,7 +534,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                 return (
                   <div key={category} className="space-y-3">
                     <h3 className="font-medium text-foreground flex items-center gap-2">
-                      <Icon className="w-4 h-4 text-[#6854CF]" />
+                      <Icon className="w-4 h-4 text-purpleDanis" />
                       {categoryLabels[category as keyof typeof categoryLabels]}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -544,19 +544,19 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                           className={cn(
                             'p-3 rounded-lg border transition-colors',
                             item.isComplete
-                              ? 'bg-[#82e664]/5 border-[#82e664]/20'
+                              ? 'bg-emerald-50 dark:bg-emerald-950 border-borderFine'
                               : item.isRequired
-                                ? 'bg-[#FF507A]/5 border-[#FF507A]/20'
+                                ? 'bg-rose-50 dark:bg-rose-950 border-rose-200 dark:border-rose-800'
                                 : 'bg-muted/30 border-border'
                           )}
                         >
                           <div className="flex items-start gap-3">
                             {item.isComplete ? (
-                              <CheckCircle2 className="w-4 h-4 text-[#82e664] mt-0.5" />
+                              <CheckCircle2 className="w-4 h-4 text-vverde mt-0.5" />
                             ) : (
                               <Circle className={cn(
                                 'w-4 h-4 mt-0.5',
-                                item.isRequired ? 'text-[#FF507A]' : 'text-muted-foreground'
+                                item.isRequired ? 'text-rojo' : 'text-muted-foreground'
                               )} />
                             )}
                             <div className="flex-1 min-w-0">
@@ -565,7 +565,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                                   {item.label}
                                 </span>
                                 {item.isRequired && !item.isComplete && (
-                                  <Badge variant="outline" className="text-[10px] border-[#FF507A]/30 text-[#FF507A]">
+                                  <Badge variant="outline" className="text-[10px] border-rose-300 dark:border-rose-700 text-rojo">
                                     Required
                                   </Badge>
                                 )}
@@ -574,7 +574,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                                 {item.description}
                               </p>
                               {item.value && (
-                                <p className="text-xs font-medium text-[#6854CF] mt-1">
+                                <p className="text-xs font-medium text-purpleDanis mt-1">
                                   {item.value}
                                 </p>
                               )}
@@ -621,7 +621,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
           <Button
             onClick={() => handleGenerateContract()}
             disabled={isAnalyzing || checklistCompletion.requiredPercentage < 50}
-            className="gap-2 bg-gradient-to-r from-[#6854CF] to-[#C4A1FF] hover:from-[#5a47b8] hover:to-[#b38aff]"
+            className="gap-2 bg-gradient-to-r from-purpleDanis to-violeta hover:from-purple-700 hover:to-violet-400"
           >
             {isAnalyzing ? (
               <>
@@ -654,8 +654,8 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-[#6854CF]/20 to-[#C4A1FF]/20">
-            <Sparkles className="w-5 h-5 text-[#6854CF]" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-900 dark:to-violet-800">
+            <Sparkles className="w-5 h-5 text-purpleDanis" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-foreground">Build with AI</h2>
@@ -671,9 +671,9 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
               variant="outline" 
               className={cn(
                 'text-xs',
-                analysis.confidence >= 75 ? 'border-[#82e664]/30 text-[#82e664]' :
-                analysis.confidence >= 50 ? 'border-[#FFE48C]/30 text-[#c9a93a]' :
-                'border-[#FF507A]/30 text-[#FF507A]'
+                analysis.confidence >= 75 ? 'border-emerald-300 dark:border-emerald-700 text-vverde' :
+                analysis.confidence >= 50 ? 'border-amber-300 dark:border-amber-700 text-amarillo' :
+                'border-rose-300 dark:border-rose-700 text-rojo'
               )}
             >
               {analysis.confidence}%
@@ -692,7 +692,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Example: I need a contract for a freelance designer creating a brand identity package. The project includes logo design, color palette, and brand guidelines. Total budget is $5,000 with 3 milestone payments. The client is XYZ Company and the designer will deliver over 4 weeks..."
-              className="min-h-[180px] resize-none bg-background border-border focus:border-[#6854CF] focus:ring-[#6854CF]/20"
+              className="min-h-[180px] resize-none bg-background border-border focus:border-purpleDanis focus:ring-violet-200 dark:focus:ring-violet-800"
             />
             <div className="mt-2 flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
@@ -715,7 +715,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">
                     {item.found ? (
-                      <CheckCircle2 className="w-4 h-4 text-[#82e664]" />
+                      <CheckCircle2 className="w-4 h-4 text-vverde" />
                     ) : (
                       <Circle className="w-4 h-4 text-muted-foreground" />
                     )}
@@ -724,7 +724,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                 ))}
               </div>
               {analysis.missingCritical.length > 0 && (
-                <p className="text-xs text-[#FF507A]">
+                <p className="text-xs text-rojo">
                   Missing: {analysis.missingCritical.slice(0, 2).join(', ')}
                 </p>
               )}
@@ -734,7 +734,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
           {/* Example Prompts */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Lightbulb className="w-4 h-4 text-[#FFE48C]" />
+              <Lightbulb className="w-4 h-4 text-amarillo" />
               <span className="text-sm font-medium text-foreground">Example scenarios</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -745,7 +745,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
                   onClick={() => setPrompt(example.prompt)}
                   className="p-3 rounded-lg border border-border/50 bg-secondary/30 hover:bg-secondary/50 hover:border-border text-left transition-all group"
                 >
-                  <h4 className="font-medium text-sm text-foreground group-hover:text-[#6854CF] transition-colors">
+                  <h4 className="font-medium text-sm text-foreground group-hover:text-purpleDanis transition-colors">
                     {example.title}
                   </h4>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
@@ -760,10 +760,10 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
             <h4 className="font-medium text-sm text-foreground mb-3">AI will automatically generate:</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {[
-                { icon: Building2, label: 'Parties', color: 'text-[#6854CF]' },
-                { icon: Target, label: 'Milestones', color: 'text-[#C4A1FF]' },
-                { icon: GitBranch, label: 'Conditions', color: 'text-[#FFE48C]' },
-                { icon: Banknote, label: 'Payments', color: 'text-[#82e664]' },
+                { icon: Building2, label: 'Parties', color: 'text-purpleDanis' },
+                { icon: Target, label: 'Milestones', color: 'text-violeta' },
+                { icon: GitBranch, label: 'Conditions', color: 'text-amarillo' },
+                { icon: Banknote, label: 'Payments', color: 'text-vverde' },
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
                   <item.icon className={cn('w-4 h-4', item.color)} />
@@ -782,7 +782,7 @@ export function AiContractBuilder({ onBack }: { onBack: () => void }) {
         <Button
           onClick={handleAnalyze}
           disabled={prompt.length < 50 || isAnalyzing}
-          className="gap-2 bg-gradient-to-r from-[#6854CF] to-[#C4A1FF] hover:from-[#5a47b8] hover:to-[#b38aff]"
+          className="gap-2 bg-gradient-to-r from-purpleDanis to-violeta hover:from-purple-700 hover:to-violet-400"
         >
           {isAnalyzing ? (
             <>

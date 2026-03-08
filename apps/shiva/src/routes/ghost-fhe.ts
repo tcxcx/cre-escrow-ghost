@@ -193,7 +193,33 @@ ghostFheRoutes.openapi(
       logger.info('Ghost deposit: starting executeDeposit', { amountWei });
 
       const result = await executeDeposit(depositWalletId, depositWalletAddress, amountWei);
-      const attestationId = `ghost-deposit-${ctx.walletAddress.slice(2, 10)}-${amountWei}`;
+
+      // Trigger CRE ghost-deposit workflow (trustless Chainlink function).
+      // CRE verifies compliance, reads FHE state, checks yield allocation,
+      // updates DON state, and publishes on-chain attestation.
+      // Non-fatal: deposit succeeds even if CRE gateway is unreachable.
+      let attestationId = `ghost-deposit-${ctx.walletAddress.slice(2, 10)}-${amountWei}`;
+      try {
+        const { triggerCreWorkflowWithFallback } = await import('../services/cre-trigger.service');
+        const creResult = await triggerCreWorkflowWithFallback<{ attestationId?: string; txHash?: string }>(
+          {
+            action: 'ghost_deposit',
+            userAddress: depositWalletAddress,
+            usdcAmount: amountWei,
+            txHash: result.txHash,
+          },
+          async () => {
+            logger.warn('CRE ghost-deposit fallback: attestation deferred');
+            return { attestationId: `deferred-${attestationId}`, txHash: result.txHash };
+          },
+        );
+        if (creResult.attestationId) attestationId = creResult.attestationId;
+        logger.info('CRE ghost-deposit workflow completed', { attestationId, creTxHash: creResult.txHash });
+      } catch (creError) {
+        logger.warn('CRE ghost-deposit workflow failed (non-fatal) — deposit still valid, attestation deferred', {
+          error: (creError as Error).message,
+        });
+      }
 
       // Persist audit trail
       try {
@@ -260,6 +286,30 @@ ghostFheRoutes.openapi(
 
       const result = await executeTransfer(ctx.walletId, to, amountWei);
 
+      // Trigger CRE verification for ghost transfer (trustless Chainlink function).
+      // Note: workflow-ghost-transfer also fires automatically via ConfidentialTransfer
+      // event log trigger, but HTTP trigger ensures verification even if log is delayed.
+      try {
+        const { triggerCreWorkflowWithFallback } = await import('../services/cre-trigger.service');
+        await triggerCreWorkflowWithFallback(
+          {
+            action: 'ghost_transfer',
+            userAddress: ctx.walletAddress,
+            recipient: to,
+            amount: amountWei,
+            txHash: result.txHash,
+          },
+          async () => {
+            logger.warn('CRE ghost-transfer fallback: verification deferred');
+            return { success: true };
+          },
+        );
+      } catch (creError) {
+        logger.warn('CRE ghost-transfer verification failed (non-fatal)', {
+          error: (creError as Error).message,
+        });
+      }
+
       // Persist audit trail
       try {
         await insertGhostTransaction(supabaseAdmin, {
@@ -312,6 +362,28 @@ ghostFheRoutes.openapi(
       const amountWei = toWei6(amount);
 
       const result = await executeWithdraw(ctx.walletId, ctx.walletAddress, amountWei);
+
+      // Trigger CRE ghost-withdraw workflow (trustless Chainlink function).
+      // Validates DON state, verifies backing, checks claim status, publishes attestation.
+      try {
+        const { triggerCreWorkflowWithFallback } = await import('../services/cre-trigger.service');
+        await triggerCreWorkflowWithFallback(
+          {
+            action: 'ghost_withdraw',
+            userAddress: ctx.walletAddress,
+            amount: amountWei,
+          },
+          async () => {
+            logger.warn('CRE ghost-withdraw fallback: verification deferred');
+            return { success: true };
+          },
+        );
+      } catch (creError) {
+        logger.warn('CRE ghost-withdraw workflow failed (non-fatal)', {
+          error: (creError as Error).message,
+        });
+      }
+
       const attestationId = `ghost-withdraw-${ctx.walletAddress.slice(2, 10)}-${amountWei}`;
 
       // Read claims to find the latest one (just created)

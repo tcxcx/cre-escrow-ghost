@@ -25,7 +25,8 @@ import { withHttp } from "../shared/triggers"
 import { publishAttestation } from "../shared/services/attestation"
 import { callView } from "../shared/services/evm"
 import { readGhostIndicator, readGhostTotalSupply } from "../shared/services/fhe"
-import { aceClient } from "../shared/clients/presets"
+import { aceClient, shivaClient } from "../shared/clients/presets"
+import { confidentialShivaClient } from "../shared/clients/confidential-presets"
 import { ERC20_ABI } from "../shared/abi/erc20"
 import { TREASURY_MANAGER_ABI } from "../shared/abi/treasury-manager"
 import type { Config } from "./types"
@@ -140,13 +141,19 @@ const ghostDeposit = withHttp<Config>(
     // separate CRE workflow (treasury-rebalance). The deposit workflow
     // verifies and attests; rebalancing happens asynchronously.
 
-    // ── Step 5: Update DON state ────────────────────────────────────────
+    // ── Step 5: Update DON state (confidential) ─────────────────────────
     runtime.log("Step 5: Update DON state")
 
-    ace.get(
+    const confShiva = confidentialShivaClient<Config>()
+    confShiva.post(
       runtime,
-      `/balances/update?address=${userAddr}&delta=${amount.toString()}&operation=deposit`,
-      (raw) => JSON.parse(raw) as { success: boolean; newBalance: string },
+      "/ghost/don-state/update",
+      {
+        address: userAddr,
+        delta: amount.toString(),
+        operation: "deposit",
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean; newBalance: string },
     )
 
     runtime.log("DON state updated with deposit")
@@ -177,6 +184,27 @@ const ghostDeposit = withHttp<Config>(
     })
 
     runtime.log(`Ghost deposit attestation: tx=${result.txHash}`)
+
+    // ── Step 7: Post callback to Shiva ──────────────────────────────────
+    runtime.log("Step 7: Post callback")
+
+    const shiva = shivaClient<Config>()
+    shiva.post(
+      runtime,
+      "/contracts/cre-callback/ghost-deposit",
+      {
+        workflow: "ghost-deposit",
+        status: "verified",
+        user_address: userAddr,
+        amount: amount.toString(),
+        attestation_id: result.attestationId,
+        attestation_tx: result.txHash,
+        ghost_supply: ghostSupply.toString(),
+        yield_value: yieldValue.toString(),
+        compliance: "passed",
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean },
+    )
 
     return JSON.stringify({
       success: true,

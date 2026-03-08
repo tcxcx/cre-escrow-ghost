@@ -11,6 +11,8 @@ export const configSchema = z.object({
   // Arbitrum Sepolia (FHE chain) — monitors ConfidentialTransfer events
   fheChainSelectorName: z.string().min(1),
   ghostUsdcAddress: addr,
+  // Standard ERC-20 Transfer event topic for compliance monitoring
+  transferEventTopic: z.string().min(1),
 })
 
 export type Config = z.infer<typeof configSchema>

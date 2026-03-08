@@ -64,6 +64,7 @@ contract EscrowFactoryV3 {
     /// @param _fees Protocol fee configuration
     /// @param _agents CRE executor agent configuration
     /// @param _windows Dispute and appeal window durations
+    /// @param _bondConfig Bond configuration for disputes and appeals
     /// @param milestoneAmounts Array of amounts per milestone (6-decimal stablecoin units)
     function createAgreement(
         bytes32 agreementId,
@@ -73,6 +74,7 @@ contract EscrowFactoryV3 {
         IEscrowWithAgentV3.FeeConfig calldata _fees,
         IEscrowWithAgentV3.AgentConfig calldata _agents,
         IEscrowWithAgentV3.WindowConfig calldata _windows,
+        IEscrowWithAgentV3.BondConfig calldata _bondConfig,
         uint256[] calldata milestoneAmounts
     ) external returns (address escrowAddress) {
         require(escrows[agreementId] == address(0), "Factory: agreement exists");
@@ -91,6 +93,7 @@ contract EscrowFactoryV3 {
             _fees,
             _agents,
             _windows,
+            _bondConfig,
             milestoneAmounts
         );
 

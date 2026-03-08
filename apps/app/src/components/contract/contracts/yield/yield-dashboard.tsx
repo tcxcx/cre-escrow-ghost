@@ -70,13 +70,13 @@ const strategyInfo: Record<YieldStrategy, { name: string; description: string; i
     name: 'Aave V3',
     description: 'Decentralized lending protocol with variable rates',
     icon: Zap,
-    color: 'text-[#B6509E]',
+    color: 'text-belanova',
   },
   compound: {
     name: 'Compound',
     description: 'Algorithmic money market protocol',
     icon: Building2,
-    color: 'text-[#00D395]',
+    color: 'text-vverde',
   },
   none: {
     name: 'No Yield',
@@ -172,14 +172,14 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Current Value</span>
-              <TrendingUp className="w-4 h-4 text-[#82e664]" />
+              <TrendingUp className="w-4 h-4 text-vverde" />
             </div>
             <p className="text-2xl font-semibold text-foreground">
               ${data.currentValue.toLocaleString()}
             </p>
             <div className="flex items-center gap-1 mt-1">
-              <ArrowUpRight className="w-3 h-3 text-[#82e664]" />
-              <span className="text-xs text-[#82e664]">+{percentageGain.toFixed(2)}%</span>
+              <ArrowUpRight className="w-3 h-3 text-vverde" />
+              <span className="text-xs text-vverde">+{percentageGain.toFixed(2)}%</span>
             </div>
           </CardContent>
         </Card>
@@ -189,9 +189,9 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Yield Earned</span>
-              <Percent className="w-4 h-4 text-[#6854CF]" />
+              <Percent className="w-4 h-4 text-purpleDanis" />
             </div>
-            <p className="text-2xl font-semibold text-[#82e664]">
+            <p className="text-2xl font-semibold text-vverde">
               +${data.totalYieldEarned.toFixed(2)}
             </p>
             <p className="text-xs text-muted-foreground mt-1">Since deposit</p>
@@ -226,7 +226,7 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#6854CF]" />
+                <div className="w-3 h-3 rounded-full bg-purpleDanis" />
                 <span className="text-sm text-foreground">Payer Receives</span>
               </div>
               <span className="text-sm font-medium text-foreground">50% of yield</span>
@@ -237,7 +237,7 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#82e664]" />
+                <div className="w-3 h-3 rounded-full bg-vverde" />
                 <span className="text-sm text-foreground">Payee Receives</span>
               </div>
               <span className="text-sm font-medium text-foreground">50% of yield</span>
@@ -270,7 +270,7 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-[#82e664]" />
+                      <TrendingUp className="w-5 h-5 text-vverde" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground">
@@ -282,7 +282,7 @@ export function YieldDashboard({ contractId }: YieldDashboardProps) {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium text-[#82e664]">
+                    <p className="text-sm font-medium text-vverde">
                       +${entry.earned.toFixed(2)}
                     </p>
                     <p className="text-xs text-muted-foreground">

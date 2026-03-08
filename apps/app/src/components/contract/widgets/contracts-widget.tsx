@@ -2,17 +2,18 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, ArrowRight } from 'lucide-react'
+import { ChevronRight, ArrowRight, Plus } from 'lucide-react'
 import { Button } from '@bu/ui/button'
-import { CreateContractButton } from '@/components/contract/shared/create-contract-button'
 import { Badge } from '@bu/ui/badge'
 import { Card, CardContent, CardHeader } from '@bu/ui/card'
 import { cn } from '@bu/ui/cn'
 import { getContractDestination, formatCurrency } from '@bu/contracts/shared'
 import { useProjectContracts } from '@/hooks/use-project-contracts'
+import { useContractParams } from '@/hooks/use-contract-params'
 
 export function ContractsWidget({ className }: { className?: string }) {
   const router = useRouter()
+  const { openSheet } = useContractParams()
   const { contracts, isLoading, error } = useProjectContracts()
 
   if (isLoading) {
@@ -24,7 +25,10 @@ export function ContractsWidget({ className }: { className?: string }) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-foreground">Contracts</h3>
-          <CreateContractButton variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground" label="" />
+          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-muted-foreground gap-1" onClick={openSheet}>
+            <Plus className="w-3.5 h-3.5" />
+            New Contract
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
