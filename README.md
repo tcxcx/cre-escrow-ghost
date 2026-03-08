@@ -214,7 +214,9 @@ export const main = createWorkflow({ configSchema, init: initWorkflow })
 | `createWorkflow()` | Eliminates CRE Runner boilerplate — wraps config parsing, init, error handling |
 | `withCron()` / `withHttp()` / `withLog()` | Trigger adapters — schedule, HTTP request, or EVM event |
 | `createPlatformClient()` | Consensus-verified HTTP client for any API |
-| `shivaClient()` / `motoraClient()` / `supabaseClient()` / `aceClient()` | Pre-configured clients for platform services |
+| `createConfidentialPlatformClient()` | Enclave-executed HTTP client — secrets injected via `{{.secretName}}` templates, optional AES-256-GCM response encryption |
+| `shivaClient()` / `motoraClient()` / `supabaseClient()` / `aceClient()` | Pre-configured consensus-verified clients for platform services |
+| `confidentialShivaClient()` / `confidentialMotoraClient()` | Pre-configured confidential clients (enclave-protected, Vault DON secrets) |
 | `publishAttestation()` | One-call on-chain attestation — encodes, signs via DON consensus, writes to BUAttestation contract |
 | `callView()` | Read any contract view function — handles encode → call → decode internally |
 | `resolveEvmClient()` | Get EVMClient from chain selector name |
@@ -481,10 +483,10 @@ All workflows share a common foundation in [`apps/cre/shared/`](apps/cre/shared/
 - [`services/fhe.ts`](apps/cre/shared/services/fhe.ts) — FHE state readers: `readGhostIndicator()`, `readGhostTotalSupply()`, `readUserClaims()`
 
 ### Clients (Consensus-Verified HTTP)
-- [`clients/create-client.ts`](apps/cre/shared/clients/create-client.ts) — Client factory with viem integration
-- [`clients/presets.ts`](apps/cre/shared/clients/presets.ts) — Chain selector presets
-- [`clients/confidential.ts`](apps/cre/shared/clients/confidential.ts) — FHE-specific client
-- [`clients/confidential-presets.ts`](apps/cre/shared/clients/confidential-presets.ts) — FHE chain presets
+- [`clients/create-client.ts`](apps/cre/shared/clients/create-client.ts) — `createPlatformClient()` — consensus-verified HTTP client factory
+- [`clients/presets.ts`](apps/cre/shared/clients/presets.ts) — `shivaClient()`, `motoraClient()`, `supabaseClient()`, `aceClient()`
+- [`clients/confidential.ts`](apps/cre/shared/clients/confidential.ts) — `createConfidentialPlatformClient()` — enclave-executed HTTP with Vault DON secrets + optional AES-256-GCM response encryption
+- [`clients/confidential-presets.ts`](apps/cre/shared/clients/confidential-presets.ts) — `confidentialShivaClient()` (encrypted responses for AI/IP), `confidentialMotoraClient()` (yield queries)
 
 ### ABIs (Contract Interfaces)
 - [`abi/bu-attestation.ts`](apps/cre/shared/abi/bu-attestation.ts) — BUAttestation ABI
