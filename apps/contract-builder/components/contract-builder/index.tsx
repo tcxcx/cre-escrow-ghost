@@ -1,8 +1,20 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import { useQueryState, parseAsString } from 'nuqs'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import {
+  Blocks,
+  Sparkles,
+  Settings2,
+} from 'lucide-react'
 import { FlowCanvas } from './flow-canvas'
 import { Toolbar } from './toolbar'
 import { NodePalette } from './node-palette'
@@ -24,7 +36,13 @@ export function ContractBuilder() {
   const saveContract = useContractStore((state) => state.saveContract)
   const isContractValid = useContractStore((state) => state.isContractValid)
   const setPreviewOpen = useContractStore((state) => state.setPreviewOpen)
+  const setAiAssistOpen = useContractStore((state) => state.setAiAssistOpen)
+  const setSettingsOpen = useContractStore((state) => state.setSettingsOpen)
   const nodes = useContractStore((state) => state.nodes)
+  const missingNodeTypes = useContractStore((state) => state.missingNodeTypes)
+
+  // Mobile drawer state for node palette
+  const [mobileNodePaletteOpen, setMobileNodePaletteOpen] = useState(false)
 
   // nuqs panel state
   const [panel, setPanel] = useQueryState('panel', parseAsString)
@@ -102,21 +120,67 @@ export function ContractBuilder() {
         {/* Toolbar */}
         <Toolbar />
 
-        {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Sidebar - Node Palette */}
+        {/* Main Content - pb on mobile for floating toolbar */}
+        <div className="flex flex-1 overflow-hidden pb-14 md:pb-0">
+          {/* Left Sidebar - Node Palette (desktop only) */}
           <aside className="w-64 border-r border-border bg-card/30 flex-shrink-0 hidden md:flex flex-col">
             <NodePalette />
           </aside>
 
-          {/* Canvas */}
+          {/* Canvas - full width on mobile */}
           <main className="flex-1 relative">
             <FlowCanvas />
           </main>
 
-          {/* Right Panel - Properties */}
+          {/* Right Panel - Properties (desktop only, mobile uses sheet inside PropertiesPanel) */}
           <PropertiesPanel />
         </div>
+
+        {/* Mobile floating toolbar - bottom of screen */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-border bg-card/95 backdrop-blur-sm safe-area-bottom">
+          <div className="flex items-center justify-around px-2 py-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex-1 flex flex-col items-center gap-1 h-auto py-2 min-h-[44px] bg-transparent relative"
+              onClick={() => setMobileNodePaletteOpen(true)}
+            >
+              <Blocks className="w-5 h-5" />
+              <span className="text-[10px] text-muted-foreground">Nodes</span>
+              {missingNodeTypes.length > 0 && nodes.length > 0 && (
+                <span className="absolute top-1 right-1/4 w-2 h-2 rounded-full bg-red-500" />
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex-1 flex flex-col items-center gap-1 h-auto py-2 min-h-[44px] bg-transparent"
+              onClick={() => setAiAssistOpen(true)}
+            >
+              <Sparkles className="w-5 h-5 text-purple-400" />
+              <span className="text-[10px] text-muted-foreground">AI Assist</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex-1 flex flex-col items-center gap-1 h-auto py-2 min-h-[44px] bg-transparent"
+              onClick={() => setSettingsOpen(true)}
+            >
+              <Settings2 className="w-5 h-5" />
+              <span className="text-[10px] text-muted-foreground">Settings</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Node Palette Sheet */}
+        <Sheet open={mobileNodePaletteOpen} onOpenChange={setMobileNodePaletteOpen}>
+          <SheetContent side="left" className="w-[300px] sm:w-[340px] p-0 bg-card border-border">
+            <SheetHeader className="sr-only">
+              <SheetTitle>Node Palette</SheetTitle>
+            </SheetHeader>
+            <NodePalette />
+          </SheetContent>
+        </Sheet>
 
         {/* Template selector -- driven by ?panel=new */}
         {panel === 'new' && (

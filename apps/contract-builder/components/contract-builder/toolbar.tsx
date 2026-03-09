@@ -104,35 +104,35 @@ export function Toolbar() {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex items-center justify-between h-14 px-4 border-b border-border bg-card/50 backdrop-blur-sm">
+      <div className="flex items-center justify-between h-14 px-2 sm:px-4 border-b border-border bg-card/50 backdrop-blur-sm">
         {/* Left Section - Logo & Contract Name */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10">
               <FileText className="w-4 h-4 text-primary" />
             </div>
             <span className="text-sm font-semibold text-foreground hidden sm:inline">BUFI</span>
           </div>
 
-          <div className="h-6 w-px bg-border" />
+          <div className="h-6 w-px bg-border hidden sm:block" />
 
           {/* Contract Name */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             {isEditing ? (
               <Input
                 value={contractName}
                 onChange={(e) => setContractName(e.target.value)}
                 onBlur={handleNameSubmit}
                 onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
-                className="h-8 w-48 text-sm bg-background"
+                className="h-8 w-32 sm:w-48 text-sm bg-background"
                 autoFocus
               />
             ) : (
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors max-w-[200px] truncate"
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors max-w-[120px] sm:max-w-[200px] truncate min-h-[44px] flex items-center"
               >
                 {contractName}
               </button>
@@ -275,8 +275,8 @@ export function Toolbar() {
           </div>
         </div>
 
-        {/* Center Section - View Controls */}
-        <div className="flex items-center gap-1">
+        {/* Center Section - View Controls (hidden on small mobile) */}
+        <div className="hidden sm:flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0 bg-transparent" onClick={() => zoomOut()}>
@@ -351,13 +351,13 @@ export function Toolbar() {
         </div>
 
         {/* Right Section - Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 gap-2 bg-transparent"
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 min-h-[44px] gap-2 bg-transparent hidden sm:flex"
                 onClick={handlePreview}
                 disabled={nodes.length === 0}
               >
@@ -376,10 +376,10 @@ export function Toolbar() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 gap-2 bg-transparent bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20"
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 min-h-[44px] gap-2 bg-transparent bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 hidden md:flex"
                 onClick={() => setAiAssistOpen(true)}
               >
                 <Sparkles className="w-4 h-4 text-purple-400" />
@@ -389,14 +389,14 @@ export function Toolbar() {
             <TooltipContent>AI Contract Assistant</TooltipContent>
           </Tooltip>
 
-          <div className="h-6 w-px bg-border mx-1" />
+          <div className="h-6 w-px bg-border mx-1 hidden md:block" />
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 w-8 p-0 bg-transparent"
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent hidden md:flex"
                 onClick={() => setSettingsOpen(true)}
               >
                 <Settings2 className="w-4 h-4" />
@@ -407,11 +407,11 @@ export function Toolbar() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className={cn(
-                  'h-8 w-8 p-0 bg-transparent',
+                  'h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent',
                   saveSuccess && 'text-emerald-400'
                 )}
                 onClick={handleSave}
@@ -435,9 +435,9 @@ export function Toolbar() {
             </TooltipContent>
           </Tooltip>
 
-          <Button 
-            size="sm" 
-            className="h-8 gap-2"
+          <Button
+            size="sm"
+            className="h-8 min-h-[44px] gap-2"
             disabled={!isContractValid || nodes.length === 0}
             onClick={() => setIsDeployModalOpen(true)}
           >
@@ -445,21 +445,23 @@ export function Toolbar() {
             <span className="hidden sm:inline">Deploy</span>
           </Button>
 
-          <DeployModal 
-            open={isDeployModalOpen} 
-            onOpenChange={setIsDeployModalOpen} 
+          <DeployModal
+            open={isDeployModalOpen}
+            onOpenChange={setIsDeployModalOpen}
           />
 
           <div className="h-6 w-px bg-border mx-1 hidden lg:block" />
 
-          <ThemeToggle />
+          <span className="hidden sm:inline-flex">
+            <ThemeToggle />
+          </span>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className={cn('h-8 w-8 p-0 bg-transparent hidden lg:flex', isPropertiesPanelOpen && 'bg-muted')}
+                className={cn('h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent hidden lg:flex', isPropertiesPanelOpen && 'bg-muted')}
                 onClick={() => setPropertiesPanelOpen(!isPropertiesPanelOpen)}
               >
                 {isPropertiesPanelOpen ? (

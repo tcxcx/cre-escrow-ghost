@@ -7,6 +7,7 @@ export const configSchema = z.object({
   attestationContract: addr,
   gasLimit: z.string().regex(/^\d+$/),
   escrowFactoryAddress: addr,
+  treasuryManagerAddress: addr,
   executorAgent: addr,
   owner: z.string(),
 })

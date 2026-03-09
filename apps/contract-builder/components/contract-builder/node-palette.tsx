@@ -106,7 +106,7 @@ function NodePaletteItem({ type, label, description, icon: Icon, colorClass, isM
       draggable
       onDragStart={(e) => onDragStart(e, type)}
       className={cn(
-        'relative flex items-center gap-3 p-2.5 rounded-lg border cursor-grab active:cursor-grabbing transition-all duration-200',
+        'relative flex items-center gap-3 p-2.5 min-h-[44px] rounded-lg border cursor-grab active:cursor-grabbing transition-all duration-200 touch-manipulation',
         colorClass,
         isMissing && 'ring-2 ring-red-500/50 animate-pulse'
       )}

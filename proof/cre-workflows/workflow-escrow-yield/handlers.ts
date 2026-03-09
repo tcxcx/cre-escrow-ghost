@@ -10,11 +10,13 @@
  */
 
 import { decodeJson, type Runtime, type HTTPPayload } from "@chainlink/cre-sdk"
-import { formatUnits } from "viem"
+import { formatUnits, type Abi } from "viem"
 import { withHttp } from "../shared/triggers"
 import { motoraClient, supabaseClient } from "../shared/clients/presets"
 import { publishAttestation } from "../shared/services/attestation"
+import { callView } from "../shared/services/evm"
 import { readTotalAmount } from "../shared/services/escrow"
+import { TREASURY_MANAGER_ABI } from "../shared/abi/treasury-manager"
 import type { Config, YieldPayload } from "./types"
 
 // ============================================================================
@@ -195,6 +197,26 @@ function handleDeposit(
     txHash: result.txHash,
   })
 
+  // 7b. Verify TreasuryManager yield state on-chain
+  // Read current yield value and backing to include in attestation
+  const yieldValue = callView(
+    runtime,
+    runtime.config.treasuryManagerAddress,
+    TREASURY_MANAGER_ABI as unknown as Abi,
+    "getYieldValueUSDC",
+  )
+
+  const [usdcBuffer, yieldInUsyc, totalBacking] = callView(
+    runtime,
+    runtime.config.treasuryManagerAddress,
+    TREASURY_MANAGER_ABI as unknown as Abi,
+    "getTotalBacking",
+  ) as unknown as [bigint, bigint, bigint]
+
+  runtime.log(
+    `TreasuryManager state: yieldValue=${formatUnits(yieldValue, 6)} buffer=${formatUnits(usdcBuffer, 6)} total=${formatUnits(totalBacking, 6)}`
+  )
+
   // 8. Publish attestation
   const attestation = publishAttestation(runtime, {
     type: "escrow_yield_deposit",
@@ -207,11 +229,15 @@ function handleDeposit(
       apy: chosen.apy.toString(),
       amount: amountStr,
       txHash: result.txHash,
+      treasuryYieldValue: yieldValue.toString(),
+      treasuryUsdcBuffer: usdcBuffer.toString(),
+      treasuryTotalBacking: totalBacking.toString(),
     },
     metadata: JSON.stringify({
       agreementId,
       strategyId: chosen.id,
       amount: amountStr,
+      treasuryManager: runtime.config.treasuryManagerAddress,
     }),
   })
 

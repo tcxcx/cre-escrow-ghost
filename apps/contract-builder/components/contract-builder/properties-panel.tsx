@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +19,12 @@ import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
 import {
   X,
   Trash2,
@@ -67,6 +73,15 @@ export function PropertiesPanel() {
   } = useContractStore()
   const [isGenerating, setIsGenerating] = useState(false)
   const [aiPrompt, setAiPrompt] = useState('')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mql.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
 
   const selectedNode = useMemo(() => 
     nodes.find((n) => n.id === selectedNodeId),
@@ -160,161 +175,189 @@ export function PropertiesPanel() {
   const config = nodeConfig[selectedNode.type as NodeType]
   const Icon = config.icon
 
-  return (
-    <TooltipProvider>
-      <div className="w-80 border-l border-border bg-card/50 backdrop-blur-sm flex flex-col h-full">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <div className="flex items-center gap-2">
-            <Icon className={cn('w-4 h-4', config.color)} />
-            <span className="text-sm font-semibold text-foreground">{config.label}</span>
-            {!isNodeValid ? (
-              <Badge variant="destructive" className="text-xs bg-red-500/10 text-red-400 border-red-500/20">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                Incomplete
-              </Badge>
-            ) : (
-              <Badge className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-                <Check className="w-3 h-3 mr-1" />
-                Valid
-              </Badge>
+  const panelContent = (
+    <>
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="flex items-center gap-2">
+          <Icon className={cn('w-4 h-4', config.color)} />
+          <span className="text-sm font-semibold text-foreground">{config.label}</span>
+          {!isNodeValid ? (
+            <Badge variant="destructive" className="text-xs bg-red-500/10 text-red-400 border-red-500/20">
+              <AlertCircle className="w-3 h-3 mr-1" />
+              Incomplete
+            </Badge>
+          ) : (
+            <Badge className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+              <Check className="w-3 h-3 mr-1" />
+              Valid
+            </Badge>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-destructive hover:text-destructive hover:bg-destructive/10 bg-transparent"
+            onClick={handleDelete}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent"
+            onClick={() => setSelectedNodeId(null)}
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Issue Navigation */}
+      {invalidNodeIds.length > 0 && (
+        <div className="flex items-center justify-between px-4 py-2 bg-red-500/5 border-b border-red-500/20">
+          <div className="flex items-center gap-2 text-xs">
+            <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+            <span className="text-red-400 font-medium">
+              {invalidNodeIds.length} issue{invalidNodeIds.length !== 1 ? 's' : ''} found
+            </span>
+            {currentInvalidIndex >= 0 && (
+              <span className="text-muted-foreground">
+                ({currentInvalidIndex + 1} of {invalidNodeIds.length})
+              </span>
             )}
           </div>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="sm"
-              className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 bg-transparent"
-              onClick={handleDelete}
+              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent"
+              onClick={handleNavigatePrev}
+              disabled={!canNavigatePrev}
             >
-              <Trash2 className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-7 w-7 p-0 bg-transparent"
-              onClick={() => setSelectedNodeId(null)}
+              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 bg-transparent"
+              onClick={handleNavigateNext}
+              disabled={!canNavigateNext}
             >
-              <X className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
         </div>
+      )}
 
-        {/* Issue Navigation */}
-        {invalidNodeIds.length > 0 && (
-          <div className="flex items-center justify-between px-4 py-2 bg-red-500/5 border-b border-red-500/20">
-            <div className="flex items-center gap-2 text-xs">
-              <AlertCircle className="w-3.5 h-3.5 text-red-400" />
-              <span className="text-red-400 font-medium">
-                {invalidNodeIds.length} issue{invalidNodeIds.length !== 1 ? 's' : ''} found
-              </span>
-              {currentInvalidIndex >= 0 && (
-                <span className="text-muted-foreground">
-                  ({currentInvalidIndex + 1} of {invalidNodeIds.length})
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 bg-transparent"
-                onClick={handleNavigatePrev}
-                disabled={!canNavigatePrev}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 bg-transparent"
-                onClick={handleNavigateNext}
-                disabled={!canNavigateNext}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
+      {/* Content */}
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-4">
+          {/* Common Fields */}
+          <div className="space-y-2">
+            <Label htmlFor="label" className="text-xs text-muted-foreground">Display Label</Label>
+            <Input
+              id="label"
+              value={selectedNode.data.label || ''}
+              onChange={(e) => handleUpdateField('label', e.target.value)}
+              className="h-9"
+            />
           </div>
-        )}
 
-        {/* Content */}
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-4">
-            {/* Common Fields */}
-            <div className="space-y-2">
-              <Label htmlFor="label" className="text-xs text-muted-foreground">Display Label</Label>
-              <Input
-                id="label"
-                value={selectedNode.data.label || ''}
-                onChange={(e) => handleUpdateField('label', e.target.value)}
-                className="h-9"
-              />
-            </div>
+          <Separator />
 
-            <Separator />
+          {/* Node-specific Fields */}
+          {(selectedNode.type === 'party-payer' || selectedNode.type === 'party-payee') && (
+            <PartyFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
 
-            {/* Node-specific Fields */}
-            {(selectedNode.type === 'party-payer' || selectedNode.type === 'party-payee') && (
-              <PartyFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField} 
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+          {selectedNode.type === 'milestone' && (
+            <MilestoneFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
 
-            {selectedNode.type === 'milestone' && (
-              <MilestoneFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField}
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+          {selectedNode.type === 'condition' && (
+            <ConditionFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
 
-            {selectedNode.type === 'condition' && (
-              <ConditionFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField}
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+          {selectedNode.type === 'payment' && (
+            <PaymentFields data={selectedNode.data} onUpdate={handleUpdateField} />
+          )}
 
-            {selectedNode.type === 'payment' && (
-              <PaymentFields data={selectedNode.data} onUpdate={handleUpdateField} />
-            )}
+          {selectedNode.type === 'signature' && (
+            <SignatureFields data={selectedNode.data} onUpdate={handleUpdateField} />
+          )}
 
-            {selectedNode.type === 'signature' && (
-              <SignatureFields data={selectedNode.data} onUpdate={handleUpdateField} />
-            )}
+          {selectedNode.type === 'clause' && (
+            <ClauseFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              aiPrompt={aiPrompt}
+              setAiPrompt={setAiPrompt}
+              isGenerating={isGenerating}
+              onGenerate={handleGenerateClause}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
 
-            {selectedNode.type === 'clause' && (
-              <ClauseFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField}
-                aiPrompt={aiPrompt}
-                setAiPrompt={setAiPrompt}
-                isGenerating={isGenerating}
-                onGenerate={handleGenerateClause}
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+          {selectedNode.type === 'commission' && (
+            <CommissionFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
 
-            {selectedNode.type === 'commission' && (
-              <CommissionFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField}
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+          {selectedNode.type === 'identity-verification' && (
+            <IdentityVerificationFields
+              data={selectedNode.data}
+              onUpdate={handleUpdateField}
+              errors={nodeValidation?.errors || {}}
+            />
+          )}
+        </div>
+      </ScrollArea>
+    </>
+  )
 
-            {selectedNode.type === 'identity-verification' && (
-              <IdentityVerificationFields 
-                data={selectedNode.data} 
-                onUpdate={handleUpdateField}
-                errors={nodeValidation?.errors || {}}
-              />
-            )}
+  if (isMobile) {
+    return (
+      <Sheet
+        open={!!selectedNode}
+        onOpenChange={(open) => {
+          if (!open) setSelectedNodeId(null)
+        }}
+      >
+        <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-card border-border">
+          <SheetHeader className="sr-only">
+            <SheetTitle>{config.label} Properties</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col h-full">
+            <TooltipProvider>
+              {panelContent}
+            </TooltipProvider>
           </div>
-        </ScrollArea>
+        </SheetContent>
+      </Sheet>
+    )
+  }
+
+  return (
+    <TooltipProvider>
+      <div className="w-80 border-l border-border bg-card/50 backdrop-blur-sm flex flex-col h-full">
+        {panelContent}
       </div>
     </TooltipProvider>
   )
