@@ -80,7 +80,7 @@ export interface ConfidentialPlatformClient<C> {
 
 const BASE64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
-function bytesToBase64(bytes: Uint8Array): string {
+export function bytesToBase64(bytes: Uint8Array): string {
   let out = ""
   for (let i = 0; i < bytes.length; i += 3) {
     const a = bytes[i] ?? 0
@@ -92,6 +92,11 @@ function bytesToBase64(bytes: Uint8Array): string {
     out += c === undefined ? "=" : BASE64_ALPHABET[c & 63]
   }
   return out
+}
+
+/** WASM-safe btoa replacement: base64-encode a string (UTF-8) */
+export function stringToBase64(str: string): string {
+  return bytesToBase64(new TextEncoder().encode(str))
 }
 
 // ============================================================================
