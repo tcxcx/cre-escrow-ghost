@@ -8,8 +8,11 @@
  * Run: cre workflow simulate workflow-payroll-attest --target local-simulation
  */
 
-import { createWorkflow } from "../shared/create-workflow"
-import { configSchema } from "./types"
+import { Runner } from "@chainlink/cre-sdk"
+import { configSchema, type Config } from "./types"
 import { initWorkflow } from "./handlers"
 
-export const main = createWorkflow({ configSchema, init: initWorkflow })
+export async function main() {
+  const runner = await Runner.newRunner<Config>({ configSchema })
+  await runner.run(initWorkflow)
+}

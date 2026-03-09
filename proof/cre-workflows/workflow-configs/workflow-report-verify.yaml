@@ -1,0 +1,22 @@
+# ==========================================================================
+# Workflow: AI Report Data Verification
+# ==========================================================================
+# On-chain attestation of AI financial report source data.
+# Triggered by triggerReportAttestation() after report compilation.
+# Run: cre workflow simulate workflow-report-verify --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-report-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-report-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

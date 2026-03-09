@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Escrow Verify (HTTP trigger)
+# ==========================================================================
+# AI verifies milestone deliverable against acceptance criteria.
+# Run: cre workflow simulate workflow-escrow-verify --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-escrow-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-escrow-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

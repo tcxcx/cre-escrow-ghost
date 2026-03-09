@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Ghost Transfer (ConfidentialTransfer event monitor)
+# ==========================================================================
+# Watches encrypted transfers on GhostUSDC, verifies compliance, syncs DON state.
+# Run: cre workflow simulate workflow-ghost-transfer --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-ghost-transfer"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-ghost-transfer"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

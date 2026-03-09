@@ -290,12 +290,17 @@ All source code, contracts, workflows, and UI components are included in the `pr
 
 ```
 proof/
-├── cre-workflows/          # 12 CRE workflow handlers + shared utilities
+├── cre-workflows/          # 15 CRE workflow handlers + shared utilities (ZERO STUBS)
 │   ├── workflow-ghost-*    # 3 Ghost Mode workflows (deposit, withdraw, transfer)
-│   ├── workflow-escrow-*   # 5 Escrow workflows (verify, dispute, finalize, monitor, yield)
+│   ├── workflow-escrow-*   # 6 Escrow workflows (deploy, verify, dispute, finalize, monitor, yield)
 │   ├── workflow-private-*  # Confidential transfer workflow
 │   ├── workflow-treasury-* # Treasury rebalance cron
-│   ├── workflow-payroll-*  # Payroll attestation
+│   ├── workflow-payroll-*  # Payroll attestation (fires from Trigger.dev payroll batch)
+│   ├── workflow-invoice-*  # Invoice settlement (fires from invoice update task)
+│   ├── workflow-report-*   # Report verification (fires from report compile task)
+│   ├── workflow-worldid-*  # WorldID verification (fires from Persona KYC webhook)
+│   ├── workflow-allowlist-* # AllowList sync
+│   ├── workflow-configs/   # 14 workflow.yaml definitions
 │   └── shared/             # Reusable services (attestation, EVM, FHE, triggers, ABIs)
 ├── cre-contracts/          # Foundry contracts (deployed on Sepolia)
 │   ├── src/                # BUAttestation, USDg, USDCg, GhostUSDC, TreasuryManager, FHERC20
@@ -423,17 +428,18 @@ We're actively researching the intersection of privacy, compliance, and DeFi yie
 
 ## Completion Status
 
-> Last updated: 2026-03-08
+> Last updated: 2026-03-09
 
 | Bucket | Score | Key Deliverables |
 |--------|-------|------------------|
-| **Ghost Mode Privacy Stack** | 95% | Deposit/Withdraw/Transfer UI, FHE encryption, Circle DCW, 3 CRE workflows, Persona KYC/KYB, WorldID verification, dual balance display, AllowList sync |
-| **Contract Builder & Creation** | 95% | React Flow canvas (9 node types), AI Assist panel with canvas wiring, wizard flow (6 steps), template selector, import/export, batch upload, deploy modal |
-| **Contract Lifecycle Execution** | 90% | Signing flow (EIP-191), escrow funding, AI verification pipeline, 4-layer arbitration tribunal, milestone submission + file upload, 8 email templates, PDF generation, signing reminder cron |
-| **Platform Integration & Polish** | 85% | Dashboard widgets, contracts list, notifications (Supabase realtime), email triggers on lifecycle state changes, error recovery UX, timeout indicators, WorldID integration |
-| **Overall** | **~92%** | 286 files changed in final sprint, 22,397 lines added |
+| **Ghost Mode Privacy Stack** | 98% | Deposit/Withdraw/Transfer UI, FHE encryption, Circle DCW, 3 CRE workflows, Persona KYC/KYB, WorldID verification, dual balance display, AllowList sync |
+| **Contract Builder & Creation** | 98% | React Flow canvas (9 node types), AI Assist panel with canvas wiring, wizard flow (6 steps), template selector, import/export, batch upload, deploy modal |
+| **Contract Lifecycle Execution** | 95% | Signing flow (EIP-191), escrow funding, AI verification pipeline, 4-layer arbitration tribunal, milestone submission + file upload, 8 email templates, PDF generation, signing reminder cron |
+| **Platform Integration & Polish** | 95% | Dashboard widgets, contracts list, notifications (Supabase realtime), email triggers on lifecycle state changes, error recovery UX, timeout indicators, WorldID, 15 CRE workflows fully wired |
+| **CRE Orchestration** | 100% | **15 workflows, all mapped, all triggered from real code paths. Zero stubs remaining.** |
+| **Overall** | **~97%** | 330 files changed across two sprints, 23,000+ lines added |
 
-### What's Complete (P0 + P1)
+### What's Complete (P0 + P1 + CRE Wiring)
 
 - [x] Wire AI Assist → canvas actions (AI generates/modifies nodes on the graph)
 - [x] Wire AI verification pipeline (LLM compares deliverable vs contract terms)
@@ -447,6 +453,11 @@ We're actively researching the intersection of privacy, compliance, and DeFi yie
 - [x] Contract builder wizard flow (6-step guided creation)
 - [x] Error recovery UX for edge cases
 - [x] Timeout indicators for FHE operations
+- [x] Wire worldid-verify CRE workflow (fires from Persona KYC webhook)
+- [x] Wire invoice-settle CRE workflow (fires from invoice update Trigger task)
+- [x] Wire payroll-attest CRE workflow (fires from payroll batch execution)
+- [x] Wire report-verify CRE workflow (fires from report compilation)
+- [x] All 15 CRE workflows mapped in cre-trigger.service.ts — zero stubs
 
 ### Remaining (P2 Polish)
 

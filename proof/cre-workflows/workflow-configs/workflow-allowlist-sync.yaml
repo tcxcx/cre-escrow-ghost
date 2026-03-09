@@ -1,0 +1,22 @@
+# ==========================================================================
+# Workflow: AllowList Sync (KYC/KYB verification attestation)
+# ==========================================================================
+# Verifies PolicyEngine AllowList status and publishes attestation.
+# Triggered by Shiva after Persona KYC/KYB webhook processing.
+# Run: cre workflow simulate workflow-allowlist-sync --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-allowlist-sync"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-allowlist-sync"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Escrow Yield (HTTP trigger)
+# ==========================================================================
+# Deposits/redeems escrow funds to Deframe yield strategies via Motora.
+# Run: cre workflow simulate workflow-escrow-yield --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-escrow-yield"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-escrow-yield"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
