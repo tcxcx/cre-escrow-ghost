@@ -1,0 +1,8 @@
+{
+  "agreementId": "agr_mock_finalize_001",
+  "escrowAddress": "0x1234567890abcdef1234567890abcdef12345678",
+  "milestoneIndex": 0,
+  "payeeBps": 10000,
+  "source": "verification",
+  "yieldEnabled": false
+}

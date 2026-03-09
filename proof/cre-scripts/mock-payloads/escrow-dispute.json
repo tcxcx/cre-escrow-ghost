@@ -1,0 +1,7 @@
+{
+  "agreementId": "agr_mock_dispute_001",
+  "escrowAddress": "0x1234567890abcdef1234567890abcdef12345678",
+  "milestoneIndex": 0,
+  "disputeId": "disp_mock_001",
+  "appealFiled": false
+}
