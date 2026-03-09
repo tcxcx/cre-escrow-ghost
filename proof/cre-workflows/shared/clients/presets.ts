@@ -61,8 +61,9 @@ export function supabaseClient<C>(): PlatformClient<C> {
     secretId: "SUPABASE_SERVICE_KEY",
     urlSecretId: "SUPABASE_URL",
     urlSuffix: "/rest/v1",
-    authType: "bearer",
+    authType: "api-key",
     authHeader: "apikey",
+    alsoSendBearerAuth: true,
   })
 }
 

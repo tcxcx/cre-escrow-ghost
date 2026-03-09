@@ -43,6 +43,16 @@ export const GHOST_USDC = '0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5' as const
 export const GHOST_USDC_ARB = '0xA3BfA84a4b7a8de8340Df3B0CCFED33240C6F765' as const
 
 // ============================================================================
+// Bu Platform Contracts — Arbitrum Sepolia (Mocks)
+// ============================================================================
+
+/** PolicyEngineMock — defaultAllow=true (Arb Sepolia) */
+export const POLICY_ENGINE_ARB = '0x43b8c40dc785c6ab868d2dfa0a91a8cc8e7d4ef6' as const
+
+/** BUAttestationMock — stores attestations without rate limits (Arb Sepolia) */
+export const BU_ATTESTATION_ARB = '0xaaf50d1ccf481657f9719a71b8384a9e1bbe1348' as const
+
+// ============================================================================
 // External Dependencies (Sepolia)
 // ============================================================================
 
@@ -91,7 +101,7 @@ export const ACE_API_URL = 'https://convergence2026-token-api.cldev.cloud'
 // ============================================================================
 
 /** EscrowFactory — Eth Sepolia (wired) — update after deploy */
-export const ESCROW_FACTORY = '0x0000000000000000000000000000000000000000' as const
+export const ESCROW_FACTORY = '0x0f8b653aadd4f04008fdaca3429f6ea24951b129' as const
 
-/** EscrowFactory — Arbitrum Sepolia (demo only, not wired) — update after deploy */
-export const ESCROW_FACTORY_ARB = '0x0000000000000000000000000000000000000000' as const
+/** EscrowFactory — Arbitrum Sepolia (wired) */
+export const ESCROW_FACTORY_ARB = '0x806dd4d26a0930d4bed506b81eb8f57f334cd53e' as const

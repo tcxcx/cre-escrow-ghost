@@ -45,6 +45,8 @@ export const ATTESTATION_OP_TYPES: Record<AttestationType, number> = {
   ghost_deposit: 16,
   ghost_transfer: 17,
   ghost_withdraw: 18,
+  allowlist_sync: 19,
+  worldid_verify: 20,
 } as const
 
 /** Config constraint for escrow workflow clients */

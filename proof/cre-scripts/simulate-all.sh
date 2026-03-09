@@ -74,7 +74,7 @@ WORKFLOWS=(
   "workflow-ghost-deposit|http|0|ACE_API_KEY_VAR|Ghost Mode USDC deposit verification|ghost-deposit.json"
   "workflow-ghost-transfer|log|0|ACE_API_KEY_VAR|ConfidentialTransfer event monitor (EVM Log)|SKIP_EVM_LOG"
   "workflow-ghost-transfer|log|1|ACE_API_KEY_VAR|Standard Transfer event monitor (EVM Log)|SKIP_EVM_LOG"
-  "workflow-ghost-withdraw|http|0|ACE_API_KEY_VAR|Ghost Mode USDC withdrawal verification|ghost-withdraw.json"
+  "workflow-ghost-withdraw|http|0|ACE_API_KEY_VAR,SHIVA_URL_VAR,SHIVA_API_KEY_VAR|Ghost Mode USDC withdrawal verification|ghost-withdraw.json"
   "workflow-invoice-settle|http|0|SUPABASE_SERVICE_KEY_VAR,SUPABASE_URL_VAR|Invoice settlement attestation|invoice-settle.json"
   "workflow-payroll-attest|http|0|SUPABASE_SERVICE_KEY_VAR,SUPABASE_URL_VAR|Payroll batch attestation|payroll-attest.json"
   "workflow-private-transfer|log|0|ACE_API_KEY_VAR,ACE_URL_VAR|ACE Vault event monitor (EVM Log)|SKIP_EVM_LOG"

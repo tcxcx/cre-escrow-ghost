@@ -25,7 +25,8 @@ import { withHttp } from "../shared/triggers"
 import { publishAttestation } from "../shared/services/attestation"
 import { callView } from "../shared/services/evm"
 import { readGhostIndicator, readGhostTotalSupply, readUserClaims, readClaim } from "../shared/services/fhe"
-import { aceClient } from "../shared/clients/presets"
+import { shivaClient } from "../shared/clients/presets"
+import { confidentialShivaClient } from "../shared/clients/confidential-presets"
 import { ERC20_ABI } from "../shared/abi/erc20"
 import { TREASURY_MANAGER_ABI } from "../shared/abi/treasury-manager"
 import type { Config } from "./types"
@@ -34,7 +35,7 @@ import type { Config } from "./types"
 // Clients
 // ============================================================================
 
-const ace = aceClient<Config>()
+const confShiva = confidentialShivaClient<Config>()
 
 // ============================================================================
 // Handler: Ghost Withdraw (HTTP Trigger)
@@ -54,13 +55,14 @@ const ghostWithdraw = withHttp<Config>(
       `Ghost withdraw v2: user=${userAddr} amount=${formatUnits(amount, 6)}`
     )
 
-    // ── Step 1: Validate DON state ───────────────────────────────────────
+    // ── Step 1: Validate DON state (confidential) ───────────────────────
     runtime.log("Step 1: Validate DON state")
 
-    const donState = ace.get(
+    const donState = confShiva.post(
       runtime,
-      `/balances?address=${userAddr}`,
-      (raw) => JSON.parse(raw) as {
+      "/ghost/don-state/query",
+      { address: userAddr },
+      (raw: string) => JSON.parse(raw) as {
         balance: string
         verified: boolean
         blocked: boolean
@@ -152,13 +154,18 @@ const ghostWithdraw = withHttp<Config>(
       )
     }
 
-    // ── Step 6: Update DON state ─────────────────────────────────────────
+    // ── Step 6: Update DON state (confidential) ─────────────────────────
     runtime.log("Step 6: Update DON state")
 
-    ace.get(
+    confShiva.post(
       runtime,
-      `/balances/update?address=${userAddr}&delta=-${amount.toString()}&operation=withdraw`,
-      (raw) => JSON.parse(raw) as { success: boolean; newBalance: string },
+      "/ghost/don-state/update",
+      {
+        address: userAddr,
+        delta: `-${amount.toString()}`,
+        operation: "withdraw",
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean; newBalance: string },
     )
 
     runtime.log("DON state updated with withdrawal")
@@ -189,6 +196,22 @@ const ghostWithdraw = withHttp<Config>(
     })
 
     runtime.log(`Ghost withdraw attestation: tx=${result.txHash}`)
+
+    // ── Step 8: Post callback to Shiva ──────────────────────────────────
+    runtime.log("Post callback to Shiva")
+    const shiva = shivaClient<Config>()
+    shiva.post(
+      runtime,
+      "/contracts/cre-callback/ghost-withdraw",
+      {
+        workflow: "ghost-withdraw",
+        status: "verified",
+        user_address: userAddr,
+        attestation_id: result.attestationId,
+        attestation_tx: result.txHash,
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean },
+    )
 
     return JSON.stringify({
       success: true,

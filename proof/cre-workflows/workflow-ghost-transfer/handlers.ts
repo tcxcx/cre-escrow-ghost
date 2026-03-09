@@ -16,11 +16,12 @@ import {
   type Runtime,
   type EVMLog,
 } from "@chainlink/cre-sdk"
-import { decodeEventLog, keccak256, toBytes, toHex } from "viem"
+import { decodeEventLog, decodeFunctionResult, keccak256, toBytes, toHex, type Abi } from "viem"
 import { withLog } from "../shared/triggers"
 import { publishAttestation } from "../shared/services/attestation"
+import { callViewRaw } from "../shared/services/evm"
 import { readGhostIndicator } from "../shared/services/fhe"
-import { aceClient } from "../shared/clients/presets"
+import { aceClient, shivaClient } from "../shared/clients/presets"
 import { GHOST_USDC_ABI } from "../shared/abi/ghost-usdc"
 import type { Config } from "./types"
 
@@ -139,7 +140,137 @@ const transferMonitor = withLog<Config>(
 
     runtime.log(`Ghost transfer attestation: tx=${result.txHash}`)
 
+    // ── Step 5: Post callback to Shiva ──────────────────────────────────
+    runtime.log("Post callback to Shiva")
+    const shiva = shivaClient<Config>()
+    shiva.post(
+      runtime,
+      "/contracts/cre-callback/ghost-transfer",
+      {
+        workflow: "ghost-transfer",
+        status: "verified",
+        attestation_id: result.attestationId,
+        attestation_tx: result.txHash,
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean },
+    )
+
     return `Ghost transfer verified: ${from} → ${to}, tx=${result.txHash}`
+  },
+)
+
+// ============================================================================
+// Handler: Standard Transfer Event Monitor (EVM Log Trigger)
+// ============================================================================
+
+// PolicyEngine ABI fragment for isAllowed
+const POLICY_ENGINE_ABI = [
+  {
+    name: "isAllowed",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "bool" }],
+  },
+] as const
+
+/**
+ * This handler watches for standard ERC-20 Transfer events on GhostUSDC.
+ * Complements the ConfidentialTransfer monitor by catching any standard
+ * Transfer(address,address,uint256) events for compliance monitoring.
+ */
+const ghostTransferLogMonitor = withLog<Config>(
+  {
+    getAddresses: (config) => [config.ghostUsdcAddress],
+    getTopics: (config) => [config.transferEventTopic],
+    chainSelectorField: "fheChainSelectorName" as keyof Config,
+  },
+  (runtime, log) => {
+    runtime.log(`GhostUSDC Transfer event detected: tx=${bytesToHex(log.txHash ?? new Uint8Array())}`)
+
+    // Decode transfer event topics
+    const fromTopic = log.topics?.[1]
+    const toTopic = log.topics?.[2]
+    const from = fromTopic ? `0x${bytesToHex(fromTopic).slice(-40)}` : "0x0"
+    const to = toTopic ? `0x${bytesToHex(toTopic).slice(-40)}` : "0x0"
+
+    runtime.log(`Transfer: from=${from} to=${to}`)
+
+    // Compliance check on both parties via PolicyEngine
+    const fromAllowedRaw = callViewRaw(
+      runtime,
+      runtime.config.policyEngineAddress,
+      POLICY_ENGINE_ABI as unknown as Abi,
+      "isAllowed",
+      [from],
+    )
+    const fromAllowed = decodeFunctionResult({
+      abi: POLICY_ENGINE_ABI as unknown as Abi,
+      functionName: "isAllowed",
+      data: fromAllowedRaw,
+    }) as boolean
+
+    const toAllowedRaw = callViewRaw(
+      runtime,
+      runtime.config.policyEngineAddress,
+      POLICY_ENGINE_ABI as unknown as Abi,
+      "isAllowed",
+      [to],
+    )
+    const toAllowed = decodeFunctionResult({
+      abi: POLICY_ENGINE_ABI as unknown as Abi,
+      functionName: "isAllowed",
+      data: toAllowedRaw,
+    }) as boolean
+
+    if (!fromAllowed || !toAllowed) {
+      runtime.log(`COMPLIANCE VIOLATION: from=${fromAllowed} to=${toAllowed}`)
+    }
+
+    // Publish attestation
+    const txHashHex = bytesToHex(log.txHash ?? new Uint8Array())
+    const entityId = `ghost-transfer-log-${keccak256(toHex(txHashHex)).slice(0, 18)}`
+
+    const result = publishAttestation(runtime, {
+      type: "ghost_transfer",
+      entityId,
+      data: {
+        fromHash: keccak256(toHex(from)),
+        toHash: keccak256(toHex(to)),
+        fromCompliant: fromAllowed,
+        toCompliant: toAllowed,
+        txHash: txHashHex,
+        timestamp: Math.floor(Date.now() / 1000),
+      },
+      metadata: JSON.stringify({
+        operation: "ghost_transfer_log_monitor",
+        trigger: "evm_log",
+      }),
+    })
+
+    runtime.log(`Log monitor attestation published: tx=${result.txHash}`)
+
+    // Callback to Shiva
+    const shiva = shivaClient<Config>()
+    shiva.post(
+      runtime,
+      "/contracts/cre-callback/ghost-transfer-log",
+      {
+        workflow: "ghost-transfer-log",
+        status: "verified",
+        from_compliant: fromAllowed,
+        to_compliant: toAllowed,
+        attestation_id: result.attestationId,
+        attestation_tx: result.txHash,
+      },
+      (raw: string) => JSON.parse(raw) as { success: boolean },
+    )
+
+    return JSON.stringify({
+      success: true,
+      attestationId: result.attestationId,
+      txHash: result.txHash,
+    })
   },
 )
 
@@ -149,4 +280,5 @@ const transferMonitor = withLog<Config>(
 
 export const initWorkflow = (config: Config) => [
   transferMonitor(config),
+  ghostTransferLogMonitor(config),
 ]

@@ -11,7 +11,7 @@ local-simulation:
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.json"
-    secrets-path: "../secrets.yaml"
+    secrets-path: "./secrets.yaml"
 
 staging:
   user-workflow:
@@ -19,4 +19,4 @@ staging:
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.json"
-    secrets-path: "../secrets.yaml"
+    secrets-path: "./secrets.yaml"

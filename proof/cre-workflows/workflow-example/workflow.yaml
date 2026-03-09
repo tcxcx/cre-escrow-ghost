@@ -1,21 +1,21 @@
 # ==========================================================================
-# Workflow: Ghost Deposit (v2 — USDC-direct)
+# Workflow: Example
 # ==========================================================================
-# Verifies deposit compliance, reads FHE state, checks yield, publishes attestation.
-# Run: cre workflow simulate workflow-ghost-deposit --target local-simulation
+# Demonstrates the reusable CRE workflow pattern.
+# Run: cre workflow simulate workflow-example --target local-simulation
 
 local-simulation:
   user-workflow:
-    workflow-name: "workflow-ghost-deposit"
+    workflow-name: "workflow-example"
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.json"
-    secrets-path: "./secrets.yaml"
+    secrets-path: "../secrets.yaml"
 
 staging:
   user-workflow:
-    workflow-name: "workflow-ghost-deposit"
+    workflow-name: "workflow-example"
   workflow-artifacts:
     workflow-path: "./main.ts"
     config-path: "./config.json"
-    secrets-path: "./secrets.yaml"
+    secrets-path: "../secrets.yaml"

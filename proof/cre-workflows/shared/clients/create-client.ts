@@ -44,6 +44,11 @@ export interface PlatformClientOptions {
   authHeader?: string
   /** Suffix to append to the resolved base URL (e.g., "/rest/v1") */
   urlSuffix?: string
+  /**
+   * If true, also send the secret value as `Authorization: Bearer <value>`.
+   * Useful for Supabase which requires both `apikey` header AND `Authorization` header.
+   */
+  alsoSendBearerAuth?: boolean
 }
 
 /** A consensus-verified HTTP client for a platform API */
@@ -75,12 +80,20 @@ export interface PlatformClient<C> {
 function buildAuthHeaders(
   authType: "bearer" | "api-key",
   authHeader: string | undefined,
-  secretValue: string
+  secretValue: string,
+  alsoSendBearerAuth?: boolean
 ): Record<string, string> {
+  const headers: Record<string, string> = {}
   if (authType === "bearer") {
-    return { [authHeader ?? "Authorization"]: `Bearer ${secretValue}` }
+    headers[authHeader ?? "Authorization"] = `Bearer ${secretValue}`
+  } else {
+    headers[authHeader ?? "X-API-Key"] = secretValue
   }
-  return { [authHeader ?? "X-API-Key"]: secretValue }
+  // Supabase needs both `apikey: <key>` AND `Authorization: Bearer <key>`
+  if (alsoSendBearerAuth && authType === "api-key") {
+    headers["Authorization"] = `Bearer ${secretValue}`
+  }
+  return headers
 }
 
 function encodeBody(payload: unknown): string {
@@ -127,7 +140,7 @@ export function createPlatformClient<C>(options: PlatformClientOptions): Platfor
                 url: `${baseUrl}${path}`,
                 method: "GET" as const,
                 headers: {
-                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value),
+                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value, options.alsoSendBearerAuth),
                   "Content-Type": "application/json",
                 },
               })
@@ -166,7 +179,7 @@ export function createPlatformClient<C>(options: PlatformClientOptions): Platfor
                 method: "POST" as const,
                 body: encodeBody(payload),
                 headers: {
-                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value),
+                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value, options.alsoSendBearerAuth),
                   "Content-Type": "application/json",
                   ...(headers ?? {}),
                 },
@@ -205,7 +218,7 @@ export function createPlatformClient<C>(options: PlatformClientOptions): Platfor
                 method: "PATCH" as const,
                 body: encodeBody(payload),
                 headers: {
-                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value),
+                  ...buildAuthHeaders(options.authType, options.authHeader, secret.value, options.alsoSendBearerAuth),
                   "Content-Type": "application/json",
                   ...(headers ?? {}),
                 },

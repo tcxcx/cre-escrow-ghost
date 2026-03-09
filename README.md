@@ -426,6 +426,95 @@ We're actively researching the intersection of privacy, compliance, and DeFi yie
 
 ---
 
+## CRE Workflow Simulation (Demo Verification)
+
+All 15 CRE workflows can be simulated locally using the Chainlink CRE CLI. The `simulate-all.sh` script automates this — compiling each workflow to WASM and running it against Sepolia testnets.
+
+### Quick Start
+
+```bash
+# Prerequisites
+brew install bun          # >= 1.2.21
+# Install CRE CLI: https://docs.chain.link/cre/getting-started
+cre version               # Verify CLI is installed
+
+# Set your deployer wallet private key (Sepolia testnet only!)
+export CRE_ETH_PRIVATE_KEY="0x<your-sepolia-private-key>"
+
+# Navigate to the CRE project root
+cd apps/cre/
+
+# Install dependencies for all workflows
+for dir in workflow-*/; do (cd "$dir" && bun install); done
+
+# List all 21 simulation handlers across 15 workflows
+./simulate-all.sh --list
+
+# Check prerequisites
+./simulate-all.sh --check
+
+# Run ALL simulations
+./simulate-all.sh all
+
+# Run a single workflow
+./simulate-all.sh ghost-deposit
+./simulate-all.sh treasury-rebalance
+```
+
+### Expected Results
+
+| Category | Count | Status | Notes |
+|----------|-------|--------|-------|
+| **WASM Compile** | 21/21 | All compile to WASM successfully | Every workflow produces valid WebAssembly |
+| **Cron triggers** | 4 | PASS | treasury-rebalance, private-transfer cron, escrow-monitor cron, example |
+| **HTTP triggers** | 13 | Compile + run (runtime depends on live services) | Need real Supabase/Shiva URLs for full pass |
+| **EVM Log triggers** | 4 | SKIP (auto) | Need real on-chain transaction hashes |
+
+### Environment Variables
+
+Copy `.env.example` and fill in your values:
+
+```bash
+# Required for on-chain write workflows
+CRE_ETH_PRIVATE_KEY=0x<sepolia-deployer-private-key>
+
+# For workflows that call Supabase (escrow-*, invoice-settle, payroll-attest, report-verify)
+SUPABASE_URL_VAR=https://<your-project>.supabase.co
+SUPABASE_SERVICE_KEY_VAR=eyJ...
+
+# For workflows that call Shiva API (escrow-dispute, escrow-finalize, escrow-verify)
+SHIVA_API_URL_VAR=https://<your-shiva-url>
+SHIVA_SERVICE_TOKEN_VAR=<token>
+
+# For Ghost Mode + ACE workflows
+ACE_API_KEY_VAR=<ace-api-key>
+ACE_URL_VAR=https://<ace-url>
+
+# For yield workflows (escrow-yield)
+MOTORA_API_URL_VAR=https://<motora-url>
+MOTORA_API_KEY_VAR=<key>
+```
+
+> Placeholder values are auto-exported by the script so simulations always run — override with real values for full end-to-end verification.
+
+### Demo Video Instructions
+
+To record a 100% verification demo:
+
+1. **Terminal 1** — Show the workflow list: `./simulate-all.sh --list`
+2. **Terminal 2** — Run all simulations: `./simulate-all.sh all`
+3. **Narrate**: "All 21 handlers compile to WASM. Cron triggers pass immediately. HTTP triggers reach runtime — they need live backend services for full pass. EVM Log triggers are auto-skipped (need real tx hashes)."
+4. **Show a passing workflow**: `./simulate-all.sh treasury-rebalance` — this reads on-chain buffer ratios from Sepolia
+5. **Show logs**: `ls simulation-logs/` and `cat` a log file to show the full CRE execution trace
+6. **Show mock payloads**: `ls mock-payloads/` — 13 JSON files with realistic test data
+7. **Show the code**: Open `workflow-escrow-verify/handlers.ts` to show the AI verification pipeline
+
+### Simulation Guide
+
+See [`proof/cre-scripts/SIMULATION-GUIDE.md`](proof/cre-scripts/SIMULATION-GUIDE.md) for detailed documentation of each workflow, trigger types, secrets, and troubleshooting.
+
+---
+
 ## Completion Status
 
 > Last updated: 2026-03-09

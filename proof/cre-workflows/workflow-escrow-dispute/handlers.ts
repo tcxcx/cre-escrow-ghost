@@ -41,7 +41,7 @@ const arbitrateDispute = withHttp<Config>(
   (runtime: Runtime<Config>, payload: HTTPPayload) => {
     // Step 1: Parse payload
     const body = JSON.parse(
-      new TextDecoder().decode(payload.body)
+      new TextDecoder().decode(payload.input)
     ) as DisputePayload
 
     runtime.log(
