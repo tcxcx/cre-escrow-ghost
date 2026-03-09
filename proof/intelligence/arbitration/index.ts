@@ -9,7 +9,7 @@
 // =============================================================================
 
 // -- Gateway (DRY entry point for all AI calls) --
-export { structured, parallelStructured, extractProvider } from './gateway'
+export { structured, parallelStructured, extractProvider, resolveModel } from './gateway'
 export type { GatewayCallOptions, GatewayResult } from './gateway'
 
 // -- Layers --
@@ -31,5 +31,9 @@ export { hashDocument, createAuditRecord, buildOnChainRecord } from './audit'
 
 
 // -- Config --
-export { DEFAULT_ARBITRATION_CONFIG } from './config'
+export { DEFAULT_ARBITRATION_CONFIG, buildArbitrationConfig } from './config'
 export type { ArbitrationConfig } from './config'
+
+// -- Model Selection --
+export { ADVOCATE_MODEL_OPTIONS } from './models'
+export type { AdvocateModelOption } from './models'

@@ -6,6 +6,8 @@
 // No provider packages or API keys needed — zero-config.
 // =============================================================================
 
+import { selectTribunalModels, selectSupremeCourtModels } from './models'
+
 export interface ArbitrationConfig {
   // Timing
   disputeWindowHours: number // min 24, max 168, default 72
@@ -94,4 +96,42 @@ export const DEFAULT_ARBITRATION_CONFIG: ArbitrationConfig = {
   },
 
   ipfsGateway: 'https://gateway.pinata.cloud',
+}
+
+/**
+ * Build an ArbitrationConfig with user-selected advocate models.
+ * Tribunal and Supreme Court models are auto-selected for neutrality.
+ */
+export function buildArbitrationConfig(
+  payerAdvocateModel?: string,
+  payeeAdvocateModel?: string,
+): ArbitrationConfig {
+  const payerModel = payerAdvocateModel ?? DEFAULT_ARBITRATION_CONFIG.layer2.model
+  const payeeModel = payeeAdvocateModel ?? DEFAULT_ARBITRATION_CONFIG.layer2.model
+
+  const tribunalModels = selectTribunalModels(payerModel, payeeModel)
+  const scModels = selectSupremeCourtModels(payerModel, payeeModel, tribunalModels)
+
+  return {
+    ...DEFAULT_ARBITRATION_CONFIG,
+    layer2: {
+      model: payerModel,
+    },
+    layer3: {
+      judges: [
+        { model: tribunalModels[0] },
+        { model: tribunalModels[1] },
+        { model: tribunalModels[2] },
+      ],
+    },
+    layer4: {
+      judges: [
+        { model: scModels[0] },
+        { model: scModels[1] },
+        { model: scModels[2] },
+        { model: scModels[3] },
+        { model: scModels[4] },
+      ],
+    },
+  }
 }

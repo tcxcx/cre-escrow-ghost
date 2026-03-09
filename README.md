@@ -313,20 +313,37 @@ proof/
 │   └── fhe-reference/      # CoFHE/Fhenix FHE integration reference (FHERC20, Wrapper)
 ├── intelligence/           # AI arbitration system
 │   ├── arbitration/        # 4-layer tribunal (verifier, advocates, judges, supreme court)
+│   │   ├── config.ts       # Multi-model tribunal configuration (Claude/GPT/Gemini)
+│   │   ├── models.ts       # Judge persona definitions + voting logic
+│   │   └── index.ts        # Orchestration gateway (L1→L4 pipeline)
+│   ├── contract-assist.service.ts  # AI contract builder service
+│   ├── contract-canvas.ts  # AI → canvas node manipulation tools
 │   └── a2ui/               # Agent-to-Agent + AG-UI streaming adapter
 ├── ghost-mode/             # Ghost Mode UI + services
 │   ├── components/         # Deposit, withdraw, transfer UIs + onboarding
-│   └── services/           # FHE state readers, privacy helpers
+│   ├── services/           # FHE state readers, privacy helpers
+│   └── cre-workflows/      # CRE workflow YAML definitions (deposit, transfer, withdraw)
 ├── stocks/                 # Stock purchasing + payroll
 │   ├── src/                # @bu/stocks package (Polygon.io, Dune, Alchemy, Massive providers)
 │   ├── earn-ui/            # Purchase flow, interactive charts, stock cards
 │   └── hooks/              # React hooks for stock data + price history
 ├── agentic-ui/             # A2A protocol + CopilotKit adapter
 │   ├── src/                # Agent cards, registry, A2A client, stream bridge, renderer
-│   └── a2a-routes/         # Shiva A2A HTTP routes + task store
-├── email-templates/        # 8 contract lifecycle email templates
+│   ├── a2a-routes/         # Shiva A2A HTTP routes + task store
+│   └── notifications/      # Real-time contract notifications (Supabase realtime)
+├── contracts/              # Contract lifecycle proof-of-work
+│   ├── lifecycle-routes/   # Email + notification trigger helpers
+│   ├── trigger-tasks/      # Trigger.dev email sending + signing reminder cron
+│   ├── wizard/             # Contract builder wizard flow (6-step)
+│   ├── ai-assist/          # AI Assist panel + API route (canvas manipulation)
+│   ├── upload/             # Milestone deliverable file upload route
+│   ├── contracts.ts        # Contract type definitions (987 lines)
+│   ├── error-recovery.tsx  # Error recovery UX component
+│   └── timeout-indicator.tsx # Timeout indicator for FHE operations
+├── email-templates/        # 8 contract lifecycle email templates (React Email)
 ├── deployed-contracts/     # Contract address registry (addresses.ts)
-└── plans/                  # 8 architecture documents and design specs
+├── worldid/                # WorldID verification integration design
+└── plans/                  # 19 architecture documents and design specs
 ```
 
 ---
@@ -404,4 +421,40 @@ We're actively researching the intersection of privacy, compliance, and DeFi yie
 
 ---
 
-*Built with Chainlink CRE, ACE, CoFHE/Fhenix, Circle, Hashnote USYC, Robinhood Chain, and a lot of coffee.*
+## Completion Status
+
+> Last updated: 2026-03-08
+
+| Bucket | Score | Key Deliverables |
+|--------|-------|------------------|
+| **Ghost Mode Privacy Stack** | 95% | Deposit/Withdraw/Transfer UI, FHE encryption, Circle DCW, 3 CRE workflows, Persona KYC/KYB, WorldID verification, dual balance display, AllowList sync |
+| **Contract Builder & Creation** | 95% | React Flow canvas (9 node types), AI Assist panel with canvas wiring, wizard flow (6 steps), template selector, import/export, batch upload, deploy modal |
+| **Contract Lifecycle Execution** | 90% | Signing flow (EIP-191), escrow funding, AI verification pipeline, 4-layer arbitration tribunal, milestone submission + file upload, 8 email templates, PDF generation, signing reminder cron |
+| **Platform Integration & Polish** | 85% | Dashboard widgets, contracts list, notifications (Supabase realtime), email triggers on lifecycle state changes, error recovery UX, timeout indicators, WorldID integration |
+| **Overall** | **~92%** | 286 files changed in final sprint, 22,397 lines added |
+
+### What's Complete (P0 + P1)
+
+- [x] Wire AI Assist → canvas actions (AI generates/modifies nodes on the graph)
+- [x] Wire AI verification pipeline (LLM compares deliverable vs contract terms)
+- [x] Escrow deploy + fund + release flow on Sepolia
+- [x] Ghost Mode as escrow funding source bridge
+- [x] Wire email triggers on lifecycle state changes (8 templates)
+- [x] Connect notifications to Supabase realtime
+- [x] File upload for milestone deliverables (Supabase Storage)
+- [x] Arbitration multi-model tribunal pipeline (3-judge + 5-judge supreme court)
+- [x] WorldID verification endpoints + CRE workflow
+- [x] Contract builder wizard flow (6-step guided creation)
+- [x] Error recovery UX for edge cases
+- [x] Timeout indicators for FHE operations
+
+### Remaining (P2 Polish)
+
+- [ ] Dashboard analytics cards (countContractsByStatus query exists)
+- [ ] Mobile responsive contract builder
+- [ ] Escrow yield wiring via Motora/Deframe
+- [ ] Live testnet dry-run with funded Circle DCW wallet
+
+---
+
+*Built with Chainlink CRE, ACE, CoFHE/Fhenix, Circle, Hashnote USYC, Robinhood Chain, WorldID, and a lot of coffee.*
