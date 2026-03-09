@@ -188,7 +188,7 @@ export function createConfidentialPlatformClient<C>(
             request: {
               url: `${baseUrl}${path}`,
               method: "POST",
-              body: bodyB64,
+              bodyString: bodyB64,
               multiHeaders: {
                 [headerName]: { values: [auth.template] },
                 "Content-Type": { values: ["application/json"] },
