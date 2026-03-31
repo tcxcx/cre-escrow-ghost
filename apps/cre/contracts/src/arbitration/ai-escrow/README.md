@@ -1,3 +1,8 @@
+Absolutely — and **“PandaDocs meets escrow”** is *exactly* the right vibe.
+
+Here’s the README rewritten with that positioning baked in (still technical, but with a clean product voice).
+
+---
 
 # BUFI Contracts
 

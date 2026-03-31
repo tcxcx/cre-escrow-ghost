@@ -1,0 +1,10 @@
+{
+  "chainSelectorName": "ethereum-testnet-sepolia",
+  "attestationContract": "0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C",
+  "gasLimit": "500000",
+  "usdcAddress": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+  "treasuryManagerAddress": "0x33A4a73FD81bB6314AB7dc77301894728E6825A4",
+  "fheChainSelectorName": "ethereum-testnet-sepolia-arbitrum-1",
+  "ghostUsdcAddress": "0x6e6Ad7EDECbb4C9B7aA9453af2ba285f6d6cCcB5",
+  "owner": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474"
+}

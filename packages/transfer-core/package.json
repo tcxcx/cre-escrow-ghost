@@ -1,0 +1,142 @@
+{
+  "name": "@bu/transfer-core",
+  "version": "0.1.0",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p .",
+    "lint": "biome check . || true",
+    "typecheck": "tsc --noEmit",
+    "clean": "git clean -xdf .next .turbo node_modules dist"
+  },
+  "dependencies": {
+    "@bu/circle": "workspace:*",
+    "@bu/env": "workspace:*",
+    "@bu/fee": "workspace:*",
+    "@bu/logger": "workspace:*",
+    "@bu/motora": "workspace:*",
+    "@bu/rbac": "workspace:*",
+    "@bu/schemas": "workspace:*",
+    "@bu/supabase": "workspace:*",
+    "@bu/types": "workspace:*",
+    "@bu/utils": "workspace:*",
+    "@bu/wallets": "workspace:*",
+    "@circle-fin/usdckit": "^0.23.0",
+    "@squirrel-labs/peanut-sdk": "^0.6.2",
+    "ethers": "^5.7.2",
+    "permissionless": "^0.2.52",
+    "uuid": "^9.0.1",
+    "viem": "^2.21.54"
+  },
+  "devDependencies": {
+    "@bu/tsconfig": "workspace:*",
+    "@types/uuid": "^9.0.8",
+    "typescript": "^5.8.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./chains": {
+      "types": "./dist/constants/Chains.d.ts",
+      "default": "./dist/constants/Chains.js"
+    },
+    "./chain-service": {
+      "types": "./dist/services/ChainService.d.ts",
+      "default": "./dist/services/ChainService.js"
+    },
+    "./paymaster-constants": {
+      "types": "./dist/constants/paymaster-constants.d.ts",
+      "default": "./dist/constants/paymaster-constants.js"
+    },
+    "./contracts": {
+      "types": "./dist/constants/Contracts.d.ts",
+      "default": "./dist/constants/Contracts.js"
+    },
+    "./protocol-config": {
+      "types": "./dist/constants/ProtocolConfig.d.ts",
+      "default": "./dist/constants/ProtocolConfig.js"
+    },
+    "./batch-payments-constants": {
+      "types": "./dist/constants/batch-payments-constants.d.ts",
+      "default": "./dist/constants/batch-payments-constants.js"
+    },
+    "./contract-service": {
+      "types": "./dist/services/ContractService.d.ts",
+      "default": "./dist/services/ContractService.js"
+    },
+    "./gas-estimation-service": {
+      "types": "./dist/services/GasEstimationService.d.ts",
+      "default": "./dist/services/GasEstimationService.js"
+    },
+    "./route-optimization-service": {
+      "types": "./dist/services/RouteOptimizationService.d.ts",
+      "default": "./dist/services/RouteOptimizationService.js"
+    },
+    "./transaction-builder": {
+      "types": "./dist/services/TransactionBuilder.d.ts",
+      "default": "./dist/services/TransactionBuilder.js"
+    },
+    "./wallet-service": {
+      "types": "./dist/services/WalletService.d.ts",
+      "default": "./dist/services/WalletService.js"
+    },
+    "./transfer-service": {
+      "types": "./dist/services/TransferService.d.ts",
+      "default": "./dist/services/TransferService.js"
+    },
+    "./chain-constants": {
+      "types": "./dist/constants/chain-constants.d.ts",
+      "default": "./dist/constants/chain-constants.js"
+    },
+    "./payout-config": {
+      "types": "./dist/constants/PayoutConfig.d.ts",
+      "default": "./dist/constants/PayoutConfig.js"
+    },
+    "./circle-payout-service": {
+      "types": "./dist/services/CirclePayoutService.d.ts",
+      "default": "./dist/services/CirclePayoutService.js"
+    },
+    "./bridge-routes": {
+      "types": "./dist/constants/bridge-routes.d.ts",
+      "default": "./dist/constants/bridge-routes.js"
+    },
+    "./bridge-kit": {
+      "types": "./dist/protocols/bridge-kit/index.d.ts",
+      "default": "./dist/protocols/bridge-kit/index.js"
+    },
+    "./batch-payments": {
+      "types": "./dist/protocols/batch-payments/index.d.ts",
+      "default": "./dist/protocols/batch-payments/index.js"
+    },
+    "./token-addresses": {
+      "types": "./dist/utils/token-addresses.d.ts",
+      "default": "./dist/utils/token-addresses.js"
+    },
+    "./batch-payment-service": "./src/services/BatchPaymentService.ts",
+    "./chain-mappings": {
+      "types": "./dist/constants/ChainMappings.d.ts",
+      "default": "./dist/constants/ChainMappings.js"
+    },
+    "./verify-transaction": {
+      "types": "./dist/utils/verify-transaction.d.ts",
+      "default": "./dist/utils/verify-transaction.js"
+    },
+    "./chain-display-names": {
+      "types": "./dist/utils/chain-display-names.d.ts",
+      "default": "./dist/utils/chain-display-names.js"
+    },
+    "./peanut-protocol": {
+      "types": "./dist/protocols/peanut-protocol/index.d.ts",
+      "default": "./dist/protocols/peanut-protocol/index.js"
+    },
+    "./circle-sdk": {
+      "types": "./dist/protocols/circle-sdk/index.d.ts",
+      "default": "./dist/protocols/circle-sdk/index.js"
+    },
+    "./services/StablecoinRegistry": "./src/services/StablecoinRegistry.ts",
+    "./types/usdckit": "./src/types/usdckit.ts"
+  }
+}

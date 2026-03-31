@@ -1,0 +1,44 @@
+{
+  "name": "@bu/private-transfer",
+  "version": "0.1.0",
+  "private": true,
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "lint": "biome check . || true"
+  },
+  "dependencies": {
+    "@bu/circle": "workspace:*",
+    "@bu/env": "workspace:*",
+    "@bu/http-client": "workspace:*",
+    "@bu/logger": "workspace:*",
+    "@bu/treasury-yield": "workspace:*",
+    "@bu/types": "workspace:*",
+    "uuid": "^11.1.0",
+    "viem": "^2.21.54"
+  },
+  "devDependencies": {
+    "@bu/tsconfig": "workspace:*",
+    "typescript": "^5.8.3"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./eip712": "./src/eip712/index.ts",
+    "./signer": "./src/signer/index.ts",
+    "./client": "./src/client/index.ts",
+    "./compliance": "./src/compliance/index.ts",
+    "./deposit": "./src/deposit/index.ts",
+    "./withdraw": "./src/withdraw/index.ts",
+    "./executor": "./src/executor/index.ts",
+    "./pipeline/amount": "./src/pipeline/amount.ts",
+    "./pipeline/tx": "./src/pipeline/tx.ts",
+    "./pipeline/execute": "./src/pipeline/execute.ts",
+    "./kyc": "./src/kyc/index.ts",
+    "./cctp": "./src/cctp/index.ts",
+    "./reserves": "./src/reserves/index.ts",
+    "./eligibility": "./src/eligibility/index.ts"
+  }
+}

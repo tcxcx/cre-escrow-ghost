@@ -1,0 +1,6 @@
+{
+  "chainSelectorName": "ethereum-testnet-sepolia",
+  "attestationContract": "0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C",
+  "gasLimit": "500000",
+  "policyEngineAddress": "0x76b727ed158fe58CaFe4FF5F98D0D98E7244F926"
+}

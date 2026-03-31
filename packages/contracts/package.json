@@ -1,0 +1,33 @@
+{
+  "name": "@bu/contracts",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./agreement": "./src/agreement/index.ts",
+    "./agreement/service": "./src/agreement.service.ts",
+    "./file": "./src/file.service.ts",
+    "./shared": "./src/shared/index.ts",
+    "./contract-flow": "./src/contract-flow/index.ts",
+    "./contract-flow/validation": "./src/contract-flow/validation.ts",
+    "./prompts": "./src/prompts/index.ts",
+    "./pdf": "./src/pdf/pdf-service.ts",
+    "./pdf/signed": "./src/pdf/signed-pdf-service.tsx",
+    "./templates": "./src/templates/index.ts",
+    "./escrow": "./src/escrow/abi.ts"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@bu/supabase": "workspace:*",
+    "@bu/types": "workspace:*",
+    "@supabase/supabase-js": "^2.49.3",
+    "@react-pdf/renderer": "4.3.0",
+    "react": "^19.0.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.6.2"
+  }
+}
