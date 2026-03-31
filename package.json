@@ -31,6 +31,10 @@
     "contracts:dev": "turbo run dev --filter=@repo/contracts",
     "contracts:test": "turbo run test --filter=@repo/contracts",
 
+    "solana:build": "cd proof/solana-escrow && anchor build",
+    "solana:test": "cd proof/solana-escrow && anchor test",
+    "solana:deploy": "cd proof/solana-escrow && anchor deploy --provider.cluster devnet",
+
     "ui:lint": "turbo run lint --filter=@repo/ui",
     "ui:check-types": "turbo run check-types --filter=@repo/ui",
 

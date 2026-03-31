@@ -95,3 +95,16 @@ export const ESCROW_FACTORY = '0x0f8b653aadd4f04008fdaca3429f6ea24951b129' as co
 
 /** EscrowFactory — Arbitrum Sepolia (demo only, not wired) — update after deploy */
 export const ESCROW_FACTORY_ARB = '0x0000000000000000000000000000000000000000' as const
+
+// ============================================================================
+// Solana Programs — Update after deploy
+// ============================================================================
+
+/** bu_escrow — Solana escrow settlement program (Anchor) — update after devnet deploy */
+export const SOLANA_BU_ESCROW_PROGRAM_ID = 'DTtYVUNVUSbT8gY7yjLJzxYaZAFFSh1WaGdoQrDUyWEG' as const
+
+/** USDC — Circle SPL Token on Solana (devnet placeholder) */
+export const SOLANA_USDC_MINT = '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU' as const
+
+/** Solana cluster — default to devnet for hackathon */
+export const SOLANA_CLUSTER = 'devnet' as const
