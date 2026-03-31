@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Escrow Dispute (HTTP trigger)
+# ==========================================================================
+# Handles dispute resolution and tribunal verdicts for escrow milestones.
+# Run: cre workflow simulate workflow-escrow-dispute --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-escrow-dispute"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-escrow-dispute"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

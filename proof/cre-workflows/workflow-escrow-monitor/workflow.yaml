@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Escrow Monitor (EVM Log + Cron triggers)
+# ==========================================================================
+# Watches factory events + periodic proof-of-reserves attestation.
+# Run: cre workflow simulate workflow-escrow-monitor --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-escrow-monitor"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-escrow-monitor"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

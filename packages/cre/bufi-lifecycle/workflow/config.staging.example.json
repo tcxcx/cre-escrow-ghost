@@ -1,0 +1,32 @@
+{
+  "chainSelectorName": "avalanche-testnet-fuji",
+  "escrowFactory": "0xYOUR_ESCROW_FACTORY_V3",
+  "identityRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+  "reputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+  "usdcAddress": "0x5425890298aed601595a70AB815c96711a31Bc65",
+  "eurcAddress": "0x5E44db7996c682E92a960b65AC713a54AD815c6B",
+  "gasLimit": "500000",
+  "protocolFeeBps": 50,
+  "protocolFeeRecipient": "0xYOUR_PROTOCOL_FEE_RECIPIENT",
+  "supabaseUrl": "https://YOUR-PROJECT.supabase.co",
+  "verifier": {
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-5-20250929"
+  },
+  "advocates": {
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-5-20250929"
+  },
+  "tribunal": [
+    { "provider": "anthropic", "model": "claude-sonnet-4-5-20250929" },
+    { "provider": "openai", "model": "gpt-4o" },
+    { "provider": "google", "model": "gemini-2.0-flash" }
+  ],
+  "supremeCourt": [
+    { "provider": "xai", "model": "grok-4-fast" },
+    { "provider": "google", "model": "gemini-2.5-pro" },
+    { "provider": "anthropic", "model": "claude-opus-4-5" },
+    { "provider": "openai", "model": "gpt-4.1" },
+    { "provider": "fireworks", "model": "deepseek-v3" }
+  ]
+}

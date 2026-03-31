@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: WorldID Verify (CRE attestation for proof of personhood)
+# ==========================================================================
+# Verifies WorldID proof came from our backend, publishes on-chain attestation.
+# Run: cre workflow simulate workflow-worldid-verify --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-worldid-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-worldid-verify"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

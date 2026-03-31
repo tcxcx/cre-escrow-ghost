@@ -1,0 +1,22 @@
+# ==========================================================================
+# Workflow: Treasury Rebalance Check
+# ==========================================================================
+# Monitors USDCg treasury buffer ratio and publishes attestations
+# about when rebalancing is needed. Read-only -- Shiva executes.
+# Run: cre workflow simulate workflow-treasury-rebalance --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-treasury-rebalance"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-treasury-rebalance"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

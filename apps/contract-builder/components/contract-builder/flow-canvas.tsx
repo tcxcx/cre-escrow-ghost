@@ -195,10 +195,10 @@ export function FlowCanvas() {
         />
       </ReactFlow>
 
-      {/* Connection hint overlay */}
+      {/* Connection hint overlay - positioned higher on mobile to avoid floating toolbar */}
       {nodes.length > 0 && edges.length === 0 && (
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg bg-card/90 border border-border shadow-lg">
-          <p className="text-sm text-muted-foreground">
+        <div className="absolute bottom-28 md:bottom-20 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg bg-card/90 border border-border shadow-lg max-w-[90vw]">
+          <p className="text-sm text-muted-foreground text-center">
             <span className="text-foreground font-medium">Tip:</span> Drag from a node handle to another to create connections
           </p>
         </div>

@@ -1,0 +1,8 @@
+{
+  "action": "allowlist_sync",
+  "walletAddress": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474",
+  "approved": true,
+  "verificationType": "kyc",
+  "personaInquiryId": "inq_mock_12345",
+  "status": "completed"
+}

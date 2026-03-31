@@ -28,13 +28,18 @@ import {
 import { cn } from '@/lib/utils'
 import { useContractStore } from '@/lib/contract-store'
 import type { ContractNode } from '@repo/contract-flow'
+import { compileGraphToAgreement } from '@repo/core/agreement/compiler'
+import { createAgreementFromTemplate } from '@/lib/api/client'
+import { useRouter } from 'next/navigation'
 
 export function ContractPreview() {
+  const router = useRouter()
   const {
     isPreviewOpen,
     setPreviewOpen,
     contractName,
     nodes,
+    edges,
     settings,
     currentSavedContract,
     generateShareLink,
@@ -42,6 +47,7 @@ export function ContractPreview() {
   } = useContractStore()
   
   const [copied, setCopied] = useState(false)
+  const [deploying, setDeploying] = useState(false)
   
   const shareLink = useMemo(() => generateShareLink(), [currentSavedContract])
 
@@ -96,6 +102,53 @@ export function ContractPreview() {
     }
     return total
   }, [nodes])
+
+  const deployAgreement = async () => {
+    if (!isContractValid || deploying) return
+    setDeploying(true)
+    try {
+      const agreementJson = compileGraphToAgreement({
+        nodes: nodes as unknown as Array<{ id: string; type: string; data: Record<string, unknown> & { label: string } }>,
+        edges: edges.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          sourceHandle: edge.sourceHandle ?? undefined,
+          targetHandle: edge.targetHandle ?? undefined,
+        })),
+        settings,
+        title: contractName,
+      })
+
+      const milestones = agreementJson.milestones.map((milestone) => ({
+        title: milestone.title,
+        amount: Number(milestone.amount) / 1_000_000,
+        acceptanceCriteria: milestone.acceptanceCriteria,
+        dueDate: milestone.dueDate ?? undefined,
+      }))
+
+      const totalAmount = milestones.reduce((sum, milestone) => sum + milestone.amount, 0)
+
+      const response = await createAgreementFromTemplate({
+        title: agreementJson.title,
+        agreementJson,
+        agreementHash: agreementJson.hashing.agreementHash ?? '',
+        tokenAddress: settings.currency === 'EURC'
+          ? '0x5E44db7996c682E92a960b65AC713a54AD815c6B'
+          : '0x5425890298aed601595a70AB815c96711a31Bc65',
+        payerAddress: '',
+        payeeAddress: '',
+        totalAmount,
+        milestones,
+      })
+
+      if (response.agreementId) {
+        router.push(`/contracts/${response.agreementId}`)
+      }
+    } finally {
+      setDeploying(false)
+    }
+  }
 
   return (
     <Sheet open={isPreviewOpen} onOpenChange={setPreviewOpen}>
@@ -437,10 +490,10 @@ export function ContractPreview() {
             </Button>
             <Button
               className="flex-1 gap-2"
-              disabled={!isContractValid}
-              onClick={() => {/* TODO: Deploy contract */}}
+              disabled={!isContractValid || deploying}
+              onClick={deployAgreement}
             >
-              Deploy Contract
+              {deploying ? 'Deploying...' : 'Deploy Contract'}
             </Button>
           </div>
         </div>

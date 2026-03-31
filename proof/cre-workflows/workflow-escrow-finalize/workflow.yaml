@@ -1,0 +1,21 @@
+# ==========================================================================
+# Workflow: Escrow Finalize (HTTP trigger)
+# ==========================================================================
+# Executes on-chain milestone release/refund after verification or dispute.
+# Run: cre workflow simulate workflow-escrow-finalize --target local-simulation
+
+local-simulation:
+  user-workflow:
+    workflow-name: "workflow-escrow-finalize"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"
+
+staging:
+  user-workflow:
+    workflow-name: "workflow-escrow-finalize"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.json"
+    secrets-path: "./secrets.yaml"

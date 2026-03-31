@@ -1,0 +1,8 @@
+{
+  "action": "deposit",
+  "agreementId": "agr_mock_yield_001",
+  "escrowAddress": "0x1234567890abcdef1234567890abcdef12345678",
+  "milestoneIndex": 0,
+  "strategyId": "strategy_mock_001",
+  "amount": "1000000000"
+}

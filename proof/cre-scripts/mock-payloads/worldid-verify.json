@@ -1,0 +1,7 @@
+{
+  "contractId": "contract_mock_001",
+  "walletAddress": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474",
+  "nullifierHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  "verificationLevel": "orb",
+  "userId": "user_mock_001"
+}

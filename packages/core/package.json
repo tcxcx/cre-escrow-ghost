@@ -6,6 +6,13 @@
   "exports": {
     "./agreement": "./agreement/schema.ts",
     "./agreement/compiler": "./agreement/compiler.ts",
+    "./agents": "./agents/index.ts",
+    "./agents/selection": "./agents/selection.ts",
+    "./agents/types": "./agents/types.ts",
+    "./agents/erc8004": "./agents/erc8004.ts",
+    "./escrow": "./escrow/index.ts",
+    "./escrow/abi": "./escrow/abi.ts",
+    "./escrow/deployments": "./escrow/deployments.ts",
     "./artifacts": "./artifacts/index.ts",
     "./artifacts/canonical": "./artifacts/canonical.ts",
     "./artifacts/storage": "./artifacts/storage.ts",

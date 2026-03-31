@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { useContractStore } from '@/lib/contract-store'
-import { contractTemplates, categoryLabels, categoryColors, tagLabels, tagColors } from '@/lib/contract-templates'
+import { contractTemplates, tagLabels, tagColors } from '@/lib/contract-templates'
 import type { ContractTemplate, ContractCategory, ContractTag } from '@repo/contract-flow'
 import { AiContractBuilder } from './ai-contract-builder'
 import { ImportContractModal } from './import-contract-modal'

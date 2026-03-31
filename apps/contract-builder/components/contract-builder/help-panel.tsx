@@ -516,7 +516,7 @@ export function HelpButton() {
       <Button
         variant="outline"
         size="sm"
-        className="fixed bottom-4 right-4 z-40 gap-2 bg-card shadow-lg border-border hover:bg-muted"
+        className="fixed bottom-16 md:bottom-4 right-4 z-40 gap-2 bg-card shadow-lg border-border hover:bg-muted min-h-[44px]"
         onClick={() => setHelpOpen(true)}
       >
         <HelpCircle className="w-4 h-4" />

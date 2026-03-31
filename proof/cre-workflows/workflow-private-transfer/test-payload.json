@@ -1,0 +1,7 @@
+{
+  "sender": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474",
+  "recipient": "0xE588a6c73933BFD66Af9b4A07d48bcE59c0D2d13",
+  "token": "0x2F28A8378798c5B42FC28f209E903508DD8F878b",
+  "amount": "1000000",
+  "txId": "test-transfer-001"
+}

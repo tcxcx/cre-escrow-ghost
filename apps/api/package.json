@@ -12,11 +12,13 @@
   "dependencies": {
     "@repo/services": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/erc-8004": "workspace:*",
     "@supabase/supabase-js": "^2.49.3",
     "hono": "^4.7.0",
     "mammoth": "^1.11.0",
     "openai": "^4.82.0",
-    "pdf-parse": "^2.4.5"
+    "pdf-parse": "^2.4.5",
+    "viem": "^2.38.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241218.0",

@@ -4,8 +4,6 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "packages/cre/ai-escrow/workflow",
-    "packages/cre/stable-fx/workflow",
     "packages/cre/bufi-lifecycle/workflow",
     "hardhat"
   ],
@@ -32,6 +30,10 @@
     "contracts:compile": "turbo run compile --filter=@repo/contracts",
     "contracts:dev": "turbo run dev --filter=@repo/contracts",
     "contracts:test": "turbo run test --filter=@repo/contracts",
+
+    "solana:build": "cd proof/solana-escrow && anchor build",
+    "solana:test": "cd proof/solana-escrow && anchor test",
+    "solana:deploy": "cd proof/solana-escrow && anchor deploy --provider.cluster devnet",
 
     "ui:lint": "turbo run lint --filter=@repo/ui",
     "ui:check-types": "turbo run check-types --filter=@repo/ui",
@@ -70,7 +72,8 @@
     "bufi:activate": "turbo run cre:workflow:activate --filter=@repo/cre-bufi-lifecycle",
     "bufi:pause": "turbo run cre:workflow:pause --filter=@repo/cre-bufi-lifecycle",
     "bufi:secrets:create": "turbo run cre:secrets:create --filter=@repo/cre-bufi-lifecycle",
-    "bufi:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-bufi-lifecycle"
+    "bufi:secrets:list": "turbo run cre:secrets:list --filter=@repo/cre-bufi-lifecycle",
+    "bufi:smoke": "bun scripts/bufi-smoke.ts"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

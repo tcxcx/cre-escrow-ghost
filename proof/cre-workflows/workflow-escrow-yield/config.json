@@ -1,0 +1,9 @@
+{
+  "chainSelectorName": "ethereum-testnet-sepolia",
+  "attestationContract": "0xC3C7A1bd7556ba93729f859F0f1D1Cb60aeEc72C",
+  "gasLimit": "500000",
+  "escrowFactoryAddress": "0x0f8b653aadd4f04008fdaca3429f6ea24951b129",
+  "treasuryManagerAddress": "0x33A4a73FD81bB6314AB7dc77301894728E6825A4",
+  "executorAgent": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474",
+  "owner": "0x09Ce8E2B3Fede2727dA4392Ea8Fe618305ba0474"
+}

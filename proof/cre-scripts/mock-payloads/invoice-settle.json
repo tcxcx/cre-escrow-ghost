@@ -1,0 +1,6 @@
+{
+  "invoiceId": "inv_mock_001",
+  "paymentTxHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+  "amount": "2500.00",
+  "currency": "USDC"
+}
